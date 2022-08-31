@@ -1,0 +1,9 @@
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        helpers.h
+        helpers.c
+        numeric_type_to_string_impl.h
+        numeric_type_to_string_impl.c
+        comparators_impl.h
+        comparators_impl.c
+)
