@@ -10,3 +10,7 @@ ALIAS_UNSIGNED_NUMERIC_TYPE(short);
 ALIAS_UNSIGNED_NUMERIC_TYPE(int);
 ALIAS_UNSIGNED_NUMERIC_TYPE(long);
 
+typedef long long llong;
+typedef unsigned long long ullong;
+
+#undef ALIAS_UNSIGNED_NUMERIC_TYPE
