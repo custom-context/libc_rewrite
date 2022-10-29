@@ -1,17 +1,8 @@
 #pragma once
 
 #include <construct/numeric_helpers.h>
-
+#include <utils/debug.h>
 #include <memory/memory.h>
-
-#ifdef DEBUG
-    #include <stdio.h>
-    #define LOG_DEBUG(MSG) printf(MSG)
-    #define LOG_DEBUG_FORMAT(FORMAT_STRING, ...) printf(FORMAT_STRING, __VA_ARGS__)
-#else
-    #define LOG_DEBUG(MSG) (MSG, 0)
-    #define LOG_DEBUG_FORMAT(FORMAT_STRING, ...) (FORMAT_STRING, __VA_ARGS__, 0)
-#endif
 
 #define DECLARE_VECTOR(TYPE)\
 struct vector_##TYPE;\

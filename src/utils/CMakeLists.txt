@@ -4,6 +4,7 @@ target_sources(${PROJECT_NAME}
         format_print.c
         format.h
         format.c
+        debug.h
 )
 
 add_subdirectory(string)
