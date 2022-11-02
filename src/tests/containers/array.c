@@ -18,20 +18,16 @@ void TYPE_METHOD(test__inc_on_construction__dec_on_destruction, destroy_at)(test
     --*(this->encounter_pointer);
 }
 
-DECLARE_ARRAY(test__inc_on_construction__dec_on_destruction, 4);
-IMPLEMENT_ARRAY(test__inc_on_construction__dec_on_destruction, 4);
+DEFINE_ARRAY(test__inc_on_construction__dec_on_destruction, 4);
 
 #define TEST_BUFFER_SIZE1 231
-DECLARE_ARRAY(int, TEST_BUFFER_SIZE1);
-IMPLEMENT_ARRAY(int, TEST_BUFFER_SIZE1);
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE1);
 
 #define TEST_BUFFER_SIZE2 348
-DECLARE_ARRAY(int, TEST_BUFFER_SIZE2);
-IMPLEMENT_ARRAY(int, TEST_BUFFER_SIZE2);
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE2);
 
 #define TEST_BUFFER_SIZE3 194
-DECLARE_ARRAY(int, TEST_BUFFER_SIZE3);
-IMPLEMENT_ARRAY(int, TEST_BUFFER_SIZE3);
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE3);
 
 
 IMPLEMENT_TYPE_TESTS(array) {
