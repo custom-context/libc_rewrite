@@ -17,11 +17,11 @@ for (char* TEST_BLOCK_NAME = ""#NAME; TEST_BLOCK_NAME != NULL; TEST_BLOCK_NAME =
 for (size_t TEST_BLOCK_COUNTER = 0; TEST_BLOCK_COUNTER != 1; TEST_BLOCK_COUNTER = 1)
 #define TEST_BLOCK(NAME) TEST_BLOCK_(NAME)
 
-#define ASSERT_(EXPR)\
+#define CHECK_(EXPR)\
 if ((char)(EXPR)) {} else {\
     printf("[%s][%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TYPE_NAME, TEST_BLOCK_NAME, TEST_BLOCK_COUNTER++, __LINE__);\
 }
-#define ASSERT(EXPR) ASSERT_(EXPR)
+#define CHECK(EXPR) CHECK_(EXPR)
 
 #else
 
@@ -35,6 +35,6 @@ if ((char)(EXPR)) {} else {\
 for (char* TEST_BLOCK_NAME; 0;)\
 for (size_t TEST_BLOCK_COUNTER; 0;)
 
-#define ASSERT(EXPR) {}
+#define CHECK(EXPR) {}
 
 #endif

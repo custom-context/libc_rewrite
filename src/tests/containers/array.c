@@ -34,34 +34,34 @@ IMPLEMENT_TYPE_TESTS(array) {
     TEST_BLOCK("size") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE1) arr_buffer;
 
-        ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE1, size)(&arr_buffer) == TEST_BUFFER_SIZE1);
+        CHECK(ARRAY_METHOD(int, TEST_BUFFER_SIZE1, size)(&arr_buffer) == TEST_BUFFER_SIZE1);
     }
 
     TEST_BLOCK("mut_at") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE2) arr_buffer;
 
-        ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer) == TEST_BUFFER_SIZE2);
+        CHECK(ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer) == TEST_BUFFER_SIZE2);
 
         for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
             *ARRAY_METHOD(int, TEST_BUFFER_SIZE2, mut_at)(&arr_buffer, i) = i * i;
         }
         
         for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
-            ASSERT(*ARRAY_METHOD(int, TEST_BUFFER_SIZE2, mut_at)(&arr_buffer, i) == i * i);
+            CHECK(*ARRAY_METHOD(int, TEST_BUFFER_SIZE2, mut_at)(&arr_buffer, i) == i * i);
         }
     }
 
     TEST_BLOCK("at") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE3) arr_buffer;
 
-        ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer) == TEST_BUFFER_SIZE3);
+        CHECK(ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer) == TEST_BUFFER_SIZE3);
 
         for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
             *ARRAY_METHOD(int, TEST_BUFFER_SIZE3, mut_at)(&arr_buffer, i) = i * i;
         }
         
         for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
-            ASSERT(*ARRAY_METHOD(int, TEST_BUFFER_SIZE3, at)(&arr_buffer, i) == i * i);
+            CHECK(*ARRAY_METHOD(int, TEST_BUFFER_SIZE3, at)(&arr_buffer, i) == i * i);
         }
     }
 
@@ -75,7 +75,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         
         ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, construct_at)(&arr_buffer);
 
-        ASSERT(encounter == ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer));
+        CHECK(encounter == ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer));
     }
     TEST_BLOCK("destroy_at") {
         ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
@@ -86,7 +86,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         }
         
         ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, destroy_at)(&arr_buffer);
-        ASSERT(encounter == -TEST_BUFFER_SIZE4);
+        CHECK(encounter == -TEST_BUFFER_SIZE4);
     }
 }
 
