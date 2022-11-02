@@ -12,24 +12,24 @@ struct string_##CHAR_TYPE utils__string__##NUMERIC_TYPE##_to_string_##CHAR_TYPE(
     struct string_##CHAR_TYPE result;\
     string_##CHAR_TYPE##_construct_at(&result);\
     if (!value) {\
-        char const letter = '0';\
+        CHAR_TYPE const letter = '0';\
         string_##CHAR_TYPE##_push_back(&result, &letter);\
         return result;\
     }\
     if (value < 0) {\
-        char const letter = '-';\
+        CHAR_TYPE const letter = '-';\
         string_##CHAR_TYPE##_push_back(&result, &letter);\
         value = -value;\
     }\
     while (value) {\
-        const char letter = value % 10 + '0';\
+        CHAR_TYPE const letter = value % 10 + '0';\
         string_##CHAR_TYPE##_push_back(&result, &letter);\
         value /= 10;\
     }\
     /*reverse values*/\
     uint const string_size = string_##CHAR_TYPE##_size(&result);\
     for (uint index = 0u; index < string_size / 2; ++index) {\
-        const char temp = *string_##CHAR_TYPE##_at(&result, index);\
+        CHAR_TYPE const temp = *string_##CHAR_TYPE##_at(&result, index);\
         *string_##CHAR_TYPE##_mut_at(&result, index) = *string_##CHAR_TYPE##_at(&result, string_size - 1 - index);\
         *string_##CHAR_TYPE##_mut_at(&result, string_size - 1 - index) = temp;\
     }\
