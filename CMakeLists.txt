@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(unicstm VERSION 0.1.0)
 
 set(CMAKE_C_COMPILER_VERSION 17)
-add_definitions(-DENABLE_TESTS)
+add_definitions(-DENABLE_TESTS -DDEBUG)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 add_executable(${PROJECT_NAME})
