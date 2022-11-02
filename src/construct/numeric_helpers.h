@@ -5,10 +5,12 @@
 // construct_at_#type, construct_copy_at_#type, destroy_at_#type for numeric types
 #define DECLARE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
 TYPE* TYPE##_construct_at(TYPE* const ptr)
+
 #define DECLARE_COPY_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
 TYPE* TYPE##_construct_copy_at(TYPE* const ptr, TYPE const* const src)
+
 #define DECLARE_MOVE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_MOVE_at(TYPE* const ptr, TYPE* const src)
+TYPE* TYPE##_construct_move_at(TYPE* const ptr, TYPE* const src)
 
 #define DECLARE_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE) \
 void TYPE##_destroy_at(TYPE* const ptr)
