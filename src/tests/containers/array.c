@@ -2,6 +2,15 @@
 
 #include <containers/array.h>
 
+#define TEST_BUFFER_SIZE1 231
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE1);
+
+#define TEST_BUFFER_SIZE2 348
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE2);
+
+#define TEST_BUFFER_SIZE3 194
+DEFINE_ARRAY(int, TEST_BUFFER_SIZE3);
+
 typedef struct test__inc_on_construction__dec_on_destruction {
     int* encounter_pointer;
 } test__inc_on_construction__dec_on_destruction;
@@ -18,17 +27,8 @@ void TYPE_METHOD(test__inc_on_construction__dec_on_destruction, destroy_at)(test
     --*(this->encounter_pointer);
 }
 
-DEFINE_ARRAY(test__inc_on_construction__dec_on_destruction, 4);
-
-#define TEST_BUFFER_SIZE1 231
-DEFINE_ARRAY(int, TEST_BUFFER_SIZE1);
-
-#define TEST_BUFFER_SIZE2 348
-DEFINE_ARRAY(int, TEST_BUFFER_SIZE2);
-
-#define TEST_BUFFER_SIZE3 194
-DEFINE_ARRAY(int, TEST_BUFFER_SIZE3);
-
+#define TEST_BUFFER_SIZE4 275
+DEFINE_ARRAY(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4);
 
 IMPLEMENT_TYPE_TESTS(array) {
     TEST_BLOCK("array<int, 4>::size") {
@@ -66,30 +66,31 @@ IMPLEMENT_TYPE_TESTS(array) {
     }
 
     TEST_BLOCK("array<int, 4>::construct_at") {
-        ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, 4) arr_buffer;
+        ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 
-        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, size)(&arr_buffer); ++i) {
-            ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, mut_at)(&arr_buffer, i)->encounter_pointer = &encounter;
+        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
+            ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, mut_at)(&arr_buffer, i)->encounter_pointer = &encounter;
         }
         
-        ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, construct_at)(&arr_buffer);
+        ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, construct_at)(&arr_buffer);
 
-        ASSERT(encounter == ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, size)(&arr_buffer));
+        ASSERT(encounter == ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer));
     }
     TEST_BLOCK("array<int, 4>::destroy_at") {
-        ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, 4) arr_buffer;
+        ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 
-        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, size)(&arr_buffer); ++i) {
-            ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, mut_at)(&arr_buffer, i)->encounter_pointer = &encounter;
+        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
+            ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, mut_at)(&arr_buffer, i)->encounter_pointer = &encounter;
         }
         
-        ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, 4, destroy_at)(&arr_buffer);
-        ASSERT(encounter == -4);
+        ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, destroy_at)(&arr_buffer);
+        ASSERT(encounter == -TEST_BUFFER_SIZE4);
     }
 }
 
 #undef TEST_BUFFER_SIZE1
 #undef TEST_BUFFER_SIZE2
 #undef TEST_BUFFER_SIZE3
+#undef TEST_BUFFER_SIZE4
