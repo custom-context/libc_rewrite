@@ -8,3 +8,16 @@
 
 #define TYPE_METHOD(TYPE, METHOD) CONCAT3(TYPE, _, METHOD)
 #define FUNCTION_FOR_TYPE(FUNCTION, TYPE) CONCAT3(FUNCTION, _, TYPE)
+
+
+#ifdef DEBUG
+
+#include <assert.h>
+
+#define ASSERT(EXPR) assert(EXPR)
+
+#else
+
+#define ASSERT(EXPR)
+
+#endif
