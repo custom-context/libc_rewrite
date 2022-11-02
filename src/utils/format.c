@@ -6,13 +6,13 @@
 #include <utils/string/helpers.h>
 #include <containers/vector.h>
 
+#include <utils/macros.h>
+
 #define NAMESPACE(NAME) utils__##NAME
 #define LOCAL_NAMESPACE(NAME) NAMESPACE(format_string__##NAME)
 #define UTILS_STR_NAMESPACE(NAME) NAMESPACE(string__##NAME)
 
-#define CONCAT(NAME1, NAME2) CONCAT_(NAME1, NAME2)
-#define CONCAT_(NAME1, NAME2) NAME1##NAME2
-#define STRUCT_FN(STRUCT_NAME, FN_NAME) CONCAT(STRUCT_NAME, _##FN_NAME)
+#define STRUCT_FN(STRUCT_NAME, FN_NAME) CONCAT3(STRUCT_NAME, _, FN_NAME)
 
 #define DECLARE(TYPE, NAME) DECLARE_##TYPE(NAME)
 #define IMPLEMENT(TYPE, NAME) IMPLEMENT_##TYPE(NAME)
@@ -55,8 +55,8 @@ struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_with_values_at)(struct LOC
 
 DECLARE(VECTOR, LOCAL_NAMESPACE(pattern));
 IMPLEMENT(VECTOR, LOCAL_NAMESPACE(pattern));
-#define VECTOR_OF_PATTERNS CONCAT(vector_, LOCAL_NAMESPACE(pattern))
-#define VECTOR_OF_PATTERNS_FN(FN_NAME) CONCAT(VECTOR_OF_PATTERNS, _##FN_NAME)
+#define VECTOR_OF_PATTERNS CONCAT2(vector_, LOCAL_NAMESPACE(pattern))
+#define VECTOR_OF_PATTERNS_FN(FN_NAME) CONCAT2(VECTOR_OF_PATTERNS, _##FN_NAME)
 
 typedef struct LOCAL_NAMESPACE(patterns) {
     struct VECTOR_OF_PATTERNS _patterns;
