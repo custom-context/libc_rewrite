@@ -35,7 +35,7 @@ struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_at)(struct LOCAL_NAMESPACE
     return this;
 }
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
-    assert(("`this` pointer must have non-nullable value", this));
+    assert(this);
     assert(src);
     string_char_construct_copy_at(&this->_string_representation, &src->_string_representation);
     this->_type = src->_type;
@@ -135,7 +135,6 @@ struct string_char NAMESPACE(format)(char const* const format_string, ...) {
 }
 
 struct string_char NAMESPACE(va_format)(char const* const format_string, va_list args) {
-    const uint format_string_size = UTILS_STR_NAMESPACE(string_length)(format_string);
     string_char formatted_string;
     string_char_construct_at(&formatted_string);
 
