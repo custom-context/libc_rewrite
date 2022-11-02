@@ -1,6 +1,7 @@
 add_subdirectory(construct)
 add_subdirectory(containers)
+add_subdirectory(fs)
 add_subdirectory(memory)
-add_subdirectory(utils)
 add_subdirectory(primitives)
+add_subdirectory(utils)
 add_subdirectory(tests)
