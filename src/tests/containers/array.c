@@ -1,5 +1,7 @@
 #include "array.h"
 
+#include <containers/array.h>
+
 typedef struct test__inc_on_construction__dec_on_destruction {
     int* encounter_pointer;
 } test__inc_on_construction__dec_on_destruction;
