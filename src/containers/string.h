@@ -1,196 +1,212 @@
 #pragma once
 
 #include <construct/numeric_helpers.h>
-#include <assert.h>
+#include <utils/macros.h>
+
 #include <memory/memory.h>
 
-#define SPECIALIZED_STRING_TYPE(CHAR_TYPE) string_##CHAR_TYPE
-#define STRING_TYPE SPECIALIZED_STRING_TYPE(char)
+// define macros for `string_type`
+#define SPECIALIZED_STRING_TYPE_(CHAR_TYPE) CONCAT3(string, _, CHAR_TYPE)
+#define SPECIALIZED_STRING_TYPE(CHAR_TYPE) SPECIALIZED_STRING_TYPE_(CHAR_TYPE)
 
-#define DECLARE_SPECIALIZED_STRING(TYPE)\
-struct string_##TYPE;\
+#define STRING_TYPE() SPECIALIZED_STRING_TYPE(char)
+
+// define macros for `struct string_type`
+#define SPECIALIZED_STRING_STRUCT_TYPE_(CHAR_TYPE) struct SPECIALIZED_STRING_TYPE(CHAR_TYPE)
+#define SPECIALIZED_STRING_STRUCT_TYPE(CHAR_TYPE) SPECIALIZED_STRING_STRUCT_TYPE_(CHAR_TYPE)
+
+#define STRING_STRUCT_TYPE() SPECIALIZED_STRING_STRUCT_TYPE(char)
+
+// define macros for string methods
+#define SPECIALIZED_STRING_METHOD_(CHAR_TYPE, METHOD) TYPE_METHOD(SPECIALIZED_STRING_TYPE(CHAR_TYPE), METHOD)
+#define SPECIALIZED_STRING_METHOD(CHAR_TYPE, METHOD) SPECIALIZED_STRING_METHOD_(CHAR_TYPE, METHOD)
+
+#define STRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(char, METHOD)
+
+// define macro for string type & string methods declaration
+#define DECLARE_SPECIALIZED_STRING_(TYPE)\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE);\
 /* --- Construction/Destruction functions implementation --- */\
-struct string_##TYPE* string_##TYPE##_construct_at(struct string_##TYPE* const this);\
-struct string_##TYPE* string_##TYPE##_construct_copy_at(struct string_##TYPE* const this, struct string_##TYPE const* const source);\
-struct string_##TYPE* string_##TYPE##_construct_by_value_at(struct string_##TYPE* const this, uint const size, TYPE const* const value);\
-struct string_##TYPE* string_##TYPE##_construct_from_buffer_at(struct string_##TYPE* const this, uint const buffer_size, TYPE const* const buffer);\
-struct string_##TYPE* string_##TYPE##_construct_from_c_string_at(struct string_##TYPE* const this, TYPE const* const buffer);\
-void string_##TYPE##_destroy_at(struct string_##TYPE* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const source);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer);\
+void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
 /* --- Memory managment functions implementation --- */\
-struct string_##TYPE* string_##TYPE##_resize(struct string_##TYPE* const this, const uint new_size, TYPE const* const value);\
-struct string_##TYPE* string_##TYPE##_reserve(struct string_##TYPE* const this, const uint new_capacity);\
-struct string_##TYPE* string_##TYPE##_clear(struct string_##TYPE* const this);\
-struct string_##TYPE* string_##TYPE##_shrink(struct string_##TYPE* const this);\
-void string_##TYPE##_push_back(struct string_##TYPE* const this, TYPE const* const value);\
-void string_##TYPE##_pop_back(struct string_##TYPE* const this);\
-struct string_##TYPE* string_##TYPE##_apppend_string(struct string_##TYPE* const this, struct string_##TYPE* another_string);\
-struct string_##TYPE* string_##TYPE##_apppend_c_string(struct string_##TYPE* const this, char const * const);\
-struct string_##TYPE* string_##TYPE##_apppend_buffer(struct string_##TYPE* const this, char const * const, TYPE const* const buffer, uint const buffer_size);\
-struct string_##TYPE* string_##TYPE##_apppend_fill(struct string_##TYPE* const this, uint const size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_capacity);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value);\
+void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const, TYPE const* const buffer, uint const buffer_size);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 /* --- Getters functions implementation --- */\
-uint string_##TYPE##_capacity(struct string_##TYPE const* const this);\
-uint string_##TYPE##_size(struct string_##TYPE const* const this);\
-uint string_##TYPE##_length(struct string_##TYPE const* const this);\
-uint string_##TYPE##_empty(struct string_##TYPE const* const this);\
-TYPE const* string_##TYPE##_data(struct string_##TYPE const* const this);\
-TYPE const* string_##TYPE##_at(struct string_##TYPE const* const this, uint index);\
-TYPE * string_##TYPE##_mut_at(struct string_##TYPE* const this, uint index);\
+uint SPECIALIZED_STRING_METHOD(TYPE, capacity)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
+uint SPECIALIZED_STRING_METHOD(TYPE, size)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
+uint SPECIALIZED_STRING_METHOD(TYPE, length)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
+uint SPECIALIZED_STRING_METHOD(TYPE, empty)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
+TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
+TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this, uint index);\
+TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint index);\
 \
-typedef struct string_##TYPE {\
+typedef SPECIALIZED_STRING_STRUCT_TYPE(TYPE) {\
     union {\
-        struct string_##TYPE##_dynamically_allocated_data {\
+        struct CONCAT3(SPECIALIZED_STRING_TYPE(TYPE), _, dynamically_allocated_data) {\
             TYPE* buffer_;\
             uint size_;\
             uint capacity_;\
         } dynamic_data_;\
-        struct string_##TYPE##_stack_allocated_data {\
-            TYPE buffer_[sizeof(struct string_##TYPE##_dynamically_allocated_data) / sizeof(TYPE)];\
+        struct CONCAT3(SPECIALIZED_STRING_TYPE(TYPE), _, stack_allocated_data) {\
+            TYPE buffer_[sizeof(struct CONCAT3(SPECIALIZED_STRING_TYPE(TYPE), _, dynamically_allocated_data)) / sizeof(TYPE)];\
         } stack_data_;\
     };\
     uint is_stack_allocated_;\
-} string_##TYPE
+} SPECIALIZED_STRING_TYPE(TYPE)
+#define DECLARE_SPECIALIZED_STRING(TYPE) DECLARE_SPECIALIZED_STRING_(TYPE)
 
 #define DECLARE_STRING() DECLARE_SPECIALIZED_STRING(char)
 
-#define IMPLEMENT_SPECIALIZED_STRING(TYPE)\
+#define IMPLEMENT_SPECIALIZED_STRING_(TYPE)\
 /* --- Construction/Destruction functions implementation --- */\
-struct string_##TYPE* string_##TYPE##_construct_at(struct string_##TYPE* const this) {\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
     static_assert(sizeof(this->dynamic_data_) / sizeof(TYPE) > 1, "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
     this->is_stack_allocated_ = 1;\
-    TYPE##_construct_at(string_##TYPE##_mut_at(this, 0u));\
-    TYPE const capacity = string_##TYPE##_capacity(this);\
-    TYPE##_construct_copy_at(string_##TYPE##_mut_at(this, capacity), (TYPE const* const)&capacity);\
+    TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, 0u));\
+    TYPE const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
+    TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, capacity), (TYPE const* const)&capacity);\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_construct_copy_at(struct string_##TYPE* const this, struct string_##TYPE const* const source) {\
-    string_##TYPE##_construct_at(this);\
-    string_##TYPE##_reserve(this, string_##TYPE##_size(source));\
-    uint const source_string_size = string_##TYPE##_size(source);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const source) {\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(source));\
+    uint const source_string_size = SPECIALIZED_STRING_METHOD(TYPE, size)(source);\
     for (uint index = 0u; index < source_string_size; ++index) {\
-        string_##TYPE##_push_back(this, string_##TYPE##_at(source, index));\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, SPECIALIZED_STRING_METHOD(TYPE, at)(source, index));\
     }\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_construct_by_value_at(struct string_##TYPE* const this, uint const size, TYPE const* const value) {\
-    string_##TYPE##_construct_at(this);\
-    string_##TYPE##_reserve(this, size);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value) {\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, size);\
     for (uint index = 0u; index < size; ++index) {\
-        string_##TYPE##_push_back(this, value);\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, value);\
     }\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_construct_from_buffer_at(struct string_##TYPE* const this, uint const buffer_size, TYPE const* const buffer) {\
-    string_##TYPE##_construct_at(this);\
-    string_##TYPE##_reserve(this, buffer_size);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer) {\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, buffer_size);\
     for (uint index = 0u; index < buffer_size; ++index) {\
-        string_##TYPE##_push_back(this, &buffer[index]);\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, &buffer[index]);\
     }\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_construct_from_c_string_at(struct string_##TYPE* const this, TYPE const* const buffer) {\
-    string_##TYPE##_construct_at(this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer) {\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
     for (uint index = 0u; buffer[index] != '\0'; ++index) {\
-        string_##TYPE##_push_back(this, &buffer[index]);\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, &buffer[index]);\
     }\
     return this;\
 }\
-void string_##TYPE##_destroy_at(struct string_##TYPE* const this) {\
+void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
     if (!this->is_stack_allocated_) {\
         free(this->dynamic_data_.buffer_);\
     };\
 }\
 /* --- Memory managment functions implementation --- */\
-struct string_##TYPE* string_##TYPE##_resize(struct string_##TYPE* const this, const uint new_size, TYPE const* const value) {\
-    if (string_##TYPE##_size(this) >= new_size) {\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_size, TYPE const* const value) {\
+    if (SPECIALIZED_STRING_METHOD(TYPE, size)(this) >= new_size) {\
         return this;\
     }\
     if (this->is_stack_allocated_) {\
-        uint const capacity = string_##TYPE##_capacity(this);\
+        uint const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
         if (capacity >= new_size) {\
-            for (uint index = string_##TYPE##_size(this); index < new_size; ++index) {\
-                TYPE##_construct_copy_at(string_##TYPE##_mut_at(this, index), value);\
+            for (uint index = SPECIALIZED_STRING_METHOD(TYPE, size)(this); index < new_size; ++index) {\
+                TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, index), value);\
             }\
-            TYPE##_construct_at(string_##TYPE##_mut_at(this, new_size));\
+            TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, new_size));\
             TYPE const current_extension_size = capacity - new_size;\
-            TYPE##_construct_copy_at(string_##TYPE##_mut_at(this, capacity), (TYPE const* const)(&current_extension_size));\
+            TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, capacity), (TYPE const* const)(&current_extension_size));\
             return this;\
         }\
     }\
-    string_##TYPE##_reserve(this, new_size);\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, new_size);\
     for (; this->dynamic_data_.size_ < new_size; ++this->dynamic_data_.size_) {\
-        TYPE##_construct_copy_at(string_##TYPE##_mut_at(this, this->dynamic_data_.size_), value);\
+        TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, this->dynamic_data_.size_), value);\
     }\
-    TYPE##_construct_at(string_##TYPE##_mut_at(this, new_size));\
+    TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, new_size));\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_reserve(struct string_##TYPE* const this, const uint new_capacity) {\
-    uint current_capacity = string_##TYPE##_capacity(this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_capacity) {\
+    uint current_capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
     if (current_capacity++ - 1 >= new_capacity) {\
         return this;\
     }\
     while (((current_capacity <<= 1) - 1) < new_capacity);\
     TYPE* const new_buffer = malloc(current_capacity * sizeof(TYPE));\
     /* Copy elements one-by-one */\
-    for (uint index = 0u; index < string_##TYPE##_size(this); ++index) {\
-        TYPE##_construct_copy_at(&new_buffer[index], string_##TYPE##_at(this, index));\
+    for (uint index = 0u; index < SPECIALIZED_STRING_METHOD(TYPE, size)(this); ++index) {\
+        TYPE_METHOD(TYPE, construct_copy_at)(&new_buffer[index], SPECIALIZED_STRING_METHOD(TYPE, at)(this, index));\
     }\
     if (!this->is_stack_allocated_) {\
         free(this->dynamic_data_.buffer_);\
     }\
-    this->dynamic_data_.size_ = string_##TYPE##_size(this);\
+    this->dynamic_data_.size_ = SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
     this->dynamic_data_.buffer_ = new_buffer;\
     this->dynamic_data_.capacity_ = current_capacity - 1;\
     this->is_stack_allocated_ = 0;\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_clear(struct string_##TYPE* const this) {\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
     if (!this->is_stack_allocated_) {\
         this->dynamic_data_.size_ = 0;\
     } else {\
-        TYPE const capacity = string_##TYPE##_capacity(this);\
-        TYPE##_construct_copy_at(string_##TYPE##_mut_at(this, capacity), (TYPE const* const)&capacity);\
+        TYPE const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
+        TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, capacity), (TYPE const* const)&capacity);\
     }\
-    TYPE##_construct_at(string_##TYPE##_mut_at(this, string_##TYPE##_capacity(this)));\
+    TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, SPECIALIZED_STRING_METHOD(TYPE, capacity)(this)));\
     return this;\
 }\
-struct string_##TYPE* string_##TYPE##_shrink_to_fit(struct string_##TYPE* const this);\
-void string_##TYPE##_push_back(struct string_##TYPE* const this, TYPE const* const value) {\
-    string_##TYPE##_resize(this, string_##TYPE##_size(this) + 1, value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value) {\
+    SPECIALIZED_STRING_METHOD(TYPE, resize)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + 1, value);\
 }\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const, TYPE const* const buffer, uint const buffer_size);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 /* --- Getters functions implementation --- */\
-uint string_##TYPE##_capacity(struct string_##TYPE const* const this) {\
+uint SPECIALIZED_STRING_METHOD(TYPE, capacity)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated_) {\
         return (sizeof(this->dynamic_data_) / sizeof(TYPE)) - 1;\
     }\
     return this->dynamic_data_.capacity_;\
 }\
-uint string_##TYPE##_size(struct string_##TYPE const* const this) {\
+uint SPECIALIZED_STRING_METHOD(TYPE, size)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated_) {\
-        uint const capacity = string_##TYPE##_capacity(this);\
-        return (capacity - *string_##TYPE##_at(this, capacity));\
+        uint const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
+        return (capacity - *SPECIALIZED_STRING_METHOD(TYPE, at)(this, capacity));\
     }\
     return this->dynamic_data_.size_;\
 }\
-uint string_##TYPE##_length(struct string_##TYPE const* const this) {\
-    return string_##TYPE##_size(this);\
+uint SPECIALIZED_STRING_METHOD(TYPE, length)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
+    return SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
 }\
-uint string_##TYPE##_empty(struct string_##TYPE const* const this) {\
-    return string_##TYPE##_size(this);\
+uint SPECIALIZED_STRING_METHOD(TYPE, empty)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
+    return SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
 }\
-TYPE const* string_##TYPE##_data(struct string_##TYPE const* const this) {\
-    return string_##TYPE##_at(this, 0u);\
+TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
+    return SPECIALIZED_STRING_METHOD(TYPE, at)(this, 0u);\
 }\
-TYPE const* string_##TYPE##_at(struct string_##TYPE const* const this, uint index) {\
-    if (this->is_stack_allocated_) {\
-        return this->stack_data_.buffer_ + index;\
-    }\
-    return this->dynamic_data_.buffer_ + index;\
+TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this, uint index) {\
+    return (this->is_stack_allocated_ ? this->stack_data_.buffer_ : this->dynamic_data_.buffer_) + index;\
 }\
-TYPE * string_##TYPE##_mut_at(struct string_##TYPE* const this, uint index) {\
-    if (this->is_stack_allocated_) {\
-        return this->stack_data_.buffer_ + index;\
-    }\
-    return this->dynamic_data_.buffer_ + index;\
-}\
-
+TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint index) {\
+    return (this->is_stack_allocated_ ? this->stack_data_.buffer_ : this->dynamic_data_.buffer_) + index;\
+}
+#define IMPLEMENT_SPECIALIZED_STRING(TYPE) IMPLEMENT_SPECIALIZED_STRING_(TYPE)
 #define IMPLEMENT_STRING() IMPLEMENT_SPECIALIZED_STRING(char)
