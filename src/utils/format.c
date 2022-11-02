@@ -31,18 +31,18 @@ typedef struct LOCAL_NAMESPACE(pattern) {
 #define PATTERN_FN(FN_NAME) STRUCT_FN(LOCAL_NAMESPACE(pattern), FN_NAME)
 
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
-    assert(this);
+    ASSERT(this);
     return this;
 }
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
-    assert(this);
-    assert(src);
+    ASSERT(this);
+    ASSERT(src);
     string_char_construct_copy_at(&this->_string_representation, &src->_string_representation);
     this->_type = src->_type;
     return this;
 }
 void PATTERN_FN(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
-    assert(this);
+    ASSERT(this);
     string_char_destroy_at(&this->_string_representation);
 }
 
@@ -97,7 +97,7 @@ struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(construct_at)(struct LOCAL_NAMESP
     return this;
 }
 struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(destroy_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
-    assert(this);
+    ASSERT(this);
     VECTOR_OF_PATTERNS * patterns = &this->_patterns;
     VECTOR_OF_PATTERNS_FN(destroy_at)(patterns);
     return this;
