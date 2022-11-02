@@ -1,9 +1,10 @@
 #pragma once
 
-#include <primitives/unsigned_types_aliases.h>
-#include <containers/string.h>
+#include "c_string_helpers.h"
 
-uint utils__string__string_length(char const* const string);
+#include <primitives/unsigned_types_aliases.h>
+
+#include <containers/string.h>
 
 #define DECLARE_NUMERIC_TYPE_TO_STRING_TYPE(NUMERIC_TYPE, CHAR_TYPE)\
 struct string_##CHAR_TYPE utils__string__##NUMERIC_TYPE##_to_string_##CHAR_TYPE(NUMERIC_TYPE value)

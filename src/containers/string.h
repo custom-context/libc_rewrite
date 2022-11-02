@@ -2,7 +2,8 @@
 
 #include <construct/numeric_helpers.h>
 #include <utils/macros.h>
-
+#include <utils/debug.h>
+#include <utils/string/c_string_helpers.h>
 #include <memory/memory.h>
 
 // define macros for `string_type`
@@ -40,10 +41,10 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(SPE
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
 void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value);\
 void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const, TYPE const* const buffer, uint const buffer_size);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const * const);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer, uint const buffer_size);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 /* --- Getters functions implementation --- */\
 uint SPECIALIZED_STRING_METHOD(TYPE, capacity)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
 uint SPECIALIZED_STRING_METHOD(TYPE, size)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this);\
@@ -107,9 +108,8 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
 }\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
-    for (uint index = 0u; buffer[index] != '\0'; ++index) {\
-        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, &buffer[index]);\
-    }\
+    uint const buffer_size = CONCAT5(utils__string, __, SPECIALIZED_STRING_TYPE(TYPE), _, length)(buffer);\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(this, buffer_size, buffer);\
     return this;\
 }\
 void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
@@ -143,7 +143,7 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(SP
 }\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_capacity) {\
     uint current_capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
-    if (current_capacity++ - 1 >= new_capacity) {\
+    if (current_capacity++ >= new_capacity) {\
         return this;\
     }\
     while (((current_capacity <<= 1) - 1) < new_capacity);\
@@ -175,10 +175,20 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_
 void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value) {\
     SPECIALIZED_STRING_METHOD(TYPE, resize)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + 1, value);\
 }\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, char const * const, TYPE const* const buffer, uint const buffer_size);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, apppend_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const * const buffer) {\
+    uint const buffer_size = CONCAT5(utils__string, __, SPECIALIZED_STRING_TYPE(TYPE), _, length)(buffer);\
+    SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, buffer, buffer_size);\
+    return this;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer, uint const buffer_size) {\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + buffer_size);\
+    for (uint index = 0u; index < buffer_size; ++index) {\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, &buffer[index]);\
+    }\
+    return this;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 /* --- Getters functions implementation --- */\
 uint SPECIALIZED_STRING_METHOD(TYPE, capacity)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated_) {\
