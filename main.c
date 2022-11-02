@@ -4,6 +4,8 @@
 #include <containers/string.h>
 #include <containers/string_impl.h>
 
+#include <tests/containers/array.h>
+
 void test_string_construct_at() {
     string_char str;
     string_char_construct_at(&str);
@@ -73,5 +75,8 @@ int main(const int argc, char const* const argv[]) {
     test_string_construct_at();
     test_string_push_back();
     test_string_from_c_string();
+
+    EXECUTE_TYPE_TESTS(array);
+
     return 0;
 }
