@@ -31,13 +31,13 @@ void TYPE_METHOD(test__inc_on_construction__dec_on_destruction, destroy_at)(test
 DEFINE_ARRAY(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4);
 
 IMPLEMENT_TYPE_TESTS(array) {
-    TEST_BLOCK("array<int, 4>::size") {
+    TEST_BLOCK("size") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE1) arr_buffer;
 
         ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE1, size)(&arr_buffer) == TEST_BUFFER_SIZE1);
     }
 
-    TEST_BLOCK("array<int, 4>::mut_at") {
+    TEST_BLOCK("mut_at") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE2) arr_buffer;
 
         ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer) == TEST_BUFFER_SIZE2);
@@ -51,7 +51,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         }
     }
 
-    TEST_BLOCK("array<int, 4>::at") {
+    TEST_BLOCK("at") {
         ARRAY_TYPE(int, TEST_BUFFER_SIZE3) arr_buffer;
 
         ASSERT(ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer) == TEST_BUFFER_SIZE3);
@@ -65,7 +65,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         }
     }
 
-    TEST_BLOCK("array<int, 4>::construct_at") {
+    TEST_BLOCK("construct_at") {
         ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 
@@ -77,7 +77,7 @@ IMPLEMENT_TYPE_TESTS(array) {
 
         ASSERT(encounter == ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer));
     }
-    TEST_BLOCK("array<int, 4>::destroy_at") {
+    TEST_BLOCK("destroy_at") {
         ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 

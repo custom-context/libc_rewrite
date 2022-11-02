@@ -19,7 +19,7 @@ for (size_t TEST_BLOCK_COUNTER = 0; TEST_BLOCK_COUNTER != 1; TEST_BLOCK_COUNTER 
 
 #define ASSERT_(EXPR)\
 if ((char)(EXPR)) {} else {\
-    printf("[%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TEST_BLOCK_NAME, ++TEST_BLOCK_COUNTER, __LINE__);\
+    printf("[%s][%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TYPE_NAME, TEST_BLOCK_NAME, TEST_BLOCK_COUNTER++, __LINE__);\
 }
 #define ASSERT(EXPR) ASSERT_(EXPR)
 
