@@ -18,7 +18,7 @@ for (size_t TEST_BLOCK_COUNTER = 0; TEST_BLOCK_COUNTER != 1; TEST_BLOCK_COUNTER 
 #define TEST_BLOCK(NAME) TEST_BLOCK_(NAME)
 
 #define CHECK_(EXPR)\
-if ((char)(EXPR)) {} else {\
+if (EXPR) {} else {\
     printf("[%s][%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TYPE_NAME, TEST_BLOCK_NAME, TEST_BLOCK_COUNTER++, __LINE__);\
 }
 #define CHECK(EXPR) CHECK_(EXPR)
