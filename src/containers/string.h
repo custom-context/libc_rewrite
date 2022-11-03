@@ -34,11 +34,16 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer);\
 void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+/* --- Assignment functions implementation --- */\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const source);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const source);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer);\
 /* --- Memory managment functions implementation --- */\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_size, TYPE const* const value);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_capacity);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
 void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value);\
 void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
@@ -117,6 +122,37 @@ void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(
         free(this->dynamic_data_.buffer_);\
     };\
 }\
+/* --- Assignment functions implementation --- */\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const source) {\
+    TYPE temporary_buffer[sizeof(this->dynamic_data_) / sizeof(TYPE)];\
+    for (uint index = 0u; index < sizeof(temporary_buffer)/sizeof(TYPE); ++index) {\
+        temporary_buffer[index] = this->stack_data_.buffer_[index];\
+        this->stack_data_.buffer_[index] = source->stack_data_.buffer_[index];\
+        source->stack_data_.buffer_[index] = temporary_buffer[index];\
+    }\
+    return this;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const source) {\
+    SPECIALIZED_STRING_STRUCT_TYPE(TYPE) temporary_string;\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(&temporary_string, source);\
+    SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(this, &temporary_string);\
+    SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
+    return this;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer) {\
+    SPECIALIZED_STRING_STRUCT_TYPE(TYPE) temporary_string;\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(&temporary_string, buffer_size, buffer);\
+    SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(this, &temporary_string);\
+    SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
+    return this;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer) {\
+    SPECIALIZED_STRING_STRUCT_TYPE(TYPE) temporary_string;\
+    SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(&temporary_string, buffer);\
+    SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(this, &temporary_string);\
+    SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
+    return this;\
+}\
 /* --- Memory managment functions implementation --- */\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, const uint new_size, TYPE const* const value) {\
     if (SPECIALIZED_STRING_METHOD(TYPE, size)(this) >= new_size) {\
@@ -171,11 +207,50 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(SPE
     TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, SPECIALIZED_STRING_METHOD(TYPE, capacity)(this)));\
     return this;\
 }\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
+    if (this->is_stack_allocated_) {\
+        return this;\
+    }\
+    uint const stack_allocated_string_capacity = (sizeof(this->dynamic_data_) / sizeof(TYPE)) - 1;\
+    uint const string_size = SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
+    if (string_size <= stack_allocated_string_capacity) {\
+        TYPE buffer[stack_allocated_string_capacity + 1];\
+        for (uint index = 0u; index < string_size; ++index) {\
+            TYPE_METHOD(TYPE, construct_copy_at)(&buffer[index], SPECIALIZED_STRING_METHOD(TYPE, at)(this, index));\
+        }\
+        free(this->dynamic_data_.buffer_);\
+        SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(this, string_size, buffer);\
+        return this;\
+    }\
+    TYPE* const buffer = malloc((string_size + 1) * sizeof(TYPE));\
+    for (uint index = 0u; index < string_size; ++index) {\
+        TYPE_METHOD(TYPE, construct_copy_at)(&buffer[index], SPECIALIZED_STRING_METHOD(TYPE, at)(this, index));\
+    }\
+    TYPE const null_terminate_character = '\0';\
+    TYPE_METHOD(TYPE, construct_copy_at)(&buffer[string_size], &null_terminate_character);\
+    free(this->dynamic_data_.buffer_);\
+    this->dynamic_data_.buffer_ = buffer;\
+    this->dynamic_data_.capacity_ = string_size + 1;\
+    return this;\
+}\
 void SPECIALIZED_STRING_METHOD(TYPE, push_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const value) {\
     SPECIALIZED_STRING_METHOD(TYPE, resize)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + 1, value);\
 }\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string);\
+void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
+    uint const size = SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
+    TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, size - 1));\
+    if (this->is_stack_allocated_) {\
+        uint const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
+        TYPE const current_extension_size = capacity - size + 1;\
+        TYPE_METHOD(TYPE, construct_copy_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, capacity), (TYPE const* const)(&current_extension_size));\
+        return;\
+    }\
+    this->dynamic_data_.size_ = size - 1;\
+}\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* another_string) {\
+    SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, SPECIALIZED_STRING_METHOD(TYPE, data)(another_string), SPECIALIZED_STRING_METHOD(TYPE, size)(another_string));\
+    return this;\
+}\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const * const buffer) {\
     uint const buffer_size = CONCAT5(utils__string, __, SPECIALIZED_STRING_TYPE(TYPE), _, length)(buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, buffer, buffer_size);\
@@ -188,7 +263,13 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buf
     }\
     return this;\
 }\
-SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
+SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value) {\
+    SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + size);\
+    for (uint index = 0u; index < size; ++index) {\
+        SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, value);\
+    }\
+    return this;\
+}\
 /* --- Getters functions implementation --- */\
 uint SPECIALIZED_STRING_METHOD(TYPE, capacity)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated_) {\
