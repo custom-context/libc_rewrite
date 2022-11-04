@@ -5,4 +5,5 @@ target_sources(${PROJECT_NAME}
         string.h
         string_impl.h
         string_impl.c
+        dense_hash_set.h
 )
