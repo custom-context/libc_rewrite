@@ -20,24 +20,19 @@ int NAMESPACE(format_print)(char const* const format_string, ...) {
 int NAMESPACE(va_format_print)(char const* const format_string, va_list args) {
     string_char formatted_string = utils__va_format(format_string, args);
 #if defined(__unix__) || defined(__APPLE__)
-    write(STDOUT_FILENO, string_char_data(&formatted_string), string_char_size(&formatted_string));
+    write(STDOUT_FILENO, STRING_METHOD(data)(&formatted_string), STRING_METHOD(size)(&formatted_string));
 #elif defined(_WIN32)
     {
-        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (hOut == INVALID_HANDLE_VALUE) {
-            return 1; 
+        HANDLE stdout_handler = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (stdout_handler == INVALID_HANDLE_VALUE) {
+            return 1;
         }
-        DWORD dwMode = 0;
-        if (!GetConsoleMode(hOut, &dwMode)) {
+        if (!WriteConsole(stdout_handler, STRING_METHOD(data)(&formatted_string),
+                         STRING_METHOD(size)(&formatted_string), NULL, NULL)) {
             return 2;
         }
-        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-        if (!SetConsoleMode(hOut, dwMode)) {
-            return 3;
-        }
-        WriteConsole(hOut, string_char_data(&formatted_string), string_char_size(&formatted_string), NULL, NULL); 
     }
 #endif
-    string_char_destroy_at(&formatted_string);
+    STRING_METHOD(destroy_at)(&formatted_string);
     return 0;    
 }
