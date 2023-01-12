@@ -9,8 +9,14 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         main.c
 )
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
-target_link_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
+
+if(WIN32)
+    add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
+    target_link_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
+endif()
+
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         DEBUG

@@ -5,8 +5,12 @@
 #include <containers/string.h>
 #include <containers/string_impl.h>
 
-#include <unistd.h>
-#include <fcntl.h>
+#if defined(WIN32)
+    #include <windows.h>
+#else
+    #include <unistd.h>
+    #include <fcntl.h>
+#endif
 
 #define OPTIONAL_ENCODING_TYPE CONCAT3(optional, _, UTF_ENCODING_ENUM())
 
@@ -26,11 +30,23 @@ static char const* encoding_type_to_filename(UTF_ENCODING_ENUM() encoding);
 
 IMPLEMENT_TYPE_TESTS(encoding) {
     TEST_BLOCK("check files encoding over test files") {
-        static char const* const current_directory_path = "./src/tests/fs/file/";
+#if defined(_WIN32)
+        static char const *const current_directory_path =
+          "\\src\\tests\\fs\\file\\";
+        static char const *const encoded_files_relative_path = "utf_encoded_files\\";
+        CHECK(STRINGIFY(PROJECT_SOURCE_DIR));
+#elif defined(__unix__) || defined(__APPLE__)
+        static char const *const current_directory_path = "./src/tests/fs/file/";
         static char const* const encoded_files_relative_path = "utf_encoded_files/";
-
+#endif
         STRING_TYPE() directory_path;
+#if defined(_WIN32)
+        STRING_METHOD(construct_from_c_string_at)
+        (&directory_path, STRINGIFY(PROJECT_SOURCE_DIR));
+        STRING_METHOD(append_c_string)(&directory_path, current_directory_path);
+#elif defined(__unix__) || defined(__APPLE__)
         STRING_METHOD(construct_from_c_string_at)(&directory_path, current_directory_path);
+#endif
         STRING_METHOD(append_c_string)(&directory_path, encoded_files_relative_path);
 
         UTF_ENCODING_ENUM() const encodings_to_check[] = {
@@ -64,6 +80,26 @@ static struct OPTIONAL_ENCODING_TYPE get_file_encoding(
     char const filename[const]) {
     size_t TEST_BLOCK_COUNTER = *TEST_BLOCK_COUNTER_PTR;
 
+#if defined(_WIN32)
+    HANDLE file_handler =
+        CreateFile(filename, GENERIC_READ, 0, NULL, OPEN_EXISTING,
+                   FILE_ATTRIBUTE_NORMAL, NULL);
+    CHECK(file_handler != INVALID_HANDLE_VALUE); // file not found
+    if (file_handler == INVALID_HANDLE_VALUE) {
+        *TEST_BLOCK_COUNTER_PTR = TEST_BLOCK_COUNTER;
+        return (OPTIONAL_ENCODING_TYPE){0};
+    }
+
+    DWORD count_bytes_read;
+    char bytes[4];
+    ReadFile(file_handler, bytes, sizeof(bytes), &count_bytes_read, NULL);
+
+    UTF_ENCODING_ENUM() encoding = NAMESPACE_FS_FILE(get_encoding)(count_bytes_read, bytes);
+    CloseHandle(file_handler);
+
+    *TEST_BLOCK_COUNTER_PTR = TEST_BLOCK_COUNTER;
+    return (OPTIONAL_ENCODING_TYPE){1, encoding};
+#elif defined(__unix__) || defined(__APPLE__)
     int file_descriptor = open(filename, O_RDONLY);
     CHECK(file_descriptor != -1); // file not found
     if (file_descriptor == -1) {
@@ -80,6 +116,7 @@ static struct OPTIONAL_ENCODING_TYPE get_file_encoding(
 
     *TEST_BLOCK_COUNTER_PTR = TEST_BLOCK_COUNTER;
     return (OPTIONAL_ENCODING_TYPE){1, encoding};
+#endif
 }
 
 static char const* encoding_type_to_filename(UTF_ENCODING_ENUM() encoding) {
