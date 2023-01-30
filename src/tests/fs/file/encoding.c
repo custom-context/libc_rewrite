@@ -50,11 +50,15 @@ IMPLEMENT_TYPE_TESTS(encoding) {
         STRING_METHOD(append_c_string)(&directory_path, encoded_files_relative_path);
 
         UTF_ENCODING_ENUM() const encodings_to_check[] = {
+            // UTF_ENCODING_ENUM_VALUE(UTF32_BE_BOM),
+            // UTF_ENCODING_ENUM_VALUE(UTF32_LE_BOM),
+            UTF_ENCODING_ENUM_VALUE(UTF16_BE_BOM),
+            UTF_ENCODING_ENUM_VALUE(UTF16_LE_BOM),
+            UTF_ENCODING_ENUM_VALUE(UTF8_BOM),
             // UTF_ENCODING_ENUM_VALUE(UTF32_BE),
             // UTF_ENCODING_ENUM_VALUE(UTF32_LE),
-            UTF_ENCODING_ENUM_VALUE(UTF16_BE),
-            UTF_ENCODING_ENUM_VALUE(UTF16_LE),
-            UTF_ENCODING_ENUM_VALUE(UTF8_BOM),
+            // UTF_ENCODING_ENUM_VALUE(UTF16_BE),
+            // UTF_ENCODING_ENUM_VALUE(UTF16_LE),
             UTF_ENCODING_ENUM_VALUE(UTF8)
         };
 
@@ -121,11 +125,16 @@ static struct OPTIONAL_ENCODING_TYPE get_file_encoding(
 
 static char const* encoding_type_to_filename(UTF_ENCODING_ENUM() encoding) {
     switch (encoding) {
+        case UTF_ENCODING_ENUM_VALUE(UTF32_BE_BOM): return "utf32_BE_BOM.txt";
+        case UTF_ENCODING_ENUM_VALUE(UTF32_LE_BOM): return "utf32_LE_BOM.txt";
+        case UTF_ENCODING_ENUM_VALUE(UTF16_BE_BOM): return "utf16_BE_BOM.txt";
+        case UTF_ENCODING_ENUM_VALUE(UTF16_LE_BOM): return "utf16_LE_BOM.txt";
+        case UTF_ENCODING_ENUM_VALUE(UTF8_BOM): return "utf8_BOM.txt";
+
         case UTF_ENCODING_ENUM_VALUE(UTF32_BE): return "utf32_BE.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF32_LE): return "utf32_LE.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF16_BE): return "utf16_BE.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF16_LE): return "utf16_LE.txt";
-        case UTF_ENCODING_ENUM_VALUE(UTF8_BOM): return "utf8_BOM.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF8): return "utf8.txt";
     }
     return NULL;
