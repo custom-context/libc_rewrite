@@ -1,19 +1,21 @@
 #pragma once
 
 #include <primitives/unsigned_types_aliases.h>
+#include <utils/macros.h>
 
-// construct_at_#type, construct_copy_at_#type, destroy_at_#type for numeric types
+// TYPE_METHOD(#type, construct_at), TYPE_METHOD(#type, construct_copy_at),
+// TYPE_METHOD(#type, destroy_at) for numeric types
 #define DECLARE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_at(TYPE* const ptr)
+TYPE* TYPE_METHOD(TYPE, construct_at)(TYPE* const ptr)
 
 #define DECLARE_COPY_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_copy_at(TYPE* const ptr, TYPE const* const src)
+TYPE* TYPE_METHOD(TYPE, construct_copy_at)(TYPE* const ptr, TYPE const* const src)
 
 #define DECLARE_MOVE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_move_at(TYPE* const ptr, TYPE* const src)
+TYPE* TYPE_METHOD(TYPE, construct_move_at)(TYPE* const ptr, TYPE* const src)
 
 #define DECLARE_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE) \
-void TYPE##_destroy_at(TYPE* const ptr)
+void TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr)
 
 #define DECLARE_CONSTRUCTORS_AND_DESTRUCTORS_FOR_NUMERIC_TYPE(TYPE) \
 DECLARE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE);\
@@ -22,24 +24,24 @@ DECLARE_MOVE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE);\
 DECLARE_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE)
 
 #define IMPLEMENT_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_at(TYPE* const ptr) { \
+TYPE* TYPE_METHOD(TYPE, construct_at)(TYPE* const ptr) { \
 	*ptr = 0; \
 	return ptr; \
 }
 
 #define IMPLEMENT_COPY_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_copy_at(TYPE* const ptr, TYPE const* const src) { \
+TYPE* TYPE_METHOD(TYPE, construct_copy_at)(TYPE* const ptr, TYPE const* const src) { \
 	*ptr = *src; \
 	return ptr; \
 }
 
 #define IMPLEMENT_MOVE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE) \
-TYPE* TYPE##_construct_move_at(TYPE* const ptr, TYPE* const src) { \
-	return TYPE##_construct_copy_at(ptr, src); \
+TYPE* TYPE_METHOD(TYPE, construct_move_at)(TYPE* const ptr, TYPE* const src) { \
+	return TYPE_METHOD(TYPE, construct_copy_at)(ptr, src); \
 }
 
 #define IMPLEMENT_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE) \
-void TYPE##_destroy_at(TYPE* const ptr) {}
+void TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr) {}
 
 #define IMPLEMENT_CONSTRUCTORS_AND_DESTRUCTORS_FOR_NUMERIC_TYPE(TYPE) \
 IMPLEMENT_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE);\

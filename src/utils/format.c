@@ -37,18 +37,18 @@ struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_at)(struct LOCAL_NAMESPACE
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
     ASSERT(this);
     ASSERT(src);
-    string_char_construct_copy_at(&this->_string_representation, &src->_string_representation);
+    STRING_METHOD(construct_copy_at)(&this->_string_representation, &src->_string_representation);
     this->_type = src->_type;
     return this;
 }
 void PATTERN_FN(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
     ASSERT(this);
-    string_char_destroy_at(&this->_string_representation);
+    STRING_METHOD(destroy_at)(&this->_string_representation);
 }
 
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_with_values_at)(struct LOCAL_NAMESPACE(pattern) * const this,
     enum LOCAL_NAMESPACE(format_string_pattern_type) type, char const* const pattern_string_representation) {
-    string_char_construct_from_c_string_at(&this->_string_representation, pattern_string_representation);
+    STRING_METHOD(construct_from_c_string_at)(&this->_string_representation, pattern_string_representation);
     this->_type = type;
     return this;
 }
@@ -114,7 +114,7 @@ struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(s
             result._pattern = VECTOR_OF_PATTERNS_FN(at)(&patterns->_patterns, vec_index);
             if (!utils__string__compare_string_char_with_buffer(
                 &result._pattern->_string_representation,
-                string_char_size(&result._pattern->_string_representation),
+                STRING_METHOD(size)(&result._pattern->_string_representation),
                 format_string + result._index)
             ) {
                 return result;
@@ -128,15 +128,15 @@ struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(s
 struct string_char NAMESPACE(format)(char const* const format_string, ...) {
     va_list args;
     va_start(args, format_string);
-    struct string_char result = NAMESPACE(va_format)(format_string, args);
+    struct STRING_TYPE() result = NAMESPACE(va_format)(format_string, args);
     va_end(args);
 
     return result;
 }
 
 struct string_char NAMESPACE(va_format)(char const* const format_string, va_list args) {
-    string_char formatted_string;
-    string_char_construct_at(&formatted_string);
+    struct STRING_TYPE() formatted_string;
+    STRING_METHOD(construct_at)(&formatted_string);
 
     struct LOCAL_NAMESPACE(patterns) patterns;
     PATTERNS_FN(construct_at)(&patterns);
@@ -145,7 +145,7 @@ struct string_char NAMESPACE(va_format)(char const* const format_string, va_list
         LOCAL_NAMESPACE(format_string_pattern_occurrence_index) pattern_n_index = LOCAL_NAMESPACE(search_pattern_occurence)(format_string + format_string_index, &patterns);
         // copy passed substring from format_string
         for (uint index = 0u; index < pattern_n_index._index; ++index, ++format_string_index) {
-            string_char_push_back(&formatted_string, &format_string[format_string_index]);
+            STRING_METHOD(push_back)(&formatted_string, &format_string[format_string_index]);
         }
         LOCAL_NAMESPACE(pattern) const* const pattern = pattern_n_index._pattern;
         // stop if no patterns matched
@@ -155,27 +155,27 @@ struct string_char NAMESPACE(va_format)(char const* const format_string, va_list
         switch (pattern->_type) {
             case ESCAPED_PERCENT: {
                 char value = '%';
-                string_char_push_back(&formatted_string, &value);
+                STRING_METHOD(push_back)(&formatted_string, &value);
             } break;
             case CHARACTER: {
                 char value = va_arg(args, int);
-                string_char_push_back(&formatted_string, &value);
+                STRING_METHOD(push_back)(&formatted_string, &value);
             } break;
             case NULL_TERMINATED_STRING: {
                 char const* const null_terminated_string = va_arg(args, char*);
                 for (uint index = 0u; null_terminated_string[index] != '\0'; ++index) {
-                    string_char_push_back(&formatted_string, &null_terminated_string[index]);
+                    STRING_METHOD(push_back)(&formatted_string, &null_terminated_string[index]);
                 }
             } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
                 string_char result = utils__string__int_to_string_char(va_arg(args, int));
-                for (uint index = 0u; index < string_char_size(&result); ++index) {
-                    string_char_push_back(&formatted_string, string_char_at(&result, index));
+                for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
+                    STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
                 }
-                string_char_destroy_at(&result);
+                STRING_METHOD(destroy_at)(&result);
             } break;
         }
-        format_string_index += string_char_size(&pattern->_string_representation);
+        format_string_index += STRING_METHOD(size)(&pattern->_string_representation);
     }
     PATTERNS_FN(destroy_at)(&patterns);
 
