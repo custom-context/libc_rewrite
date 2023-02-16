@@ -20,7 +20,7 @@ ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_at)(ARRAY_STRU
 ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_copy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const source);\
 ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_by_value_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, TYPE const* const value);\
 ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_from_buffer_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, TYPE const (*buffer)[SIZE]);\
-void ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this);\
+void* ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this);\
 \
 uint ARRAY_METHOD(TYPE, SIZE, size)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this);\
 TYPE const* ARRAY_METHOD(TYPE, SIZE, data)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this);\
@@ -62,11 +62,12 @@ ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_from_buffer_at
     }\
     return this;\
 }\
-void ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this){\
+void* ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this){\
     ASSERT(this);\
     for (uint index = 0u; index < SIZE; ++index) {\
         TYPE_METHOD(TYPE, destroy_at)(ARRAY_METHOD(TYPE, SIZE, mut_at)(this, index));\
     }\
+    return this;\
 }\
 \
 uint ARRAY_METHOD(TYPE, SIZE, size)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this) {\
@@ -94,7 +95,7 @@ static ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_at)(ARR
 static ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_copy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const source);\
 static ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_by_value_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, TYPE const* const value);\
 static ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_from_buffer_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this, TYPE const (*buffer)[SIZE]);\
-static void ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this);\
+void* ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this);\
 \
 static uint ARRAY_METHOD(TYPE, SIZE, size)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this);\
 static TYPE const* ARRAY_METHOD(TYPE, SIZE, data)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this);\
@@ -133,11 +134,12 @@ static ARRAY_STRUCT_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_from_bu
     }\
     return this;\
 }\
-static void ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this){\
+void* ARRAY_METHOD(TYPE, SIZE, destroy_at)(ARRAY_STRUCT_TYPE(TYPE, SIZE)* const this){\
     ASSERT(this);\
     for (uint index = 0u; index < SIZE; ++index) {\
         TYPE_METHOD(TYPE, destroy_at)(ARRAY_METHOD(TYPE, SIZE, mut_at)(this, index));\
     }\
+    return this;\
 }\
 \
 static uint ARRAY_METHOD(TYPE, SIZE, size)(ARRAY_STRUCT_TYPE(TYPE, SIZE) const* const this) {\
