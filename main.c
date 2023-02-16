@@ -7,6 +7,7 @@
 #include <tests/containers/array/array.h>
 #include <tests/containers/string/string.h>
 #include <tests/fs/file/encoding.h>
+#include <tests/network/socket/socket.h>
 
 void exec_tests();
 void print_formatted_args(int const argc, char const* const argv[const]);
@@ -25,6 +26,7 @@ void exec_tests() {
     EXECUTE_TYPE_TESTS(array);
     EXECUTE_TYPE_TESTS(string);
     EXECUTE_TYPE_TESTS(encoding);
+    EXECUTE_TYPE_TESTS(socket);
 }
 
 void print_formatted_args(int const argc, char const* const argv[]) {

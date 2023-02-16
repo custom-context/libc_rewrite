@@ -1,3 +1,4 @@
 add_subdirectory(containers)
 add_subdirectory(fs)
+add_subdirectory(network)
 add_subdirectory(utils)
