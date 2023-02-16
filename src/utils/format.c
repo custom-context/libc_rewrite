@@ -41,9 +41,10 @@ struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_copy_at)(struct LOCAL_NAME
     this->_type = src->_type;
     return this;
 }
-void PATTERN_FN(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
+void* PATTERN_FN(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
     ASSERT(this);
     STRING_METHOD(destroy_at)(&this->_string_representation);
+    return this;
 }
 
 struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_with_values_at)(struct LOCAL_NAMESPACE(pattern) * const this,
@@ -96,7 +97,7 @@ struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(construct_at)(struct LOCAL_NAMESP
     }
     return this;
 }
-struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(destroy_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
+void* PATTERNS_FN(destroy_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
     ASSERT(this);
     VECTOR_OF_PATTERNS * patterns = &this->_patterns;
     VECTOR_OF_PATTERNS_FN(destroy_at)(patterns);

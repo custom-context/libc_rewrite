@@ -33,7 +33,7 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer);\
-void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
+void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this);\
 /* --- Assignment functions implementation --- */\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const source);\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE) const* const source);\
@@ -117,10 +117,11 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(this, buffer_size, buffer);\
     return this;\
 }\
-void SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
+void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this) {\
     if (!this->is_stack_allocated_) {\
         free(this->dynamic_data_.buffer_);\
     };\
+    return this;\
 }\
 /* --- Assignment functions implementation --- */\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_from_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const source) {\

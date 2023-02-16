@@ -15,7 +15,7 @@ TYPE* TYPE_METHOD(TYPE, construct_copy_at)(TYPE* const ptr, TYPE const* const sr
 TYPE* TYPE_METHOD(TYPE, construct_move_at)(TYPE* const ptr, TYPE* const src)
 
 #define DECLARE_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE) \
-void TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr)
+void* TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr)
 
 #define DECLARE_CONSTRUCTORS_AND_DESTRUCTORS_FOR_NUMERIC_TYPE(TYPE) \
 DECLARE_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE);\
@@ -41,7 +41,9 @@ TYPE* TYPE_METHOD(TYPE, construct_move_at)(TYPE* const ptr, TYPE* const src) { \
 }
 
 #define IMPLEMENT_DESTROY_AT_FOR_NUMERIC_TYPE(TYPE) \
-void TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr) {}
+void* TYPE_METHOD(TYPE, destroy_at)(TYPE* const ptr) { \
+	return ptr; \
+}
 
 #define IMPLEMENT_CONSTRUCTORS_AND_DESTRUCTORS_FOR_NUMERIC_TYPE(TYPE) \
 IMPLEMENT_CONSTRUCT_AT_FOR_NUMERIC_TYPE(TYPE);\

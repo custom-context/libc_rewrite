@@ -23,8 +23,9 @@ void TYPE_METHOD(test__inc_on_construction__dec_on_destruction, construct_copy_a
     ++*(this->encounter_pointer);
 }
 
-void TYPE_METHOD(test__inc_on_construction__dec_on_destruction, destroy_at)(test__inc_on_construction__dec_on_destruction* const this) {
+void* TYPE_METHOD(test__inc_on_construction__dec_on_destruction, destroy_at)(test__inc_on_construction__dec_on_destruction* const this) {
     --*(this->encounter_pointer);
+    return this;
 }
 
 #define TEST_BUFFER_SIZE4 275

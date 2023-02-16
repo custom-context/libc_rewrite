@@ -35,11 +35,8 @@ struct INTERFACE_VTABLE_TYPE(INTERFACE_NAME) const*/*const*/ INTERFACE_VTABLE_VA
 struct INTERFACE_TYPE(INTERFACE_NAME)/*const*/ INTERFACE_VARIABLE(INTERFACE_NAME)
 
 #define DEFINE_INTERFACE_TYPE_DYNAMIC_DISPOSE_METHODS(INTERFACE_NAME)\
-inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), destroy_at)(struct INTERFACE_TYPE(INTERFACE_NAME)* const interface) {\
-    interface->INTERFACE_VTABLE_VARIABLE(INTERFACE_NAME)->destroy_at(interface);\
-}\
-inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocate_at)(struct INTERFACE_TYPE(INTERFACE_NAME)* const interface) {\
-    interface->INTERFACE_VTABLE_VARIABLE(INTERFACE_NAME)->deallocate_at(interface);\
+inline static void* TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), destroy_at)(struct INTERFACE_TYPE(INTERFACE_NAME)* const interface) {\
+    return interface->INTERFACE_VTABLE_VARIABLE(INTERFACE_NAME)->destroy_at(interface);\
 }
 
 /*
@@ -52,8 +49,7 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * 
 * * struct INTERFACE_VTABLE_TYPE(OnClick) {
 * *     void (*click)(struct INTERFACE_TYPE(OnClick)* const this);
-* *     void (*destroy_at)(struct INTERFACE_TYPE(OnClick)* const this);
-* *     void (*deallocate_at)(struct INTERFACE_TYPE(OnClick)* const this);
+* *     void* (*destroy_at)(struct INTERFACE_TYPE(OnClick)* const this);
 * * };
 * * 
 * * struct INTERFACE_TYPE(OnClick) {
@@ -61,8 +57,7 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * };
 * * 
 * * struct INTERFACE_TYPE(OnClick)* TYPE_METHOD(INTERFACE_TYPE(OnClick), construct_at)(struct INTERFACE_TYPE(OnClick)* const this);
-* * void TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at)(struct INTERFACE_TYPE(OnClick)* const this);
-* * void TYPE_MEMBER(INTERFACE_TYPE(OnClick), deallocate_at)(struct INTERFACE_TYPE(OnClick)* const this);
+* * void* TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at)(struct INTERFACE_TYPE(OnClick)* const this);
 * * 
 * * inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(OnClick), click)(struct INTERFACE_TYPE(OnClick)* const this) {
 * *     this->INTERFACE_VTABLE_VARIABLE(OnClick)->click(this);
@@ -77,19 +72,16 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * #include <stdlib.h>
 * * #include <stdio.h>
 * * 
-* * void TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at)(struct INTERFACE_TYPE(OnClick)* const this) {
+* * void* TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at)(struct INTERFACE_TYPE(OnClick)* const this) {
 * *     // method body
 * *     // ...
-* * }
-* * 
-* * void TYPE_MEMBER(INTERFACE_TYPE(OnClick), deallocate_at)(struct INTERFACE_TYPE(OnClick)* const this) {
-* *     free(this);
+* *     // boilerplate
+* *     return this;
 * * }
 * * 
 * * static struct INTERFACE_VTABLE_TYPE(OnClick) TYPE_MEMBER(INTERFACE_TYPE(OnClick), INTERFACE_VTABLE_VARIABLE(OnClick)) = {
 * *     .click = NULL,
-* *     .destroy_at = TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at),
-* *     .deallocate_at = TYPE_MEMBER(INTERFACE_TYPE(OnClick), deallocate_at)
+* *     .destroy_at = TYPE_MEMBER(INTERFACE_TYPE(OnClick), destroy_at)
 * * };
 * * 
 * * struct INTERFACE_TYPE(OnClick)* TYPE_METHOD(INTERFACE_TYPE(OnClick), construct_at)(struct INTERFACE_TYPE(OnClick)* const this) {
@@ -109,15 +101,10 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * 
 * * struct Button* TYPE_METHOD(Button, construct_at)(struct Button* const this);
 * * struct INTERFACE_TYPE(OnClick)* INTERFACE_GETTER(Button, OnClick)(struct Button* const this);
-* * void TYPE_METHOD(Button, destroy_at)(struct Button* const this);
-* * inline static void TYPE_DYNAMIC_METHOD(Button, destroy_at)(struct Button* const this) {
+* * void* TYPE_METHOD(Button, destroy_at)(struct Button* const this);
+* * inline static void* TYPE_DYNAMIC_METHOD(Button, destroy_at)(struct Button* const this) {
 * *     // any interface with destroy_at is appropriate
-* *     TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(OnClick), destroy_at)(INTERFACE_GETTER(Button, OnClick)(this));
-* * }
-* * void TYPE_METHOD(Button, deallocate_at)(struct Button* const this);
-* * inline static void TYPE_DYNAMIC_METHOD(Button, deallocate_at)(struct Button* const this) {
-* *     // any interface with deallocate_at is appropriate
-* *     TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(OnClick), deallocate_at)(INTERFACE_GETTER(Button, OnClick)(this));
+* *     return TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(OnClick), destroy_at)(INTERFACE_GETTER(Button, OnClick)(this));
 * * }
 * *
 * button.c
@@ -126,26 +113,19 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * #include <stdlib.h>
 * * #include <stdio.h>
 * * 
-* * void TYPE_METHOD(Button, destroy_at)(struct Button* const this) {
+* * void* TYPE_METHOD(Button, destroy_at)(struct Button* const this) {
 * *     printf("Button class destructor called\n");
 * * 
 * *     TYPE_METHOD(INTERFACE_TYPE(OnClick), destroy_at)(&this->INTERFACE_VARIABLE(OnClick));
-* * }
-* * 
-* * void TYPE_METHOD(Button, deallocate_at)(struct Button* const this) {
-* *     free(this);
+* *     return this;
 * * }
 * * 
 * * // OnClick overloading
 * * // fully boilerplated destroy_at
-* * static void TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), destroy_at))(struct INTERFACE_TYPE(OnClick)* const interface) {
-* *     TYPE_METHOD(Button, destroy_at)((struct Button* const)((void*)interface - offsetof(struct Button, INTERFACE_VARIABLE(OnClick))));
-* * }
-* * 
-* * // fully boilerplated deallocate_at
-* * void TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), deallocate_at))(struct INTERFACE_TYPE(OnClick)* const interface) {
+* * static void* TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), destroy_at))(struct INTERFACE_TYPE(OnClick)* const interface) {
 * *     struct Button* const this = (struct Button* const)((void*)interface - offsetof(struct Button, INTERFACE_VARIABLE(OnClick)));
-* *     TYPE_METHOD(Button, deallocate_at)(this);
+* *     TYPE_METHOD(Button, destroy_at)(this);
+* *     return this;
 * * }
 * * 
 * * void TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), click))(struct INTERFACE_TYPE(OnClick)* const interface) {
@@ -157,8 +137,7 @@ inline static void TYPE_DYNAMIC_METHOD(INTERFACE_TYPE(INTERFACE_NAME), deallocat
 * * 
 * * static struct INTERFACE_VTABLE_TYPE(OnClick) CONCAT3(Button, _, INTERFACE_VTABLE_VARIABLE(OnClick)) = {
 * *     .click = &TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), click)),
-* *     .destroy_at = &TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), destroy_at)),
-* *     .deallocate_at = &TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), deallocate_at))
+* *     .destroy_at = &TYPE_METHOD(Button, TYPE_METHOD(INTERFACE_TYPE(OnClick), destroy_at))
 * * };
 * * 
 * * struct INTERFACE_TYPE(OnClick)* INTERFACE_GETTER(Button, OnClick)(struct Button* const this) {
