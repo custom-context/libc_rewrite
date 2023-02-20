@@ -2,6 +2,8 @@
 
 #include <network/native/native.h>
 
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this) {
     ADDRESS_INFO_METHOD(construct_at)(&this->address_info);
     SOCKET_METHOD(construct_with_invalidation_at)(&this->socket);
@@ -11,6 +13,28 @@ struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const th
 
 int CLIENT_METHOD(is_connection_established)(struct CLIENT_TYPE() const* const this) {
     return SOCKET_METHOD(is_valid)(&this->socket);
+}
+
+struct RESULT_TYPE(int, int) CLIENT_METHOD(status)(struct CLIENT_TYPE() const* const this) {
+    struct RESULT_TYPE(int, int) result;
+
+    int error_code = 0;
+    int error_code_size = sizeof(error_code);
+    if (getsockopt(this->socket.native_socket,
+        SOL_SOCKET,
+        SO_ERROR,
+        (void*)(&error_code),
+        &error_code_size) == -1) {
+#if defined(WIN32)
+        error_code = WSAGetLastError();
+#else
+        error_code = errno;
+#endif
+        RESULT_METHOD(int, int, construct_move_from_error_at)(&result, &error_code);
+        return result;
+    }
+    RESULT_METHOD(int, int, construct_move_from_value_at)(&result, &error_code);
+    return result;
 }
 
 struct CLIENT_TYPE()* CLIENT_METHOD(connect)(struct CLIENT_TYPE()* const this,

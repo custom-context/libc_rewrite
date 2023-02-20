@@ -19,6 +19,8 @@ struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const th
 
 int CLIENT_METHOD(is_connection_established)(struct CLIENT_TYPE() const* const this);
 
+struct RESULT_TYPE(int, int) CLIENT_METHOD(status)(struct CLIENT_TYPE() const* const this);
+
 struct CLIENT_TYPE()* CLIENT_METHOD(connect)(struct CLIENT_TYPE()* const this,
     char const* const restrict host,
     char const* const restrict service,
