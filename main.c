@@ -6,6 +6,7 @@
 
 #include <tests/containers/array/array.h>
 #include <tests/containers/string/string.h>
+#include <tests/utils/result/result.h>
 #include <tests/fs/file/encoding.h>
 #include <tests/network/socket/socket.h>
 #include <tests/network/address_info/address_info.h>
@@ -27,6 +28,7 @@ int main(int const argc, char const* const argv[]) {
 void exec_tests() {
     EXECUTE_TYPE_TESTS(array);
     EXECUTE_TYPE_TESTS(string);
+    EXECUTE_TYPE_TESTS(result);
     EXECUTE_TYPE_TESTS(encoding);
     EXECUTE_TYPE_TESTS(socket);
     EXECUTE_TYPE_TESTS(address_info);
