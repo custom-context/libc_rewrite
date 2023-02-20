@@ -113,7 +113,7 @@ struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(s
     for (; format_string[result._index] != '\0'; ++result._index) {
         for (uint vec_index = 0u; vec_index < VECTOR_OF_PATTERNS_FN(size)(&patterns->_patterns); ++vec_index) {
             result._pattern = VECTOR_OF_PATTERNS_FN(at)(&patterns->_patterns, vec_index);
-            if (!utils__string__compare_string_char_with_buffer(
+            if (!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(
                 &result._pattern->_string_representation,
                 STRING_METHOD(size)(&result._pattern->_string_representation),
                 format_string + result._index)

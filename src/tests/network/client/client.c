@@ -50,7 +50,7 @@ IMPLEMENT_TYPE_TESTS(client) {
         for (address_encounter = 0u; address_encounter < sizeof(domain_addresses_with_requests) / sizeof(*domain_addresses_with_requests); ++address_encounter) {
             char const* const domain_address = domain_addresses_with_requests[address_encounter].domain_address;
             char const* const request = domain_addresses_with_requests[address_encounter].request;
-            size_t const request_size = utils__string__string_char_length(request);
+            size_t const request_size = RAW_STRING_FUNCTION(char, length)(request);
             SOCKET_DOMAIN_ENUM() const domain = domains[domain_encounter];
             address_info_criterias.socket_domain = domain;
             

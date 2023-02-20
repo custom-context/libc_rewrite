@@ -3,7 +3,7 @@
 #include <construct/numeric_helpers.h>
 #include <utils/macros.h>
 #include <utils/debug.h>
-#include <utils/string/c_string_helpers.h>
+#include <utils/string/raw_string_helpers.h>
 #include <memory/memory.h>
 
 // define macros for `string_type`
@@ -113,7 +113,7 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
 }\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const* const buffer) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
-    uint const buffer_size = CONCAT5(utils__string, __, SPECIALIZED_STRING_TYPE(TYPE), _, length)(buffer);\
+    uint const buffer_size = RAW_STRING_FUNCTION(TYPE, length)(buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(this, buffer_size, buffer);\
     return this;\
 }\
@@ -253,7 +253,7 @@ SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_str
     return this;\
 }\
 SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(SPECIALIZED_STRING_STRUCT_TYPE(TYPE)* const this, TYPE const * const buffer) {\
-    uint const buffer_size = CONCAT5(utils__string, __, SPECIALIZED_STRING_TYPE(TYPE), _, length)(buffer);\
+    uint const buffer_size = RAW_STRING_FUNCTION(TYPE, length)(buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, buffer, buffer_size);\
     return this;\
 }\
