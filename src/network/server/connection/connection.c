@@ -1,6 +1,8 @@
 #include "connection.h"
 
-#include <errno.h>
+#if !defined(WIN32)
+    #include <errno.h>
+#endif
 
 #include <utils/debug.h>
 
@@ -14,7 +16,12 @@ struct RESULT_TYPE(int, int) CONNECTION_METHOD(status)(struct CONNECTION_TYPE() 
     struct RESULT_TYPE(int, int) result;
 
     int error_code = 0;
-    int error_code_size = sizeof(error_code);
+#if defined (WIN32)
+    int error_code_size;
+#else
+    socklen_t error_code_size;
+#endif
+    error_code_size = sizeof(error_code);
     if (getsockopt(this->socket.native_socket,
         SOL_SOCKET,
         SO_ERROR,

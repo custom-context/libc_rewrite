@@ -2,6 +2,11 @@
 
 #include <network/native/native.h>
 
+#if !defined(WIN32)
+    #include <errno.h>
+    #include <netdb.h>
+#endif
+
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
 
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this) {
@@ -19,7 +24,12 @@ struct RESULT_TYPE(int, int) CLIENT_METHOD(status)(struct CLIENT_TYPE() const* c
     struct RESULT_TYPE(int, int) result;
 
     int error_code = 0;
-    int error_code_size = sizeof(error_code);
+#if defined (WIN32)
+    int error_code_size;
+#else
+    socklen_t error_code_size;
+#endif
+    error_code_size = sizeof(error_code);
     if (getsockopt(this->socket.native_socket,
         SOL_SOCKET,
         SO_ERROR,

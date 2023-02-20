@@ -2,6 +2,11 @@
 
 #include <network/native/native.h>
 
+#if !defined(WIN32)
+    #include <sys/socket.h>
+    #include <unistd.h>
+#endif
+
 struct SOCKET_TYPE()* SOCKET_METHOD(construct_at)(struct SOCKET_TYPE()* const this,
     enum SOCKET_DOMAIN_ENUM() domain,
     enum SOCKET_TYPE_ENUM() socket_type,

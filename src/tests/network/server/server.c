@@ -3,12 +3,15 @@
 #include <network/server/server.h>
 #include <network/client/client.h>
 
+#include <utils/string/comparators_impl.h>
 #include <utils/string/helpers.h>
 
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
 
 #if defined(WIN32)
     #include <ws2tcpip.h>
+#else
+    #include <netdb.h>
 #endif
 
 IMPLEMENT_TYPE_TESTS(server) {
