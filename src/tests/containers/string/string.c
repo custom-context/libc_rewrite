@@ -157,7 +157,7 @@ IMPLEMENT_TYPE_TESTS(string) {
         for (size_t i = 0u; i < STRING_METHOD(size)(&str); ++i) {
             STRING_METHOD(pop_back)(&str2);
             CHECK(STRING_METHOD(size)(&str2) == STRING_METHOD(size)(&str) - 1 - i);
-            CHECK(!utils__string__compare_string_char_with_buffer(&str2, STRING_METHOD(size)(&str2), STRING_METHOD(data)(&str)));
+            CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str2, STRING_METHOD(size)(&str2), STRING_METHOD(data)(&str)));
         }
 
         STRING_METHOD(destroy_at)(&str2);
@@ -166,14 +166,14 @@ IMPLEMENT_TYPE_TESTS(string) {
 
     TEST_BLOCK("`construct_from_c_string` method without reallocations") {
         char const* const c_string = "str w. len < 16";
-        size_t const c_string_length = utils__string__string_char_length(c_string);
+        size_t const c_string_length = RAW_STRING_FUNCTION(char, length)(c_string);
 
         STRING_TYPE() str;
         STRING_METHOD(construct_from_c_string_at)(&str, c_string);
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);
@@ -181,7 +181,7 @@ IMPLEMENT_TYPE_TESTS(string) {
 
     TEST_BLOCK("`construct_from_c_string` method with reallocations") {
         char const* const c_string = "str w. more than 16";
-        size_t const c_string_length = utils__string__string_char_length(c_string);
+        size_t const c_string_length = RAW_STRING_FUNCTION(char, length)(c_string);
 
         STRING_TYPE() str;
         STRING_METHOD(construct_from_c_string_at)(&str, c_string);
@@ -189,7 +189,7 @@ IMPLEMENT_TYPE_TESTS(string) {
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
 
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
         CHECK(!str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);
@@ -197,14 +197,14 @@ IMPLEMENT_TYPE_TESTS(string) {
 
     TEST_BLOCK("`shrink_to_fit` method without reallocations") {
         char const* const c_string = "str w. len < 16";
-        size_t const c_string_length = utils__string__string_char_length(c_string);
+        size_t const c_string_length = RAW_STRING_FUNCTION(char, length)(c_string);
 
         STRING_TYPE() str;
         STRING_METHOD(construct_from_c_string_at)(&str, c_string);
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(pop_back)(&str);
@@ -212,13 +212,13 @@ IMPLEMENT_TYPE_TESTS(string) {
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length - 1);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length - 1);
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length - 1, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length - 1, c_string));
         CHECK(str.is_stack_allocated_);
     }
 
     TEST_BLOCK("`shrink_to_fit` method with deallocation") {
         char const* const c_string = "str w. len gt 16";
-        size_t const c_string_length = utils__string__string_char_length(c_string);
+        size_t const c_string_length = RAW_STRING_FUNCTION(char, length)(c_string);
 
         STRING_TYPE() str;
         STRING_METHOD(construct_from_c_string_at)(&str, c_string);
@@ -226,16 +226,15 @@ IMPLEMENT_TYPE_TESTS(string) {
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
 
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
         CHECK(!str.is_stack_allocated_);
 
-        //
         STRING_METHOD(pop_back)(&str);
         STRING_METHOD(shrink_to_fit)(&str);
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length - 1);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length - 1);
-        CHECK(!utils__string__compare_string_char_with_buffer(&str, c_string_length - 1, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length - 1, c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);

@@ -1,7 +1,7 @@
 target_sources(${PROJECT_NAME}
     PRIVATE
-        c_string_helpers.h
-        c_string_helpers.c
+        raw_string_helpers.h
+        raw_string_helpers.c
         helpers.h
         numeric_type_to_string_impl.h
         numeric_type_to_string_impl.c
