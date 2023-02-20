@@ -5,7 +5,14 @@
 #if defined(WIN32)
     #include <ws2tcpip.h>
 #else
+    #include <sys/types.h>
+    #include <netdb.h>
+    #include <arpa/inet.h>
 #endif
+
+// "standard" memset used - it's defined in libc's string.h, but without knowledge of current architecture
+// it's hard to correctly implement it
+#include <string.h>
 
 struct ADDRESS_INFO_TYPE()* ADDRESS_INFO_METHOD(construct_at)(struct ADDRESS_INFO_TYPE()* const this) {
     this->native_address_info = NULL;
@@ -124,7 +131,11 @@ int ADDRESS_INFO_METHOD(receive)(
         return 0u;
     }
 
+#if defined(WIN32)
     int native_sender_address_length = this->native_address_info->ai_addrlen;
+#else
+    socklen_t native_sender_address_length = this->native_address_info->ai_addrlen;
+#endif
     int return_value = recvfrom(socket.native_socket, buffer, buffer_size, 0, 
         this->native_address_info->ai_addr,
         &native_sender_address_length

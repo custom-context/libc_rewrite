@@ -1,13 +1,14 @@
 #include "native.h"
 
+#if !defined(WIN32)
+    #include <sys/types.h>
+    #include <netdb.h>
+#endif
+
 int NAMESPACE_NETWORK_NATIVE(get_native_domain)(enum SOCKET_DOMAIN_ENUM() domain) {
     switch (domain) {
     case SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED):
-#if defined(WIN32)
         return AF_UNSPEC;
-#else
-        return AF_UNSPEC;
-#endif
     case SOCKET_DOMAIN_ENUM_VALUE(INTERNAL):
 #if defined(WIN32)
         return AF_UNSPEC;
@@ -25,6 +26,7 @@ int NAMESPACE_NETWORK_NATIVE(get_native_domain)(enum SOCKET_DOMAIN_ENUM() domain
         return AF_BLUETOOTH;
 #endif
     }
+    return AF_UNSPEC;
 }
 enum SOCKET_DOMAIN_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_domain)(int native_domain) {
     switch (native_domain) {
@@ -57,6 +59,8 @@ int NAMESPACE_NETWORK_NATIVE(get_native_socket_type)(enum SOCKET_TYPE_ENUM() soc
         case SOCKET_TYPE_ENUM_VALUE(RELIABLE_MESSAGE_DATAGRAM): return SOCK_RDM;
         case SOCKET_TYPE_ENUM_VALUE(SEQUENCE_PACKET): return SOCK_SEQPACKET;
     }
+    // TODO: change to optional or error socket type
+    return SOCK_STREAM;
 }
 enum SOCKET_TYPE_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_socket_type)(int native_socket_type) {
     switch (native_socket_type) {

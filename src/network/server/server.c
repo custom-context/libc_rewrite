@@ -1,5 +1,10 @@
 #include "server.h"
 
+#if !defined(WIN32)
+    #include <errno.h>
+    #include <netdb.h>
+#endif
+
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
 
 // connection's private method that opened for server class only 
@@ -10,7 +15,11 @@ static struct CONNECTION_TYPE()* CONNECTION_METHOD(construct_move_from_socket_at
 
 // socket's private method that opened for server class only
 static struct SOCKET_TYPE()* SOCKET_METHOD(construct_on_acceptance_at)(struct SOCKET_TYPE()* const this, struct SERVER_TYPE() const* const server) {
+#if defined(WIN32)
     int native_address_length = server->address_info.native_address_info->ai_addrlen;
+#else
+    socklen_t native_address_length = server->address_info.native_address_info->ai_addrlen;
+#endif
     this->native_socket = accept(server->socket.native_socket,
         server->address_info.native_address_info->ai_addr,
         &native_address_length);
@@ -102,7 +111,12 @@ struct RESULT_TYPE(int, int) SERVER_METHOD(status)(struct SERVER_TYPE() const* c
     struct RESULT_TYPE(int, int) result;
 
     int error_code = 0;
-    int error_code_size = sizeof(error_code);
+#if defined (WIN32)
+    int error_code_size;
+#else
+    socklen_t error_code_size;
+#endif
+    error_code_size = sizeof(error_code);
     if (getsockopt(this->socket.native_socket,
         SOL_SOCKET,
         SO_ERROR,
