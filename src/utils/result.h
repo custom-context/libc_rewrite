@@ -80,4 +80,4 @@ static void* RESULT_METHOD(SUCCESS_TYPE, ERROR_TYPE, destroy_at)(struct RESULT_T
     }\
     RESULT_METHOD(SUCCESS_TYPE, ERROR_TYPE, construct_at)(this);\
     return this;\
-}\
+}
