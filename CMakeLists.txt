@@ -10,8 +10,9 @@ target_sources(${PROJECT_NAME}
         main.c
 )
 
+add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
+
 if(WIN32)
-    add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
     target_link_libraries(${PROJECT_NAME} wsock32 ws2_32)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)

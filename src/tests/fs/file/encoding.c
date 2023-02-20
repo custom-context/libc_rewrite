@@ -34,18 +34,20 @@ IMPLEMENT_TYPE_TESTS(encoding) {
         static char const *const current_directory_path =
           "\\src\\tests\\fs\\file\\";
         static char const *const encoded_files_relative_path = "utf_encoded_files\\";
-        CHECK(STRINGIFY(PROJECT_SOURCE_DIR));
 #elif defined(__unix__) || defined(__APPLE__)
-        static char const *const current_directory_path = "./src/tests/fs/file/";
+        static char const *const current_directory_path = "/src/tests/fs/file/";
         static char const* const encoded_files_relative_path = "utf_encoded_files/";
 #endif
+        CHECK(STRINGIFY(PROJECT_SOURCE_DIR));
         STRING_TYPE() directory_path;
 #if defined(_WIN32)
         STRING_METHOD(construct_from_c_string_at)
         (&directory_path, STRINGIFY(PROJECT_SOURCE_DIR));
         STRING_METHOD(append_c_string)(&directory_path, current_directory_path);
 #elif defined(__unix__) || defined(__APPLE__)
-        STRING_METHOD(construct_from_c_string_at)(&directory_path, current_directory_path);
+        STRING_METHOD(construct_from_c_string_at)
+        (&directory_path, STRINGIFY(PROJECT_SOURCE_DIR));
+        STRING_METHOD(append_c_string)(&directory_path, current_directory_path);
 #endif
         STRING_METHOD(append_c_string)(&directory_path, encoded_files_relative_path);
 
