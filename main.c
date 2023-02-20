@@ -11,6 +11,7 @@
 #include <tests/network/socket/socket.h>
 #include <tests/network/address_info/address_info.h>
 #include <tests/network/client/client.h>
+#include <tests/network/server/server.h>
 
 void exec_tests();
 void print_formatted_args(int const argc, char const* const argv[const]);
@@ -33,6 +34,7 @@ void exec_tests() {
     EXECUTE_TYPE_TESTS(socket);
     EXECUTE_TYPE_TESTS(address_info);
     EXECUTE_TYPE_TESTS(client);
+    EXECUTE_TYPE_TESTS(server);
 }
 
 void print_formatted_args(int const argc, char const* const argv[]) {

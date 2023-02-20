@@ -11,6 +11,13 @@ struct SOCKET_TYPE()* SOCKET_METHOD(construct_at)(struct SOCKET_TYPE()* const th
 
     return this;
 }
+
+struct SOCKET_TYPE()* SOCKET_METHOD(construct_move_at)(struct SOCKET_TYPE()* const this, struct SOCKET_TYPE()* const src) {
+    this->native_socket = src->native_socket;
+    SOCKET_METHOD(construct_with_invalidation_at)(src);
+    return this;
+}
+
 struct SOCKET_TYPE()* SOCKET_METHOD(construct_with_invalidation_at)(struct SOCKET_TYPE()* const this) {
 #if !defined(WIN32)
     enum {
