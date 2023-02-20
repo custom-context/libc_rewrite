@@ -50,6 +50,7 @@ typedef struct SOCKET_TYPE() {
 #define SOCKET_METHOD(METHOD) TYPE_METHOD(SOCKET_TYPE(), METHOD)
 
 struct SOCKET_TYPE()* SOCKET_METHOD(construct_at)(struct SOCKET_TYPE()* const this, enum SOCKET_DOMAIN_ENUM() domain, enum SOCKET_TYPE_ENUM() socket_type, struct SOCKET_PROTOCOL_TYPE() const* const NOT_NULL(protocol));
+struct SOCKET_TYPE()* SOCKET_METHOD(construct_move_at)(struct SOCKET_TYPE()* const this, struct SOCKET_TYPE()* const src);
 struct SOCKET_TYPE()* SOCKET_METHOD(construct_with_invalidation_at)(struct SOCKET_TYPE()* const this);
 void* SOCKET_METHOD(destroy_at)(struct SOCKET_TYPE()* const this);
 
