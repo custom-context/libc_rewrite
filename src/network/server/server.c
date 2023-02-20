@@ -75,8 +75,21 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
         if (setsockopt(this->socket.native_socket,
             SOL_SOCKET,
             SO_REUSEADDR,
+#if defined(WIN32)
             &(char){'1'}, sizeof(char)
+#else
+            &(int){1}, sizeof(int)
+#endif
         ) == -1) {
+            {
+                struct RESULT_TYPE(int, int) status = SERVER_METHOD(status)(this);
+                if (RESULT_METHOD(int, int, has_value)(&status)) {
+                    LOG_DEBUG_FORMAT("setsockopt status on success: %d\n", errno);
+                } else {
+                    LOG_DEBUG_FORMAT("setsockopt status on error: %d\n", *RESULT_METHOD(int, int, error)(&status));
+                }
+                RESULT_METHOD(int, int, destroy_at)(&status);
+            }
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }
@@ -86,6 +99,15 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
             current_address_info->native_address_info->ai_addr,
             current_address_info->native_address_info->ai_addrlen
         ) == -1) {
+            {
+                struct RESULT_TYPE(int, int) status = SERVER_METHOD(status)(this);
+                if (RESULT_METHOD(int, int, has_value)(&status)) {
+                    LOG_DEBUG_FORMAT("bind status on success: %d\n", errno);
+                } else {
+                    LOG_DEBUG_FORMAT("bind status on error: %d\n", *RESULT_METHOD(int, int, error)(&status));
+                }
+                RESULT_METHOD(int, int, destroy_at)(&status);
+            }
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }
