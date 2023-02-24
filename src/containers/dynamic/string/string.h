@@ -17,6 +17,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE);\
 /* --- Construction/Destruction functions implementation --- */\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source);\
+struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const buffer);\
@@ -80,6 +81,20 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     for (uint index = 0u; index < source_string_size; ++index) {\
         SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, SPECIALIZED_STRING_METHOD(TYPE, at)(source, index));\
     }\
+    return this;\
+}\
+struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
+    if (source->is_stack_allocated_) {\
+        SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(this, source);\
+        return this;\
+    }\
+    this->is_stack_allocated_ = 0u;\
+    this->dynamic_data_.buffer_ = source->dynamic_data_.buffer_;\
+    this->dynamic_data_.size_ = source->dynamic_data_.size_;\
+    this->dynamic_data_.capacity_ = source->dynamic_data_.capacity_;\
+\
+    SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(source);\
+    source->is_stack_allocated_ = 1u;\
     return this;\
 }\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, uint const size, TYPE const* const value) {\
