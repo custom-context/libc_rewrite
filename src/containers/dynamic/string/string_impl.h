@@ -1,6 +1,6 @@
 #pragma once
 
-#include "string.h"
+#include <containers/dynamic/string/string.h>
 
 #include <construct/characters_helpers.h>
 

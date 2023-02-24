@@ -4,7 +4,7 @@
 
 #include <primitives/unsigned_types_aliases.h>
 
-#include <containers/string.h>
+#include <containers/dynamic/string/string.h>
 
 #include <utils/common.h>
 #ifndef NAMESPACE_UTILS_STRING

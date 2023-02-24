@@ -1,27 +1,18 @@
 #pragma once
 
-#include <construct/numeric_helpers.h>
-#include <utils/macros.h>
-#include <utils/debug.h>
 #include <utils/string/raw_string_helpers.h>
-#include <memory/memory.h>
+#include <containers/dynamic/common.h>
 
 // define macros for `string_type`
-#define SPECIALIZED_STRING_TYPE_(CHAR_TYPE) CONCAT3(string, _, CHAR_TYPE)
-#define SPECIALIZED_STRING_TYPE(CHAR_TYPE) SPECIALIZED_STRING_TYPE_(CHAR_TYPE)
-
+#define SPECIALIZED_STRING_TYPE(CHAR_TYPE) NAMESPACE_CONTAINERS_DYNAMIC(CONCAT3(string, _, CHAR_TYPE))
 #define STRING_TYPE() SPECIALIZED_STRING_TYPE(char)
 
 // define macros for `struct string_type`
-#define SPECIALIZED_STRING_STRUCT_TYPE_(CHAR_TYPE) struct SPECIALIZED_STRING_TYPE(CHAR_TYPE)
-#define SPECIALIZED_STRING_STRUCT_TYPE(CHAR_TYPE) SPECIALIZED_STRING_STRUCT_TYPE_(CHAR_TYPE)
-
+#define SPECIALIZED_STRING_STRUCT_TYPE(CHAR_TYPE) struct SPECIALIZED_STRING_TYPE(CHAR_TYPE)
 #define STRING_STRUCT_TYPE() SPECIALIZED_STRING_STRUCT_TYPE(char)
 
 // define macros for string methods
-#define SPECIALIZED_STRING_METHOD_(CHAR_TYPE, METHOD) TYPE_METHOD(SPECIALIZED_STRING_TYPE(CHAR_TYPE), METHOD)
-#define SPECIALIZED_STRING_METHOD(CHAR_TYPE, METHOD) SPECIALIZED_STRING_METHOD_(CHAR_TYPE, METHOD)
-
+#define SPECIALIZED_STRING_METHOD(CHAR_TYPE, METHOD) TYPE_METHOD(SPECIALIZED_STRING_TYPE(CHAR_TYPE), METHOD)
 #define STRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(char, METHOD)
 
 // define macro for string type & string methods declaration

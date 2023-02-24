@@ -25,7 +25,7 @@ enum LOCAL_NAMESPACE(format_string_pattern_type) {
 };
 
 typedef struct LOCAL_NAMESPACE(pattern) {
-    string_char _string_representation;
+    struct STRING_TYPE() _string_representation;
     enum LOCAL_NAMESPACE(format_string_pattern_type) _type;
 } LOCAL_NAMESPACE(pattern);
 #define PATTERN_FN(FN_NAME) STRUCT_FN(LOCAL_NAMESPACE(pattern), FN_NAME)
@@ -126,7 +126,7 @@ struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(s
     return result;
 }
 
-struct string_char NAMESPACE(format)(char const* const format_string, ...) {
+struct STRING_TYPE() NAMESPACE(format)(char const* const format_string, ...) {
     va_list args;
     va_start(args, format_string);
     struct STRING_TYPE() result = NAMESPACE(va_format)(format_string, args);
@@ -135,7 +135,7 @@ struct string_char NAMESPACE(format)(char const* const format_string, ...) {
     return result;
 }
 
-struct string_char NAMESPACE(va_format)(char const* const format_string, va_list args) {
+struct STRING_TYPE() NAMESPACE(va_format)(char const* const format_string, va_list args) {
     struct STRING_TYPE() formatted_string;
     STRING_METHOD(construct_at)(&formatted_string);
 
@@ -169,7 +169,7 @@ struct string_char NAMESPACE(va_format)(char const* const format_string, va_list
                 }
             } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
-                string_char result = utils__string__int_to_string_char(va_arg(args, int));
+                struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT_FUNCTION(int, STRING_TYPE()))(va_arg(args, int));
                 for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
                     STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
                 }
