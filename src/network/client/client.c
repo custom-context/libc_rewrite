@@ -1,3 +1,4 @@
+#include "client_inheritance.h"
 #include "client.h"
 
 #include <network/native/native.h>
@@ -9,10 +10,19 @@
 
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
 
+static struct INTERFACE_VTABLE_TYPE(CLIENT_TYPE()) TYPE_MEMBER(CLIENT_TYPE(), INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())) = {
+    .destroy_at = CLIENT_METHOD(destroy_at),
+    .on_success_connection = CLIENT_METHOD(on_success_connection)
+};
+
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this) {
+    // boilerplate
+    this->INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE()) = &TYPE_MEMBER(CLIENT_TYPE(), INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE()));
     ADDRESS_INFO_METHOD(construct_at)(&this->address_info);
     SOCKET_METHOD(construct_with_invalidation_at)(&this->socket);
-
+    // body
+    // ...
+    // boilerplate
     return this;
 }
 
@@ -35,11 +45,7 @@ struct RESULT_TYPE(int, int) CLIENT_METHOD(status)(struct CLIENT_TYPE() const* c
         SO_ERROR,
         (void*)(&error_code),
         &error_code_size) == -1) {
-#if defined(WIN32)
-        error_code = WSAGetLastError();
-#else
-        error_code = errno;
-#endif
+        error_code = NAMESPACE_NETWORK(get_last_error)();
         RESULT_METHOD(int, int, construct_move_from_error_at)(&result, &error_code);
         return result;
     }
@@ -91,10 +97,17 @@ struct CLIENT_TYPE()* CLIENT_METHOD(reconnect)(struct CLIENT_TYPE()* const this)
             continue;
         }
 
+        // TODO: add return value check for errors
         if (connect(this->socket.native_socket,
             current_address_info->native_address_info->ai_addr,
             current_address_info->native_address_info->ai_addrlen
         ) == -1) {
+            SOCKET_METHOD(destroy_at)(&this->socket);
+            continue;
+        }
+
+        // TODO: add return value check for errors
+        if (CLIENT_DYNAMIC_METHOD(on_success_connection)(this) == -1) {
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }
@@ -128,10 +141,4 @@ int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
     ASSERT(CLIENT_METHOD(is_connection_established)(this));
 
     return recv(this->socket.native_socket, buffer, buffer_size, 0);
-}
-
-void* CLIENT_METHOD(destroy_at)(struct CLIENT_TYPE()* const this) {
-    SOCKET_METHOD(destroy_at)(&this->socket);
-    ADDRESS_INFO_METHOD(destroy_at)(&this->address_info);
-    return this;
 }

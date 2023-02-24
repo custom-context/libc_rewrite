@@ -8,12 +8,21 @@
 
 #define CLIENT_TYPE() NAMESPACE_NETWORK_CLIENT(client)
 
+struct CLIENT_TYPE();
+
+struct INTERFACE_VTABLE_TYPE(CLIENT_TYPE()) {
+    int (*on_success_connection)(struct CLIENT_TYPE() const* const this);
+    void* (*destroy_at)(struct CLIENT_TYPE()* const this);
+};
+
 typedef struct CLIENT_TYPE() {
+    DEFINE_INTERFACE_VTABLE_ADAPTER(CLIENT_TYPE());
     struct SOCKET_TYPE() socket;
     struct ADDRESS_INFO_TYPE() address_info;
 } CLIENT_TYPE();
 
 #define CLIENT_METHOD(METHOD) TYPE_METHOD(CLIENT_TYPE(), METHOD)
+#define CLIENT_DYNAMIC_METHOD(METHOD) TYPE_DYNAMIC_METHOD(CLIENT_TYPE(), METHOD)
 
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this);
 
@@ -41,4 +50,10 @@ int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
     size_t buffer_size
 );
 
-void* CLIENT_METHOD(destroy_at)(struct CLIENT_TYPE()* const this);
+// dynamic methods
+inline static int CLIENT_DYNAMIC_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const this) {
+    return this->INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->on_success_connection(this);
+}
+inline static void* CLIENT_DYNAMIC_METHOD(destroy_at)(struct CLIENT_TYPE()* const this) {
+    return this->INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->destroy_at(this);
+}
