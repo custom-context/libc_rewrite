@@ -76,10 +76,12 @@ TYPE const* ARRAY_METHOD(TYPE, SIZE, data)(struct ARRAY_TYPE(TYPE, SIZE) const* 
 }\
 TYPE * ARRAY_METHOD(TYPE, SIZE, mut_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, uint index) {\
     ASSERT(this);\
+    ASSERT(index < SIZE);\
     return this->buffer_ + index;\
 }\
 TYPE const* ARRAY_METHOD(TYPE, SIZE, at)(struct ARRAY_TYPE(TYPE, SIZE) const* const this, uint index) {\
     ASSERT(this);\
+    ASSERT(index < SIZE);\
     return this->buffer_ + index;\
 }
 
