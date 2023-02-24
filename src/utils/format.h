@@ -1,6 +1,6 @@
 #pragma once
 
-#include <containers/dynamic/string/string_impl.h>
+#include <containers/dynamic/string/string.h>
 
 #include <stdarg.h>
 
