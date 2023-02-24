@@ -1,4 +1,5 @@
 #include "server.h"
+#include "server_inheritance.h"
 
 #if !defined(WIN32)
     #include <errno.h>
@@ -28,9 +29,19 @@ static struct SOCKET_TYPE()* SOCKET_METHOD(construct_on_acceptance_at)(struct SO
 }
 
 // server' methods
+static struct INTERFACE_VTABLE_TYPE(SERVER_TYPE()) TYPE_MEMBER(SERVER_TYPE(), INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())) = {
+    .destroy_at = SERVER_METHOD(destroy_at),
+    .on_success_bind = SERVER_METHOD(on_success_bind)
+};
+
 struct SERVER_TYPE()* SERVER_METHOD(construct_at)(struct SERVER_TYPE()* const this) {
+    // boilerplate
+    this->INTERFACE_VTABLE_VARIABLE(SERVER_TYPE()) = &TYPE_MEMBER(SERVER_TYPE(), INTERFACE_VTABLE_VARIABLE(SERVER_TYPE()));
     ADDRESS_INFO_METHOD(construct_at)(&this->address_info);
     SOCKET_METHOD(construct_with_invalidation_at)(&this->socket);
+    // body
+    // ...
+    // boilerplate
     return this;
 }
 
@@ -99,7 +110,7 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
             current_address_info->native_address_info->ai_addr,
             current_address_info->native_address_info->ai_addrlen
         ) == -1) {
-            {
+            /*debug check for error status*/{
                 struct RESULT_TYPE(int, int) status = SERVER_METHOD(status)(this);
                 if (RESULT_METHOD(int, int, has_value)(&status)) {
                     LOG_DEBUG_FORMAT("bind status on success: %d\n", errno);
@@ -108,6 +119,11 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
                 }
                 RESULT_METHOD(int, int, destroy_at)(&status);
             }
+            SOCKET_METHOD(destroy_at)(&this->socket);
+            continue;
+        }
+
+        if (SERVER_DYNAMIC_METHOD(on_success_bind)(this) == -1) {
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }
@@ -121,7 +137,7 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
         ADDRESS_INFO_METHOD(destroy_at)(&this->address_info);
         return this;
     }
-
+    
     return this;
 }
 
@@ -144,11 +160,7 @@ struct RESULT_TYPE(int, int) SERVER_METHOD(status)(struct SERVER_TYPE() const* c
         SO_ERROR,
         (void*)(&error_code),
         &error_code_size) == -1) {
-#if defined(WIN32)
-        error_code = WSAGetLastError();
-#else
-        error_code = errno;
-#endif
+        error_code = NAMESPACE_NETWORK(get_last_error)();
         RESULT_METHOD(int, int, construct_move_from_error_at)(&result, &error_code);
         return result;
     }
@@ -180,11 +192,3 @@ struct SERVER_TYPE()* SERVER_METHOD(shutdown)(struct SERVER_TYPE()* const this) 
 
     return this;
 }
-
-void* SERVER_METHOD(destroy_at)(struct SERVER_TYPE()* const this) {
-    SOCKET_METHOD(destroy_at)(&this->socket);
-    ADDRESS_INFO_METHOD(destroy_at)(&this->address_info);
-
-    return this;
-}
-
