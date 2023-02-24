@@ -2,8 +2,8 @@
 
 #include <fs/file/encoding.h>
 
-#include <containers/string.h>
-#include <containers/string_impl.h>
+#include <containers/dynamic/string/string.h>
+#include <containers/dynamic/string/string_impl.h>
 
 #if defined(WIN32)
     #include <windows.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <containers/string_impl.h>
+#include <containers/dynamic/string/string_impl.h>
 
 #include <stdarg.h>
 
@@ -11,9 +11,9 @@
  * * null terminated format string
  * @param ...
  * @return
- * * struct string_char - formatted string
+ * * struct STRING_TYPE() - formatted string
  */
-struct string_char utils__format(char const* const format_string, ...);
+struct STRING_TYPE() utils__format(char const* const format_string, ...);
 
 /**
  * @brief 
@@ -23,6 +23,6 @@ struct string_char utils__format(char const* const format_string, ...);
  * @param args
  * * list of variadic arguments
  * @return
- * * struct string_char - formatted string
+ * * struct STRING_TYPE() - formatted string
  */
-struct string_char utils__va_format(char const* const format_string, va_list args);
+struct STRING_TYPE() utils__va_format(char const* const format_string, va_list args);

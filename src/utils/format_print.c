@@ -18,7 +18,7 @@ int NAMESPACE(format_print)(char const* const format_string, ...) {
 }
 
 int NAMESPACE(va_format_print)(char const* const format_string, va_list args) {
-    string_char formatted_string = utils__va_format(format_string, args);
+    struct STRING_TYPE() formatted_string = utils__va_format(format_string, args);
 #if defined(__unix__) || defined(__APPLE__)
     write(STDOUT_FILENO, STRING_METHOD(data)(&formatted_string), STRING_METHOD(size)(&formatted_string));
 #elif defined(_WIN32)
