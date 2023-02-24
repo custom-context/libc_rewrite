@@ -1,8 +1,6 @@
 #pragma once
 
-#include <construct/numeric_helpers.h>
-#include <utils/debug.h>
-#include <memory/memory.h>
+#include <containers/common.h>
 
 #define DECLARE_VECTOR(TYPE)\
 struct vector_##TYPE;\

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <construct/numeric_helpers.h>
-
-#include <utils/macros.h>
+#include <containers/common.h>
 
 #define ARRAY_TYPE_(TYPE, SIZE) CONCAT5(array, _, TYPE, _, SIZE)
 #define ARRAY_TYPE(TYPE, SIZE) ARRAY_TYPE_(TYPE, SIZE)
