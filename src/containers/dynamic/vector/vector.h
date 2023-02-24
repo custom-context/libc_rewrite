@@ -9,7 +9,7 @@
 struct VECTOR_TYPE(TYPE);\
 /* --- Construction/Destruction functions implementation --- */\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_at)(struct VECTOR_TYPE(TYPE)* const this);\
-struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_copy_at)(struct VECTOR_TYPE(TYPE)* const this, struct VECTOR_TYPE(TYPE)* source);\
+struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_copy_at)(struct VECTOR_TYPE(TYPE)* const this, struct VECTOR_TYPE(TYPE) const* const source);\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_by_value_at)(struct VECTOR_TYPE(TYPE)* const this, uint const size, TYPE const* const value);\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_from_buffer_at)(struct VECTOR_TYPE(TYPE)* const this, uint const buffer_size, TYPE const* const buffer);\
 void* VECTOR_METHOD(TYPE, destroy_at)(struct VECTOR_TYPE(TYPE)* const this);\
@@ -38,7 +38,7 @@ struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_at)(struct VECTOR_TYPE(T
     this->size_ = this->capacity_ = 0u;\
     return this;\
 }\
-struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_copy_at)(struct VECTOR_TYPE(TYPE)* const this, struct VECTOR_TYPE(TYPE)* source) {\
+struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_copy_at)(struct VECTOR_TYPE(TYPE)* const this, struct VECTOR_TYPE(TYPE) const* const source) {\
     return VECTOR_METHOD(TYPE, construct_from_buffer_at)(this, VECTOR_METHOD(TYPE, size)(source), VECTOR_METHOD(TYPE, data(source)));\
 }\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_by_value_at)(struct VECTOR_TYPE(TYPE)* const this, uint const size, TYPE const* const value) {\
