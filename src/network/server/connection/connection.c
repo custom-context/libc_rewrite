@@ -27,11 +27,7 @@ struct RESULT_TYPE(int, int) CONNECTION_METHOD(status)(struct CONNECTION_TYPE() 
         SO_ERROR,
         (void*)(&error_code),
         &error_code_size) == -1) {
-#if defined(WIN32)
-        error_code = WSAGetLastError();
-#else
-        error_code = errno;
-#endif
+        error_code = NAMESPACE_NETWORK(get_last_error)();
         RESULT_METHOD(int, int, construct_move_from_error_at)(&result, &error_code);
         return result;
     }
