@@ -1,6 +1,6 @@
 #pragma once
 
-#include <containers/common.h>
+#include <containers/dynamic/common.h>
 
 #define VECTOR_TYPE(TYPE) NAMESPACE_CONTAINERS(CONCAT3(vector, _, TYPE))
 #define VECTOR_METHOD(TYPE, METHOD) TYPE_METHOD(VECTOR_TYPE(TYPE), METHOD)
