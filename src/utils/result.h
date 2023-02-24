@@ -8,8 +8,10 @@
 
 #define DEFINE_RESULT_TYPE(SUCCESS_TYPE, ERROR_TYPE)\
 typedef struct RESULT_TYPE(SUCCESS_TYPE, ERROR_TYPE) {\
-    SUCCESS_TYPE value;\
-    ERROR_TYPE error;\
+    union {\
+        SUCCESS_TYPE value;\
+        ERROR_TYPE error;\
+    };\
     char has_value;\
 } RESULT_TYPE(SUCCESS_TYPE, ERROR_TYPE);\
 
