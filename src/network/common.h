@@ -12,3 +12,5 @@
 
 #include <utils/result.h>
 DEFINE_RESULT_TYPE(int, int);
+
+int NAMESPACE_NETWORK(get_last_error)();
