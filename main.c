@@ -13,6 +13,7 @@
 #include <tests/network/client/client.h>
 #include <tests/network/server/server.h>
 #include <tests/network/nb_client/nb_client.h>
+#include <tests/network/nb_server/nb_server.h>
 
 void exec_tests();
 void print_formatted_args(int const argc, char const* const argv[const]);
@@ -37,6 +38,7 @@ void exec_tests() {
     EXECUTE_TYPE_TESTS(client);
     EXECUTE_TYPE_TESTS(server);
     EXECUTE_TYPE_TESTS(nb_client);
+    EXECUTE_TYPE_TESTS(nb_server);
 }
 
 void print_formatted_args(int const argc, char const* const argv[]) {
