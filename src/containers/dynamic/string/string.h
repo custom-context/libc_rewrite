@@ -12,7 +12,7 @@
 #define STRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(char, METHOD)
 
 // define macro for string type & string methods declaration
-#define DECLARE_SPECIALIZED_STRING_(TYPE)\
+#define DECLARE_SPECIALIZED_STRING(TYPE)\
 struct SPECIALIZED_STRING_TYPE(TYPE);\
 /* --- Construction/Destruction functions implementation --- */\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
@@ -60,11 +60,10 @@ typedef struct SPECIALIZED_STRING_TYPE(TYPE) {\
     };\
     uint is_stack_allocated_;\
 } SPECIALIZED_STRING_TYPE(TYPE)
-#define DECLARE_SPECIALIZED_STRING(TYPE) DECLARE_SPECIALIZED_STRING_(TYPE)
 
 #define DECLARE_STRING() DECLARE_SPECIALIZED_STRING(char)
 
-#define IMPLEMENT_SPECIALIZED_STRING_(TYPE)\
+#define IMPLEMENT_SPECIALIZED_STRING(TYPE)\
 /* --- Construction/Destruction functions implementation --- */\
 struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     static_assert(sizeof(this->dynamic_data_) / sizeof(TYPE) > 1, "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
@@ -302,5 +301,4 @@ TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(struct SPECIALIZED_STRING_TYPE(T
 TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, uint index) {\
     return (this->is_stack_allocated_ ? this->stack_data_.buffer_ : this->dynamic_data_.buffer_) + index;\
 }
-#define IMPLEMENT_SPECIALIZED_STRING(TYPE) IMPLEMENT_SPECIALIZED_STRING_(TYPE)
 #define IMPLEMENT_STRING() IMPLEMENT_SPECIALIZED_STRING(char)
