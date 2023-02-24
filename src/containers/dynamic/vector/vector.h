@@ -28,14 +28,14 @@ TYPE * VECTOR_METHOD(TYPE, mut_at)(struct VECTOR_TYPE(TYPE)* const this, uint in
 \
 typedef struct VECTOR_TYPE(TYPE) {\
     TYPE* buffer_;\
-    uint _size, capacity_;\
+    uint size_, capacity_;\
 } VECTOR_TYPE(TYPE)
 
 #define IMPLEMENT_VECTOR(TYPE)\
 /* --- Construction/Destruction functions implementation --- */\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_at)(struct VECTOR_TYPE(TYPE)* const this) {\
     this->buffer_ = NULL;\
-    this->_size = this->capacity_ = 0u;\
+    this->size_ = this->capacity_ = 0u;\
     return this;\
 }\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_copy_at)(struct VECTOR_TYPE(TYPE)* const this, struct VECTOR_TYPE(TYPE)* source) {\
@@ -46,7 +46,7 @@ struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_by_value_at)(struct VECT
         return VECTOR_METHOD(TYPE, construct_at)(this);\
     }\
     this->buffer_ = malloc(size * sizeof(TYPE));\
-    this->_size = size;\
+    this->size_ = size;\
     this->capacity_ = size;\
     /* Copy elements one-by-one */\
     for (uint index = 0u; index < size; ++index) {\
@@ -59,7 +59,7 @@ struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, construct_from_buffer_at)(struct V
         return VECTOR_METHOD(TYPE, construct_at)(this);\
     }\
     this->buffer_ = malloc(buffer_size * sizeof(TYPE));\
-    this->_size = buffer_size;\
+    this->size_ = buffer_size;\
     this->capacity_ = buffer_size;\
     /* Copy elements one-by-one */\
     for (uint index = 0u; index < buffer_size; ++index) {\
@@ -78,8 +78,8 @@ struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, resize)(struct VECTOR_TYPE(TYPE)* 
         return this;\
     }\
     VECTOR_METHOD(TYPE, reserve)(this, new_size);\
-    for (; this->_size < new_size; ++this->_size) {\
-        TYPE_METHOD(TYPE, construct_copy_at)(VECTOR_METHOD(TYPE, mut_at)(this, this->_size), value);\
+    for (; this->size_ < new_size; ++this->size_) {\
+        TYPE_METHOD(TYPE, construct_copy_at)(VECTOR_METHOD(TYPE, mut_at)(this, this->size_), value);\
     }\
     return this;\
 }\
@@ -101,8 +101,8 @@ struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, reserve)(struct VECTOR_TYPE(TYPE)*
     return this;\
 }\
 struct VECTOR_TYPE(TYPE)* VECTOR_METHOD(TYPE, clear)(struct VECTOR_TYPE(TYPE)* const this) {\
-    while (this->_size) {\
-        TYPE_METHOD(TYPE, destroy_at)(VECTOR_METHOD(TYPE, mut_at)(this, --this->_size));\
+    while (this->size_) {\
+        TYPE_METHOD(TYPE, destroy_at)(VECTOR_METHOD(TYPE, mut_at)(this, --this->size_));\
     }\
     return this;\
 }\
@@ -125,7 +125,7 @@ void VECTOR_METHOD(TYPE, push_back)(struct VECTOR_TYPE(TYPE)* const this, TYPE c
 }\
 /* --- Getters functions implementation --- */\
 uint VECTOR_METHOD(TYPE, size)(struct VECTOR_TYPE(TYPE) const* const this) {\
-    return this->_size;\
+    return this->size_;\
 }\
 uint VECTOR_METHOD(TYPE, capacity)(struct VECTOR_TYPE(TYPE) const* const this) {\
     return this->capacity_;\
