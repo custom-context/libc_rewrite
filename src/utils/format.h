@@ -1,7 +1,7 @@
 #pragma once
 
 #include <containers/dynamic/string/string.h>
-
+#include <utils/common.h>
 #include <stdarg.h>
 
 /**
@@ -13,7 +13,7 @@
  * @return
  * * struct STRING_TYPE() - formatted string
  */
-struct STRING_TYPE() utils__format(char const* const format_string, ...);
+struct STRING_TYPE() NAMESPACE_UTILS(format)(char const* const format_string, ...);
 
 /**
  * @brief 
@@ -25,4 +25,4 @@ struct STRING_TYPE() utils__format(char const* const format_string, ...);
  * @return
  * * struct STRING_TYPE() - formatted string
  */
-struct STRING_TYPE() utils__va_format(char const* const format_string, va_list args);
+struct STRING_TYPE() NAMESPACE_UTILS(va_format)(char const* const format_string, va_list args);

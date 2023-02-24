@@ -7,18 +7,16 @@
 #include <windows.h>
 #endif
 
-#define NAMESPACE(NAME) utils__##NAME
-
-int NAMESPACE(format_print)(char const* const format_string, ...) {
+int NAMESPACE_UTILS(format_print)(char const* const format_string, ...) {
     va_list args;
     va_start(args, format_string);    
-    int result = utils__va_format_print(format_string, args);
+    int result = NAMESPACE_UTILS(va_format_print)(format_string, args);
     va_end(args);
     return result;
 }
 
-int NAMESPACE(va_format_print)(char const* const format_string, va_list args) {
-    struct STRING_TYPE() formatted_string = utils__va_format(format_string, args);
+int NAMESPACE_UTILS(va_format_print)(char const* const format_string, va_list args) {
+    struct STRING_TYPE() formatted_string = NAMESPACE_UTILS(va_format)(format_string, args);
 #if defined(__unix__) || defined(__APPLE__)
     write(STDOUT_FILENO, STRING_METHOD(data)(&formatted_string), STRING_METHOD(size)(&formatted_string));
 #elif defined(_WIN32)

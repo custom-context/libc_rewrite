@@ -8,9 +8,7 @@
 
 #include <utils/macros.h>
 
-#define NAMESPACE(NAME) utils__##NAME
-#define LOCAL_NAMESPACE(NAME) NAMESPACE(format_string__##NAME)
-#define UTILS_STR_NAMESPACE(NAME) NAMESPACE(string__##NAME)
+#define LOCAL_NAMESPACE(NAME) NAMESPACE_UTILS(format_string__##NAME)
 
 #define STRUCT_FN(STRUCT_NAME, FN_NAME) TYPE_METHOD(STRUCT_NAME, FN_NAME)
 
@@ -121,16 +119,16 @@ struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(s
     return result;
 }
 
-struct STRING_TYPE() NAMESPACE(format)(char const* const format_string, ...) {
+struct STRING_TYPE() NAMESPACE_UTILS(format)(char const* const format_string, ...) {
     va_list args;
     va_start(args, format_string);
-    struct STRING_TYPE() result = NAMESPACE(va_format)(format_string, args);
+    struct STRING_TYPE() result = NAMESPACE_UTILS(va_format)(format_string, args);
     va_end(args);
 
     return result;
 }
 
-struct STRING_TYPE() NAMESPACE(va_format)(char const* const format_string, va_list args) {
+struct STRING_TYPE() NAMESPACE_UTILS(va_format)(char const* const format_string, va_list args) {
     struct STRING_TYPE() formatted_string;
     STRING_METHOD(construct_at)(&formatted_string);
 

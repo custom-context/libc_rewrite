@@ -1,17 +1,18 @@
 #pragma once
 
+#include <utils/common.h>
 #include <stdarg.h>
 
 /**
  * @brief 
- * * utils__format_print function works as printf but using unix/write syscall
+ * * NAMESPACE_UTILS(format_print) function works as printf but using unix/write syscall
  * @param format_string
  * * null terminated format string
  * @param ... 
  * @return
  * * int 
  */
-int utils__format_print(char const* const format_string, ...);
+int NAMESPACE_UTILS(format_print)(char const* const format_string, ...);
 
 /**
  * @brief 
@@ -23,4 +24,4 @@ int utils__format_print(char const* const format_string, ...);
  * @return
  * * int 
  */
-int utils__va_format_print(char const* const format_string, va_list args);
+int NAMESPACE_UTILS(va_format_print)(char const* const format_string, va_list args);
