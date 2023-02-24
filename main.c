@@ -12,6 +12,7 @@
 #include <tests/network/address_info/address_info.h>
 #include <tests/network/client/client.h>
 #include <tests/network/server/server.h>
+#include <tests/network/nb_client/nb_client.h>
 
 void exec_tests();
 void print_formatted_args(int const argc, char const* const argv[const]);
@@ -35,6 +36,7 @@ void exec_tests() {
     EXECUTE_TYPE_TESTS(address_info);
     EXECUTE_TYPE_TESTS(client);
     EXECUTE_TYPE_TESTS(server);
+    EXECUTE_TYPE_TESTS(nb_client);
 }
 
 void print_formatted_args(int const argc, char const* const argv[]) {
