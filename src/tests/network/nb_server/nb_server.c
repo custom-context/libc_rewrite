@@ -80,7 +80,11 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                     connection = NB_SERVER_METHOD(accept)(&server);
                 } while(
                     !CONNECTION_METHOD(is_established)(&connection) &&
+#if defined(WIN32)
                     NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK
+#else
+                    NAMESPACE_NETWORK(get_last_error)() == EWOULDBLOCK
+#endif
                 );
 
                 struct RESULT_TYPE(int, int) connection_status = CONNECTION_METHOD(status)(&connection);
@@ -110,7 +114,12 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                         sizeof(server_request_buffer)
                     );
                 } while (received_package_size == -1 &&
-                    NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK);
+#if defined(WIN32)
+                    NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK
+#else
+                    NAMESPACE_NETWORK(get_last_error)() == EWOULDBLOCK
+#endif
+                );
 
                 CHECK(received_package_size > 0);
                 CHECK(received_package_size == STRING_METHOD(size)(&client_request));
@@ -128,7 +137,12 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                         STRING_METHOD(size)(&server_response)
                     );
                 } while (sent_package_size == -1 &&
-                    NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK);
+#if defined(WIN32)
+                    NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK
+#else
+                    NAMESPACE_NETWORK(get_last_error)() == EWOULDBLOCK
+#endif
+                );
                 CHECK(sent_package_size > 0);
                 CHECK(sent_package_size == STRING_METHOD(size)(&server_response));
             }
