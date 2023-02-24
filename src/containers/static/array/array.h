@@ -1,8 +1,8 @@
 #pragma once
 
-#include <containers/common.h>
+#include <containers/static/common.h>
 
-#define ARRAY_TYPE(TYPE, SIZE) CONCAT5(array, _, TYPE, _, SIZE)
+#define ARRAY_TYPE(TYPE, SIZE) NAMESPACE_CONTAINERS_STATIC(CONCAT5(array, _, TYPE, _, SIZE))
 #define ARRAY_METHOD(TYPE, SIZE, METHOD) TYPE_METHOD(ARRAY_TYPE(TYPE, SIZE), METHOD)
 
 #define DECLARE_ARRAY(TYPE, SIZE)\

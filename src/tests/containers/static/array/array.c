@@ -1,6 +1,6 @@
 #include "array.h"
 
-#include <containers/array.h>
+#include <containers/static/array/array.h>
 
 #define TEST_BUFFER_SIZE1 231
 DEFINE_ARRAY(int, TEST_BUFFER_SIZE1);
