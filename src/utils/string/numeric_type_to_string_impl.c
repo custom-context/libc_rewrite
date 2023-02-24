@@ -1,5 +1,5 @@
 #include "numeric_type_to_string_impl.h"
-#include <containers/dynamic/string/string_impl.h>
+#include <containers/dynamic/string/string.h>
 
 IMPLEMENT_NUMERIC_TYPE_TO_STRING(char);
 IMPLEMENT_NUMERIC_TYPE_TO_STRING(uchar);

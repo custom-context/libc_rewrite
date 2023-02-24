@@ -1,4 +1,4 @@
-#include "string_impl.h"
+#include "string.h"
 
 IMPLEMENT_STRING();
 IMPLEMENT_SPECIALIZED_STRING(char8);

@@ -302,3 +302,12 @@ TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TY
     return (this->is_stack_allocated_ ? this->stack_data_.buffer_ : this->dynamic_data_.buffer_) + index;\
 }
 #define IMPLEMENT_STRING() IMPLEMENT_SPECIALIZED_STRING(char)
+
+// predefine strings types/functions
+#include <construct/characters_helpers.h>
+
+DECLARE_STRING();
+DECLARE_SPECIALIZED_STRING(char8);
+DECLARE_SPECIALIZED_STRING(char16);
+DECLARE_SPECIALIZED_STRING(char32);
+DECLARE_SPECIALIZED_STRING(char64);

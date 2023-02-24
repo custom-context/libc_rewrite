@@ -2,7 +2,6 @@
 #include <utils/format.h>
 
 #include <containers/dynamic/string/string.h>
-#include <containers/dynamic/string/string_impl.h>
 
 #include <tests/containers/static/array/array.h>
 #include <tests/containers/dynamic/string/string.h>

@@ -3,7 +3,6 @@
 #include <containers/dynamic/string/string.h>
 #include <utils/string/helpers.h>
 
-#include <containers/dynamic/string/string_impl.h>
 #include <utils/string/comparators_impl.h>
 
 IMPLEMENT_TYPE_TESTS(string) {

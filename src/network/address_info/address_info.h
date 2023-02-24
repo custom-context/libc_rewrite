@@ -3,7 +3,7 @@
 #include <network/socket/socket.h>
 #include <network/common.h>
 
-#include <containers/dynamic/string/string_impl.h>
+#include <containers/dynamic/string/string.h>
 
 #if defined(WIN32)
     #include <ws2def.h>
