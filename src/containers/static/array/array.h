@@ -10,6 +10,7 @@ struct ARRAY_TYPE(TYPE, SIZE);\
 \
 struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this);\
 struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_copy_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, struct ARRAY_TYPE(TYPE, SIZE) const* const source);\
+struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_move_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, struct ARRAY_TYPE(TYPE, SIZE)* const source);\
 struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_by_value_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, TYPE const* const value);\
 struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_from_buffer_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, TYPE const (*buffer)[SIZE]);\
 void* ARRAY_METHOD(TYPE, SIZE, destroy_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this);\
@@ -38,6 +39,10 @@ struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_copy_at)(struc
         TYPE_METHOD(TYPE, construct_copy_at)(ARRAY_METHOD(TYPE, SIZE, mut_at)(this, index), ARRAY_METHOD(TYPE, SIZE, at)(source, index));\
     }\
     return this;\
+}\
+struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_move_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, struct ARRAY_TYPE(TYPE, SIZE)* const source) {\
+    ASSERT(this);\
+    return ARRAY_METHOD(TYPE, SIZE, construct_copy_at)(this, source);\
 }\
 struct ARRAY_TYPE(TYPE, SIZE)* ARRAY_METHOD(TYPE, SIZE, construct_by_value_at)(struct ARRAY_TYPE(TYPE, SIZE)* const this, TYPE const* const value) {\
     ASSERT(this);\
