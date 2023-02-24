@@ -12,10 +12,7 @@
 #define LOCAL_NAMESPACE(NAME) NAMESPACE(format_string__##NAME)
 #define UTILS_STR_NAMESPACE(NAME) NAMESPACE(string__##NAME)
 
-#define STRUCT_FN(STRUCT_NAME, FN_NAME) CONCAT3(STRUCT_NAME, _, FN_NAME)
-
-#define DECLARE(TYPE, NAME) DECLARE_##TYPE(NAME)
-#define IMPLEMENT(TYPE, NAME) IMPLEMENT_##TYPE(NAME)
+#define STRUCT_FN(STRUCT_NAME, FN_NAME) TYPE_METHOD(STRUCT_NAME, FN_NAME)
 
 enum LOCAL_NAMESPACE(format_string_pattern_type) {
     ESCAPED_PERCENT,
@@ -54,53 +51,51 @@ struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_with_values_at)(struct LOC
     return this;
 }
 
-DECLARE(VECTOR, LOCAL_NAMESPACE(pattern));
-IMPLEMENT(VECTOR, LOCAL_NAMESPACE(pattern));
-#define VECTOR_OF_PATTERNS CONCAT2(vector_, LOCAL_NAMESPACE(pattern))
-#define VECTOR_OF_PATTERNS_FN(FN_NAME) CONCAT2(VECTOR_OF_PATTERNS, _##FN_NAME)
+DECLARE_VECTOR(LOCAL_NAMESPACE(pattern));
+IMPLEMENT_VECTOR(LOCAL_NAMESPACE(pattern));
 
 typedef struct LOCAL_NAMESPACE(patterns) {
-    struct VECTOR_OF_PATTERNS _patterns;
+    struct VECTOR_TYPE(LOCAL_NAMESPACE(pattern)) _patterns;
 } LOCAL_NAMESPACE(patterns);
 #define PATTERNS_FN(FN_NAME) STRUCT_FN(LOCAL_NAMESPACE(patterns), FN_NAME)
 
 struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(construct_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
-    VECTOR_OF_PATTERNS * patterns = &this->_patterns;
+    struct VECTOR_TYPE(LOCAL_NAMESPACE(pattern)) * patterns = &this->_patterns;
 
-    VECTOR_OF_PATTERNS_FN(construct_at)(patterns);
+    VECTOR_METHOD(LOCAL_NAMESPACE(pattern), construct_at)(patterns);
 
     struct LOCAL_NAMESPACE(pattern) pattern;
     { // "%%"
         PATTERN_FN(construct_with_values_at)(&pattern, ESCAPED_PERCENT, "%%");
-        VECTOR_OF_PATTERNS_FN(push_back)(patterns, &pattern);
+        VECTOR_METHOD(LOCAL_NAMESPACE(pattern), push_back)(patterns, &pattern);
         PATTERN_FN(destroy_at)(&pattern);
     }
     { // "%c"
         PATTERN_FN(construct_with_values_at)(&pattern, CHARACTER, "%c");
-        VECTOR_OF_PATTERNS_FN(push_back)(patterns, &pattern);
+        VECTOR_METHOD(LOCAL_NAMESPACE(pattern), push_back)(patterns, &pattern);
         PATTERN_FN(destroy_at)(&pattern);
     }
     { // "%s"
         PATTERN_FN(construct_with_values_at)(&pattern, NULL_TERMINATED_STRING, "%s");
-        VECTOR_OF_PATTERNS_FN(push_back)(patterns, &pattern);
+        VECTOR_METHOD(LOCAL_NAMESPACE(pattern), push_back)(patterns, &pattern);
         PATTERN_FN(destroy_at)(&pattern);
     }
     { // "%d"
         PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, "%d");
-        VECTOR_OF_PATTERNS_FN(push_back)(patterns, &pattern);
+        VECTOR_METHOD(LOCAL_NAMESPACE(pattern), push_back)(patterns, &pattern);
         PATTERN_FN(destroy_at)(&pattern);
     }
     { // "%i"
         PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, "%i");
-        VECTOR_OF_PATTERNS_FN(push_back)(patterns, &pattern);
+        VECTOR_METHOD(LOCAL_NAMESPACE(pattern), push_back)(patterns, &pattern);
         PATTERN_FN(destroy_at)(&pattern);
     }
     return this;
 }
 void* PATTERNS_FN(destroy_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
     ASSERT(this);
-    VECTOR_OF_PATTERNS * patterns = &this->_patterns;
-    VECTOR_OF_PATTERNS_FN(destroy_at)(patterns);
+    struct VECTOR_TYPE(LOCAL_NAMESPACE(pattern)) * patterns = &this->_patterns;
+    VECTOR_METHOD(LOCAL_NAMESPACE(pattern), destroy_at)(patterns);
     return this;
 }
 
@@ -111,8 +106,8 @@ typedef struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) {
 struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(search_pattern_occurence)(char const* const format_string, LOCAL_NAMESPACE(patterns) const* const patterns) {
     LOCAL_NAMESPACE(format_string_pattern_occurrence_index) result = {._pattern = NULL, ._index = 0u};
     for (; format_string[result._index] != '\0'; ++result._index) {
-        for (uint vec_index = 0u; vec_index < VECTOR_OF_PATTERNS_FN(size)(&patterns->_patterns); ++vec_index) {
-            result._pattern = VECTOR_OF_PATTERNS_FN(at)(&patterns->_patterns, vec_index);
+        for (uint vec_index = 0u; vec_index < VECTOR_METHOD(LOCAL_NAMESPACE(pattern), size)(&patterns->_patterns); ++vec_index) {
+            result._pattern = VECTOR_METHOD(LOCAL_NAMESPACE(pattern), at)(&patterns->_patterns, vec_index);
             if (!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(
                 &result._pattern->_string_representation,
                 STRING_METHOD(size)(&result._pattern->_string_representation),
