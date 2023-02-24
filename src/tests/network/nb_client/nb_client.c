@@ -79,7 +79,11 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
                         request_size
                     );
                 } while (sent_package_size == -1 &&
+#if defined(WIN32)
                     NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK
+#else
+                    NAMESPACE_NETWORK(get_last_error)() == EWOULDBLOCK
+#endif
                 );
                 CHECK(sent_package_size > 0);
                 CHECK(sent_package_size == request_size);
@@ -92,7 +96,11 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
                         sizeof(response_buffer)
                     );
                 } while (received_package_size == -1 &&
+#if defined(WIN32)
                     NAMESPACE_NETWORK(get_last_error)() == WSAEWOULDBLOCK
+#else
+                    NAMESPACE_NETWORK(get_last_error)() == EWOULDBLOCK
+#endif
                 );
                 CHECK(received_package_size > 0);
                 CHECK(received_package_size <= sizeof(response_buffer));
