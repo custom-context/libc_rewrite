@@ -4,7 +4,7 @@
 #include <utils/string/numeric_type_to_string_impl.h>
 
 #include <utils/string/helpers.h>
-#include <containers/vector.h>
+#include <containers/dynamic/vector/vector.h>
 
 #include <utils/macros.h>
 
