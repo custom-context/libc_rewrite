@@ -7,7 +7,7 @@
 
 #include <stddef.h> // offsetof
 
-int NB_CLIENT_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const base) {
+int NB_CLIENT_METHOD(VTABLE_MEMBER(on_success_connection))(struct CLIENT_TYPE() const* const base) {
     // boilerplate
     void const* const void_this = (char const* const)base - offsetof(struct NB_CLIENT_TYPE(), base_client);
     struct NB_CLIENT_TYPE() const* const this = (struct NB_CLIENT_TYPE() const* const)(void_this);
@@ -20,7 +20,7 @@ int NB_CLIENT_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const ba
 #endif
 }
 
-void* NB_CLIENT_METHOD(destroy_at)(struct NB_CLIENT_TYPE()* const this) {
-    CLIENT_METHOD(destroy_at)(&this->base_client);
+void* NB_CLIENT_METHOD(VTABLE_MEMBER(destroy_at))(struct NB_CLIENT_TYPE()* const this) {
+    CLIENT_METHOD(VTABLE_MEMBER(destroy_at))(&this->base_client);
     return this;
 }

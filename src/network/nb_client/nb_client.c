@@ -4,15 +4,15 @@
 #include <stddef.h> // offsetof
 
 // client destroy_at overloading
-static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(CLIENT_TYPE()), CLIENT_METHOD(destroy_at))(struct CLIENT_TYPE()* const base) {
+static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(CLIENT_TYPE()), CLIENT_METHOD(VTABLE_MEMBER(destroy_at)))(struct CLIENT_TYPE()* const base) {
     void* const void_this = (void* const)((char* const)base - offsetof(struct NB_CLIENT_TYPE(), base_client));
     struct NB_CLIENT_TYPE()* const this = (struct NB_CLIENT_TYPE()* const)(void_this);
-    return NB_CLIENT_METHOD(destroy_at)(this);
+    return NB_CLIENT_METHOD(VTABLE_MEMBER(destroy_at))(this);
 }
 
 static struct INTERFACE_VTABLE_TYPE(CLIENT_TYPE()) TYPE_MEMBER(NB_CLIENT_TYPE(), INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())) = {
-    .destroy_at = TYPE_METHOD(INTERFACE_VTABLE_TYPE(CLIENT_TYPE()), CLIENT_METHOD(destroy_at)),
-    .on_success_connection = NB_CLIENT_METHOD(on_success_connection)
+    .destroy_at = TYPE_METHOD(INTERFACE_VTABLE_TYPE(CLIENT_TYPE()), CLIENT_METHOD(VTABLE_MEMBER(destroy_at))),
+    .on_success_connection = NB_CLIENT_METHOD(VTABLE_MEMBER(on_success_connection))
 };
 
 struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(construct_at)(struct NB_CLIENT_TYPE()* const this) {
