@@ -14,9 +14,9 @@ add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} wsock32 ws2_32)
+    target_compile_options(${PROJECT_NAME} PRIVATE /std:c17 -Wpedantic -Wall -Werror -Wno-unused-function -Wno-declaration-after-statement -fmacro-backtrace-limit=0)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
-    target_link_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wno-unused-function -fsanitize=address -g)
+    target_compile_options(${PROJECT_NAME} PRIVATE -pednatic -Wall -Werror -Wno-unused-function -Wno-declaration-after-statement -fmacro-backtrace-limit=0 -fsanitize=address -g)
 endif()
 
 target_compile_definitions(${PROJECT_NAME}
