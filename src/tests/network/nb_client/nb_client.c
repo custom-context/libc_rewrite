@@ -107,7 +107,7 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
             }
         }
 
-        NB_CLIENT_DYNAMIC_METHOD(destroy_at)(&nb_client);
+        NB_CLIENT_METHOD(destroy_at)(&nb_client);
     }
 #if defined(WIN32)
     WSACleanup();

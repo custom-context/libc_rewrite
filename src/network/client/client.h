@@ -22,7 +22,6 @@ typedef struct CLIENT_TYPE() {
 } CLIENT_TYPE();
 
 #define CLIENT_METHOD(METHOD) TYPE_METHOD(CLIENT_TYPE(), METHOD)
-#define CLIENT_DYNAMIC_METHOD(METHOD) TYPE_DYNAMIC_METHOD(CLIENT_TYPE(), METHOD)
 
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this);
 
@@ -51,9 +50,9 @@ int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
 );
 
 // dynamic methods
-inline static int CLIENT_DYNAMIC_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const this) {
+inline static int CLIENT_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const this) {
     return this->INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->on_success_connection(this);
 }
-inline static void* CLIENT_DYNAMIC_METHOD(destroy_at)(struct CLIENT_TYPE()* const this) {
+inline static void* CLIENT_METHOD(destroy_at)(struct CLIENT_TYPE()* const this) {
     return this->INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->destroy_at(this);
 }

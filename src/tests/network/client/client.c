@@ -77,7 +77,7 @@ IMPLEMENT_TYPE_TESTS(client) {
             CHECK(received_package_size <= (int)sizeof(response_buffer));
         }
 
-        CLIENT_DYNAMIC_METHOD(destroy_at)(&client);
+        CLIENT_METHOD(destroy_at)(&client);
     }
 #if defined(WIN32)
     WSACleanup();
