@@ -22,9 +22,17 @@
 #define NOT_NULL(NAME) CONCAT3(not_null, __, NAME)
 #define UNUSED(NAME) (void)(NAME)
 
+// struct's subtype definition helpers
 #define STRUCT_SUBTYPE(STRUCT_NAME, SUBTYPE_NAME) TYPE_MEMBER(STRUCT_NAME, SUBTYPE_NAME)
 #define DECLARE_STRUCT_SUBTYPE(STRUCT_NAME, SUBTYPE_NAME, SUBTYPE_TYPE)\
     typedef SUBTYPE_TYPE STRUCT_SUBTYPE(STRUCT_NAME, SUBTYPE_NAME)
+
+// enumeration type definition helpers
+#define ENUM_TYPE(TYPE)\
+    CONCAT3(enum, __, TYPE)
+
+#define ENUM_VALUE(ENUM_NAME, VALUE)\
+    TYPE_MEMBER(ENUM_TYPE(TYPE), VALUE)
 
 // interfaces' macro helpers definitions
 #define TYPE_DYNAMIC_METHOD(TYPE, METHOD) CONCAT5(TYPE, __, dynamic, __, METHOD)
