@@ -6,7 +6,7 @@
 
 #define DEFINE_SET_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, TYPE)\
     DECLARE_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, SET_INTERFACE_TYPE(TYPE)) = {\
-        .destroy_at = &SET_INTERFACE_METHOD(TYPE, destroy_at),\
+        .destroy_at = &TYPE_VT_METHOD(SET_INTERFACE_TYPE(TYPE), destroy_at),\
         .clear = NULL,\
         .size = NULL,\
         /* insert element */\
@@ -27,7 +27,7 @@
 
 #define DEFINE_SET_INTERFACE_ITERATOR_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, TYPE)\
     DECLARE_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, SET_INTERFACE_ITERATOR_TYPE(TYPE)) = {\
-        .destroy_at = &SET_INTERFACE_ITERATOR_METHOD(TYPE, destroy_at),\
+        .destroy_at = &TYPE_VT_METHOD(SET_INTERFACE_ITERATOR_TYPE(TYPE), destroy_at),\
         /* --- Element access functions --- */\
         .value = NULL,\
         .const_value = NULL,\
@@ -49,7 +49,7 @@
 
 #define DEFINE_SET_CONST_INTERFACE_ITERATOR_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, TYPE)\
     DECLARE_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(MODIFIER, SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)) = {\
-        .destroy_at = &SET_INTERFACE_CONST_ITERATOR_METHOD(TYPE, destroy_at),\
+        .destroy_at = &TYPE_VT_METHOD(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE), destroy_at),\
         /* --- Element access functions --- */\
         .value = NULL,\
         .const_value = NULL,\
