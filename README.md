@@ -1,6 +1,9 @@
 Attempt to replace some c library functions & add some containers & macro helpers to emulate some stl functions/containers
 
 List of desirable features:
+- Language hacks:
+- - [x] Virtual inheritance emulation
+- - [x] Generic structs/methods/functions
 - Memory:
 - - [x] Generic default allocators
 - - [x] No open C stdlib header
