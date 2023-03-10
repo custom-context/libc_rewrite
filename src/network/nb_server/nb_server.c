@@ -5,7 +5,8 @@
 
 // server destroy_at overloading
 static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(SERVER_TYPE()), SERVER_METHOD(destroy_at))(struct SERVER_TYPE()* const base) {
-    struct NB_SERVER_TYPE()* const this = (struct NB_SERVER_TYPE()* const)((void*)base - offsetof(struct NB_SERVER_TYPE(), base_server));
+    void* const void_this = (void* const)((char* const)base - offsetof(struct NB_SERVER_TYPE(), base_server));
+    struct NB_SERVER_TYPE()* const this = (struct NB_SERVER_TYPE()* const)(void_this);
     return NB_SERVER_METHOD(destroy_at)(this);
 }
 

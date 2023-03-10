@@ -1,6 +1,6 @@
 #include "common.h"
 
-int NAMESPACE_NETWORK(get_last_error)() {
+int NAMESPACE_NETWORK(get_last_error)(void) {
     #if defined(WIN32)
         return WSAGetLastError();
     #else

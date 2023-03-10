@@ -63,18 +63,18 @@ IMPLEMENT_TYPE_TESTS(client) {
             CHECK(CLIENT_METHOD(is_connection_established)(&client));
 
             int sent_package_size = CLIENT_METHOD(send)(&client,
-                (void*)request,
+                (void const*)request,
                 request_size
             );
             CHECK(sent_package_size > 0);
-            CHECK(sent_package_size == request_size);
+            CHECK(sent_package_size == (int)request_size);
 
             int received_package_size = CLIENT_METHOD(receive)(&client,
                 (void*)response_buffer,
                 sizeof(response_buffer)
             );
             CHECK(received_package_size > 0);
-            CHECK(received_package_size <= sizeof(response_buffer));
+            CHECK(received_package_size <= (int)sizeof(response_buffer));
         }
 
         CLIENT_DYNAMIC_METHOD(destroy_at)(&client);

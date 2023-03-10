@@ -3,7 +3,7 @@
 #include <utils/macros.h>
 
 #if defined(WIN32)
-    #include <winsock2.h>
+    #include <WinSock2.h>
 #else
     #include <sys/socket.h>
 #endif
@@ -13,4 +13,4 @@
 #include <utils/result.h>
 DEFINE_RESULT_TYPE(int, int);
 
-int NAMESPACE_NETWORK(get_last_error)();
+int NAMESPACE_NETWORK(get_last_error)(void);

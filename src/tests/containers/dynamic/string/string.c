@@ -25,17 +25,17 @@ IMPLEMENT_TYPE_TESTS(string) {
         for (size_t i = 0u; i < STRING_METHOD(capacity)(&str); ++i) {
             char value;
             if (i < 10) {
-                value = i + '0';
+                value = (char)(i) + '0';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i - 10 < 26) {
-                value = i - 10 + 'a';
+                value = (char)(i) - 10 + 'a';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i - 36 < 26) {
-                value =  i - 36 + 'A';
+                value =  (char)(i) - 36 + 'A';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
@@ -44,15 +44,15 @@ IMPLEMENT_TYPE_TESTS(string) {
         
         for (size_t i = 0u; i < STRING_METHOD(size)(&str); ++i) {
             if (i < 10) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i + '0');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) + '0');
                 continue;
             }
             if (i - 10 < 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - 10 + 'a');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - 10 + 'a');
                 continue;
             }
             if (i - 36 < 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - 36 + 'A');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - 36 + 'A');
                 continue;
             }
         }
@@ -70,17 +70,17 @@ IMPLEMENT_TYPE_TESTS(string) {
         for (size_t i = 0u; i < 10 + 26 + 26; ++i) {
             char value;
             if (i < 10) {
-                value = i + '0';
+                value = (char)(i) + '0';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i < 10 + 26) {
-                value = i - 10 + 'a';
+                value = (char)(i) - 10 + 'a';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i < 10 + 26 + 26) {
-                value =  i - 36 + 'A';
+                value = (char)(i) - 36 + 'A';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
@@ -91,15 +91,15 @@ IMPLEMENT_TYPE_TESTS(string) {
         
         for (size_t i = 0u; i < STRING_METHOD(size)(&str); ++i) {
             if (i < 10) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i + '0');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) + '0');
                 continue;
             }
             if (i < 10 + 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - 10 + 'a');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - 10 + 'a');
                 continue;
             }
             if (i < 10 + 26 + 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - (10 + 26) + 'A');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - (10 + 26) + 'A');
                 continue;
             }
         }
@@ -116,17 +116,17 @@ IMPLEMENT_TYPE_TESTS(string) {
         for (size_t i = 0u; i < 10 + 26 + 26; ++i) {
             char value;
             if (i < 10) {
-                value = i + '0';
+                value = (char)(i) + '0';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i < 10 + 26) {
-                value = i - 10 + 'a';
+                value = (char)(i) - 10 + 'a';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
             if (i < 10 + 26 + 26) {
-                value =  i - 36 + 'A';
+                value = (char)(i) - 36 + 'A';
                 STRING_METHOD(push_back)(&str, &value);
                 continue;
             }
@@ -137,15 +137,15 @@ IMPLEMENT_TYPE_TESTS(string) {
         
         for (size_t i = 0u; i < STRING_METHOD(size)(&str); ++i) {
             if (i < 10) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i + '0');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) + '0');
                 continue;
             }
             if (i < 10 + 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - 10 + 'a');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - 10 + 'a');
                 continue;
             }
             if (i < 10 + 26 + 26) {
-                CHECK(*STRING_METHOD(at)(&str, i) == i - (10 + 26) + 'A');
+                CHECK(*STRING_METHOD(at)(&str, (uint)(i)) == (char)(i) - (10 + 26) + 'A');
                 continue;
             }
         }
@@ -172,7 +172,7 @@ IMPLEMENT_TYPE_TESTS(string) {
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length), c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);
@@ -188,7 +188,7 @@ IMPLEMENT_TYPE_TESTS(string) {
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
 
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length), c_string));
         CHECK(!str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);
@@ -203,7 +203,7 @@ IMPLEMENT_TYPE_TESTS(string) {
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length), c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(pop_back)(&str);
@@ -211,7 +211,7 @@ IMPLEMENT_TYPE_TESTS(string) {
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length - 1);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length - 1);
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length - 1, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length) - 1, c_string));
         CHECK(str.is_stack_allocated_);
     }
 
@@ -225,7 +225,7 @@ IMPLEMENT_TYPE_TESTS(string) {
         CHECK(STRING_METHOD(size)(&str) == c_string_length);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length);
 
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length), c_string));
         CHECK(!str.is_stack_allocated_);
 
         STRING_METHOD(pop_back)(&str);
@@ -233,7 +233,7 @@ IMPLEMENT_TYPE_TESTS(string) {
 
         CHECK(STRING_METHOD(size)(&str) == c_string_length - 1);
         CHECK(STRING_METHOD(capacity)(&str) >= c_string_length - 1);
-        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, c_string_length - 1, c_string));
+        CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&str, (uint)(c_string_length) - 1, c_string));
         CHECK(str.is_stack_allocated_);
 
         STRING_METHOD(destroy_at)(&str);

@@ -45,7 +45,7 @@ SOCKET_PROTOCOL_TYPE() ADDRESS_INFO_METHOD(get_socket_protocol)(struct ADDRESS_I
 
 int ADDRESS_INFO_METHOD(send)(
     struct ADDRESS_INFO_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 );
 

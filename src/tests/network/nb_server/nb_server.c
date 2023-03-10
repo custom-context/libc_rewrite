@@ -6,10 +6,10 @@
 #include <utils/string/comparators_impl.h>
 #include <utils/string/helpers.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 #if defined(WIN32)
-    #include <ws2tcpip.h>
+    #include <WS2tcpip.h>
 #else
     #include <netdb.h>
 #endif
@@ -99,11 +99,11 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
 
             /*send request to server*/{
                 int const sent_package_size = CLIENT_METHOD(send)(&client,
-                    (void*)STRING_METHOD(data)(&client_request),
+                    (void const*)STRING_METHOD(data)(&client_request),
                     STRING_METHOD(size)(&client_request)
                 );
                 CHECK(sent_package_size > 0);
-                CHECK(sent_package_size == STRING_METHOD(size)(&client_request));
+                CHECK(sent_package_size == (int)STRING_METHOD(size)(&client_request));
             }
 
             /*receive request from client*/{
@@ -122,9 +122,9 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                 );
 
                 CHECK(received_package_size > 0);
-                CHECK(received_package_size == STRING_METHOD(size)(&client_request));
+                CHECK(received_package_size == (int)STRING_METHOD(size)(&client_request));
                 CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&client_request,
-                    received_package_size,
+                    (uint)received_package_size,
                     server_request_buffer
                 ));
             }
@@ -133,7 +133,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                 int sent_package_size;
                 do {
                     sent_package_size = CONNECTION_METHOD(send)(&connection,
-                        (void*)STRING_METHOD(data)(&server_response),
+                        (void const*)STRING_METHOD(data)(&server_response),
                         STRING_METHOD(size)(&server_response)
                     );
                 } while (sent_package_size == -1 &&
@@ -144,7 +144,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
 #endif
                 );
                 CHECK(sent_package_size > 0);
-                CHECK(sent_package_size == STRING_METHOD(size)(&server_response));
+                CHECK(sent_package_size == (int)STRING_METHOD(size)(&server_response));
             }
 
             /*receive response from server*/{
@@ -153,9 +153,9 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                     sizeof(client_response_buffer)
                 );
                 CHECK(received_package_size > 0);
-                CHECK(received_package_size == STRING_METHOD(size)(&server_response));
+                CHECK(received_package_size == (int)STRING_METHOD(size)(&server_response));
                 CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&server_response,
-                    received_package_size,
+                    (uint)received_package_size,
                     client_response_buffer
                 ));
             }
@@ -168,7 +168,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
         CLIENT_DYNAMIC_METHOD(destroy_at)(&client);
         STRING_METHOD(destroy_at)(&server_response);
         STRING_METHOD(destroy_at)(&client_request);
-        SERVER_DYNAMIC_METHOD(destroy_at)(&server);
+        NB_SERVER_DYNAMIC_METHOD(destroy_at)(&server);
     }
 #if defined(WIN32)
     WSACleanup();

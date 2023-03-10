@@ -2,9 +2,9 @@
 
 #include "format.h"
 #if defined(__unix__) || defined(__APPLE__)
-#include <unistd.h>
+    #include <unistd.h>
 #elif defined(_WIN32)
-#include <windows.h>
+    #include <Windows.h>
 #endif
 
 int NAMESPACE_UTILS(format_print)(char const* const format_string, ...) {

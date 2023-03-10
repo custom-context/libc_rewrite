@@ -30,7 +30,7 @@ struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(shutdown)(struct NB_CLIENT_TYPE()* con
 struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(reconnect)(struct NB_CLIENT_TYPE()* const this);
 
 int NB_CLIENT_METHOD(send)(struct NB_CLIENT_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 );
 

@@ -2,7 +2,7 @@
 
 #include <network/nb_client/nb_client.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 IMPLEMENT_TYPE_TESTS(nb_client) {
 #if defined(WIN32)
@@ -75,7 +75,7 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
                 int sent_package_size;
                 do {
                     sent_package_size = NB_CLIENT_METHOD(send)(&nb_client,
-                        (void*)request,
+                        (void const*)request,
                         request_size
                     );
                 } while (sent_package_size == -1 &&
@@ -86,7 +86,7 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
 #endif
                 );
                 CHECK(sent_package_size > 0);
-                CHECK(sent_package_size == request_size);
+                CHECK(sent_package_size == (int)request_size);
             }
             /*receive response*/{
                 int received_package_size;
@@ -103,7 +103,7 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
 #endif
                 );
                 CHECK(received_package_size > 0);
-                CHECK(received_package_size <= sizeof(response_buffer));
+                CHECK(received_package_size <= (int)sizeof(response_buffer));
             }
         }
 
