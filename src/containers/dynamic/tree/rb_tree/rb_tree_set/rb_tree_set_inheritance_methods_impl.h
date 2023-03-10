@@ -23,7 +23,7 @@ COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METH
     /* boilerplate */\
     TYPE_METHOD(COMPARATOR, destroy_at)(&this->comparator);\
     TYPE_METHOD(ALLOCATOR, destroy_at)(&this->allocator);\
-    TYPE_METHOD(SET_INTERFACE_TYPE(TYPE), destroy_at)(base);\
+    TYPE_METHOD(SET_INTERFACE_TYPE(TYPE), VTABLE_MEMBER(destroy_at))(base);\
     return this;\
 }\
 /* --- Common containers' functions --- */\
@@ -492,7 +492,7 @@ COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOC
     /* method body */\
     this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage = NULL;\
     /* boilerplate */\
-    TYPE_METHOD(SET_INTERFACE_ITERATOR_TYPE(TYPE), destroy_at)(&this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
+    TYPE_METHOD(SET_INTERFACE_ITERATOR_TYPE(TYPE), VTABLE_MEMBER(destroy_at))(&this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
     return this;\
 }\
 /* --- Element access functions --- */\
@@ -689,7 +689,7 @@ COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND
     /* method body */\
     this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage = NULL;\
     /* boilerplate */\
-    TYPE_METHOD(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE), destroy_at)(\
+    TYPE_METHOD(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE), VTABLE_MEMBER(destroy_at))(\
         &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
     return this;\
 }\

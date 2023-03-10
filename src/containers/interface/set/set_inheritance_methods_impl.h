@@ -5,19 +5,19 @@
 // set non-dynamic 'dynamic' inner methods implementation
 #define DEFINE_SET_INTERFACE_INHERITANCE_METHODS_WITH_MODIFIER(COMMON_MODIFIER, TYPE)\
 /* --- Construction/Destruction functions --- */\
-COMMON_MODIFIER void* SET_INTERFACE_METHOD(TYPE, destroy_at)(\
+COMMON_MODIFIER void* SET_INTERFACE_METHOD(TYPE, VTABLE_MEMBER(destroy_at))(\
     struct SET_INTERFACE_TYPE(TYPE)* const this) {\
     ASSERT(this);\
     return this;\
 }\
 /* --- Construction/Destruction functions --- */\
-COMMON_MODIFIER void* SET_INTERFACE_ITERATOR_METHOD(TYPE, destroy_at)(\
+COMMON_MODIFIER void* SET_INTERFACE_ITERATOR_METHOD(TYPE, VTABLE_MEMBER(destroy_at))(\
     struct SET_INTERFACE_ITERATOR_TYPE(TYPE)* const this) {\
     ASSERT(this);\
     return this;\
 }\
 /* --- Construction/Destruction functions --- */\
-COMMON_MODIFIER void* SET_INTERFACE_CONST_ITERATOR_METHOD(TYPE, destroy_at)(\
+COMMON_MODIFIER void* SET_INTERFACE_CONST_ITERATOR_METHOD(TYPE, VTABLE_MEMBER(destroy_at))(\
     struct SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)* const this) {\
     ASSERT(this);\
     return this;\
