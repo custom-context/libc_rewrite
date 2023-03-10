@@ -6,13 +6,13 @@
 #define NAMESPACE_FS(NAME) CONCAT3(fs, __, NAME)
 #define NAMESPACE_FS_FILE(NAME) NAMESPACE_FS(CONCAT3(file, __, NAME))
 
-#define UTF_ENCODING_ENUM() NAMESPACE_FS_FILE(UTF_ENCODING)
-#define UTF_ENCODING_ENUM_VALUE(VALUE) CONCAT3(UTF_ENCODING_ENUM(), _, VALUE)
+#define UTF_ENCODING_ENUM() NAMESPACE_FS_FILE(ENUM_TYPE(UTF_ENCODING))
+#define UTF_ENCODING_ENUM_VALUE(VALUE) ENUM_VALUE(UTF_ENCODING_ENUM(), VALUE)
 
 // some how check the encoding of file (UTF-8/16/32)
 // article: http://unicode.org/faq/utf_bom.html#BOM
 
-typedef enum NAMESPACE_FS_FILE(UTF_ENCODING) {
+typedef enum UTF_ENCODING_ENUM() {
     // BOM encoding
     UTF_ENCODING_ENUM_VALUE(UTF32_BE_BOM), // 00 00 FE FF    UTF-32, big-endian, BOM
     UTF_ENCODING_ENUM_VALUE(UTF32_LE_BOM), // FF FE 00 00    UTF-32, little-endian, BOM
@@ -25,6 +25,6 @@ typedef enum NAMESPACE_FS_FILE(UTF_ENCODING) {
     UTF_ENCODING_ENUM_VALUE(UTF16_BE),     // 00 xx xx xx    UTF-16, big-endian
     UTF_ENCODING_ENUM_VALUE(UTF16_LE),     // xx 00 xx xx    UTF-16, little-endian
     UTF_ENCODING_ENUM_VALUE(UTF8)          // xx xx xx xx    UTF-8
-} NAMESPACE_FS_FILE(UTF_ENCODING);
+} UTF_ENCODING_ENUM();
 
-enum NAMESPACE_FS_FILE(UTF_ENCODING) NAMESPACE_FS_FILE(get_encoding)(uint const header_bytes_size, char const* const header_bytes);
+enum UTF_ENCODING_ENUM() NAMESPACE_FS_FILE(get_encoding)(uint const header_bytes_size, char const* const header_bytes);
