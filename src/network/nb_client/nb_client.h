@@ -11,7 +11,6 @@ typedef struct NB_CLIENT_TYPE() {
 } NB_CLIENT_TYPE();
 
 #define NB_CLIENT_METHOD(METHOD) TYPE_METHOD(NB_CLIENT_TYPE(), METHOD)
-#define NB_CLIENT_DYNAMIC_METHOD(METHOD) TYPE_DYNAMIC_METHOD(NB_CLIENT_TYPE(), METHOD)
 
 struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(construct_at)(struct NB_CLIENT_TYPE()* const this);
 
@@ -40,9 +39,9 @@ int NB_CLIENT_METHOD(receive)(struct NB_CLIENT_TYPE() const* const this,
 );
 
 // dynamic methods
-inline static int NB_CLIENT_DYNAMIC_METHOD(on_success_connection)(struct NB_CLIENT_TYPE() const* const this) {
+inline static int NB_CLIENT_METHOD(on_success_connection)(struct NB_CLIENT_TYPE() const* const this) {
     return this->base_client.INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->on_success_connection(&this->base_client);
 }
-inline static void* NB_CLIENT_DYNAMIC_METHOD(destroy_at)(struct NB_CLIENT_TYPE()* const this) {
+inline static void* NB_CLIENT_METHOD(destroy_at)(struct NB_CLIENT_TYPE()* const this) {
     return this->base_client.INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())->destroy_at(&this->base_client);
 }

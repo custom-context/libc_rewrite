@@ -107,7 +107,7 @@ struct CLIENT_TYPE()* CLIENT_METHOD(reconnect)(struct CLIENT_TYPE()* const this)
         }
 
         // TODO: add return value check for errors
-        if (CLIENT_DYNAMIC_METHOD(on_success_connection)(this) == -1) {
+        if (CLIENT_METHOD(on_success_connection)(this) == -1) {
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }

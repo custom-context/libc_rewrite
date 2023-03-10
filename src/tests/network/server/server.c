@@ -134,7 +134,7 @@ IMPLEMENT_TYPE_TESTS(server) {
             }
         }
 
-        CLIENT_DYNAMIC_METHOD(destroy_at)(&client);
+        CLIENT_METHOD(destroy_at)(&client);
         STRING_METHOD(destroy_at)(&server_response);
         STRING_METHOD(destroy_at)(&client_request);
         SERVER_DYNAMIC_METHOD(destroy_at)(&server);
