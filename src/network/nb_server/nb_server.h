@@ -15,7 +15,6 @@ typedef struct NB_SERVER_TYPE() {
 } NB_SERVER_TYPE();
 
 #define NB_SERVER_METHOD(METHOD) TYPE_METHOD(NB_SERVER_TYPE(), METHOD)
-#define NB_SERVER_DYNAMIC_METHOD(METHOD) TYPE_DYNAMIC_METHOD(NB_SERVER_TYPE(), METHOD)
 
 struct NB_SERVER_TYPE()* NB_SERVER_METHOD(construct_at)(struct NB_SERVER_TYPE()* const this);
 
@@ -38,9 +37,9 @@ struct CONNECTION_TYPE() NB_SERVER_METHOD(accept)(struct NB_SERVER_TYPE()* const
 struct NB_SERVER_TYPE()* NB_SERVER_METHOD(shutdown)(struct NB_SERVER_TYPE()* const this);
 
 // dynamic methods
-inline static int NB_SERVER_DYNAMIC_METHOD(on_success_bind)(struct NB_SERVER_TYPE() const* const this) {
+inline static int NB_SERVER_METHOD(on_success_bind)(struct NB_SERVER_TYPE() const* const this) {
     return this->base_server.INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())->on_success_bind(&this->base_server);
 }
-inline static void* NB_SERVER_DYNAMIC_METHOD(destroy_at)(struct NB_SERVER_TYPE()* const this) {
+inline static void* NB_SERVER_METHOD(destroy_at)(struct NB_SERVER_TYPE()* const this) {
     return this->base_server.INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())->destroy_at(&this->base_server);
 }

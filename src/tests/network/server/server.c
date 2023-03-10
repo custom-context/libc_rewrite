@@ -137,7 +137,7 @@ IMPLEMENT_TYPE_TESTS(server) {
         CLIENT_METHOD(destroy_at)(&client);
         STRING_METHOD(destroy_at)(&server_response);
         STRING_METHOD(destroy_at)(&client_request);
-        SERVER_DYNAMIC_METHOD(destroy_at)(&server);
+        SERVER_METHOD(destroy_at)(&server);
     }
 #if defined(WIN32)
     WSACleanup();

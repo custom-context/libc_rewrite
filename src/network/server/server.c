@@ -30,8 +30,8 @@ static struct SOCKET_TYPE()* SOCKET_METHOD(construct_on_acceptance_at)(struct SO
 
 // server' methods
 static struct INTERFACE_VTABLE_TYPE(SERVER_TYPE()) TYPE_MEMBER(SERVER_TYPE(), INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())) = {
-    .destroy_at = SERVER_METHOD(destroy_at),
-    .on_success_bind = SERVER_METHOD(on_success_bind)
+    .destroy_at = SERVER_METHOD(VTABLE_MEMBER(destroy_at)),
+    .on_success_bind = SERVER_METHOD(VTABLE_MEMBER(on_success_bind))
 };
 
 struct SERVER_TYPE()* SERVER_METHOD(construct_at)(struct SERVER_TYPE()* const this) {
@@ -123,7 +123,7 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
             continue;
         }
 
-        if (SERVER_DYNAMIC_METHOD(on_success_bind)(this) == -1) {
+        if (SERVER_METHOD(on_success_bind)(this) == -1) {
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
         }
