@@ -5,7 +5,7 @@
 #include <containers/dynamic/string/string.h>
 
 #if defined(WIN32)
-    #include <windows.h>
+    #include <Windows.h>
 #else
     #include <unistd.h>
     #include <fcntl.h>
@@ -37,7 +37,6 @@ IMPLEMENT_TYPE_TESTS(encoding) {
         static char const *const current_directory_path = "/src/tests/fs/file/";
         static char const* const encoded_files_relative_path = "utf_encoded_files/";
 #endif
-        CHECK(STRINGIFY(PROJECT_SOURCE_DIR));
         STRING_TYPE() directory_path;
 #if defined(_WIN32)
         STRING_METHOD(construct_from_c_string_at)

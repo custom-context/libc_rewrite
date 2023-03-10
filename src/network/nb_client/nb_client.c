@@ -5,7 +5,8 @@
 
 // client destroy_at overloading
 static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(CLIENT_TYPE()), CLIENT_METHOD(destroy_at))(struct CLIENT_TYPE()* const base) {
-    struct NB_CLIENT_TYPE()* const this = (struct NB_CLIENT_TYPE()* const)((void*)base - offsetof(struct NB_CLIENT_TYPE(), base_client));
+    void* const void_this = (void* const)((char* const)base - offsetof(struct NB_CLIENT_TYPE(), base_client));
+    struct NB_CLIENT_TYPE()* const this = (struct NB_CLIENT_TYPE()* const)(void_this);
     return NB_CLIENT_METHOD(destroy_at)(this);
 }
 
@@ -52,7 +53,7 @@ struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(reconnect)(struct NB_CLIENT_TYPE()* co
 }
 
 int NB_CLIENT_METHOD(send)(struct NB_CLIENT_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 ) {
     return CLIENT_METHOD(send)(&this->base_client, buffer, buffer_size);

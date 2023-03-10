@@ -5,7 +5,7 @@
 #include <construct/numeric_helpers.h>
 
 DEFINE_RESULT_TYPE(int, int);
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 IMPLEMENT_TYPE_TESTS(result) {
     TEST_BLOCK("result construction/destruction") {

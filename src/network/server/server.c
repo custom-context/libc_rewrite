@@ -6,7 +6,7 @@
     #include <netdb.h>
 #endif
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 // connection's private method that opened for server class only 
 static struct CONNECTION_TYPE()* CONNECTION_METHOD(construct_move_from_socket_at)(struct CONNECTION_TYPE()* const this, struct SOCKET_TYPE()* const socket) {
@@ -17,7 +17,7 @@ static struct CONNECTION_TYPE()* CONNECTION_METHOD(construct_move_from_socket_at
 // socket's private method that opened for server class only
 static struct SOCKET_TYPE()* SOCKET_METHOD(construct_on_acceptance_at)(struct SOCKET_TYPE()* const this, struct SERVER_TYPE() const* const server) {
 #if defined(WIN32)
-    int native_address_length = server->address_info.native_address_info->ai_addrlen;
+    int native_address_length = (int)(server->address_info.native_address_info->ai_addrlen);
 #else
     socklen_t native_address_length = server->address_info.native_address_info->ai_addrlen;
 #endif
@@ -108,7 +108,7 @@ struct SERVER_TYPE()* SERVER_METHOD(rebind)(struct SERVER_TYPE()* const this) {
         // TODO: add return value check for errors
         if (bind(this->socket.native_socket,
             current_address_info->native_address_info->ai_addr,
-            current_address_info->native_address_info->ai_addrlen
+            (int)(current_address_info->native_address_info->ai_addrlen)
         ) == -1) {
             /*debug check for error status*/{
                 struct RESULT_TYPE(int, int) status = SERVER_METHOD(status)(this);

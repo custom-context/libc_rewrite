@@ -14,12 +14,12 @@
 #include <tests/network/nb_client/nb_client.h>
 #include <tests/network/nb_server/nb_server.h>
 
-void exec_tests();
+void exec_tests(void);
 void print_formatted_args(int const argc, char const* const argv[const]);
 
-void check_file_encoding(char const filename[const]);
-
 int main(int const argc, char const* const argv[]) {
+    UNUSED(argc);
+    UNUSED(argv);
     exec_tests();
 
     print_formatted_args(argc, argv);
@@ -27,7 +27,7 @@ int main(int const argc, char const* const argv[]) {
     return 0;
 }
 
-void exec_tests() {
+void exec_tests(void) {
     EXECUTE_TYPE_TESTS(array);
     EXECUTE_TYPE_TESTS(string);
     EXECUTE_TYPE_TESTS(result);
@@ -40,7 +40,7 @@ void exec_tests() {
     EXECUTE_TYPE_TESTS(nb_server);
 }
 
-void print_formatted_args(int const argc, char const* const argv[]) {
+void print_formatted_args(int const argc, char const* const argv[const]) {
     STRING_TYPE() formatted_string = utils__format("argc: %d\n", argc);
     utils__format_print(STRING_METHOD(data)(&formatted_string));
     STRING_METHOD(destroy_at)(&formatted_string);

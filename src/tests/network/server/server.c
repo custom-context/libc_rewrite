@@ -6,10 +6,10 @@
 #include <utils/string/comparators_impl.h>
 #include <utils/string/helpers.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 #if defined(WIN32)
-    #include <ws2tcpip.h>
+    #include <WS2tcpip.h>
 #else
     #include <netdb.h>
 #endif
@@ -87,11 +87,11 @@ IMPLEMENT_TYPE_TESTS(server) {
 
             /*send request to server*/{
                 int const sent_package_size = CLIENT_METHOD(send)(&client,
-                    (void*)STRING_METHOD(data)(&client_request),
+                    (void const*)STRING_METHOD(data)(&client_request),
                     STRING_METHOD(size)(&client_request)
                 );
                 CHECK(sent_package_size > 0);
-                CHECK(sent_package_size == STRING_METHOD(size)(&client_request));
+                CHECK(sent_package_size == (int const)STRING_METHOD(size)(&client_request));
             }
 
             /*receive request from client*/{
@@ -100,31 +100,31 @@ IMPLEMENT_TYPE_TESTS(server) {
                     sizeof(server_request_buffer)
                 );
                 CHECK(received_package_size > 0);
-                CHECK(received_package_size == STRING_METHOD(size)(&client_request));
+                CHECK(received_package_size == (int const)STRING_METHOD(size)(&client_request));
                 CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&client_request,
-                    received_package_size,
+                    (uint const)received_package_size,
                     server_request_buffer
                 ));
             }
 
             /*send response to client*/{
                 int const sent_package_size = CONNECTION_METHOD(send)(&connection,
-                    (void*)STRING_METHOD(data)(&server_response),
+                    (void const*)STRING_METHOD(data)(&server_response),
                     STRING_METHOD(size)(&server_response)
                 );
                 CHECK(sent_package_size > 0);
-                CHECK(sent_package_size == STRING_METHOD(size)(&server_response));
+                CHECK(sent_package_size == (int const)STRING_METHOD(size)(&server_response));
             }
 
             /*receive response from server*/{
-                int received_package_size = CLIENT_METHOD(receive)(&client,
+                int const received_package_size = CLIENT_METHOD(receive)(&client,
                     (void*)client_response_buffer,
                     sizeof(client_response_buffer)
                 );
                 CHECK(received_package_size > 0);
-                CHECK(received_package_size == STRING_METHOD(size)(&server_response));
+                CHECK(received_package_size == (int const)STRING_METHOD(size)(&server_response));
                 CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&server_response,
-                    received_package_size,
+                    (uint const)received_package_size,
                     client_response_buffer
                 ));
             }

@@ -8,7 +8,7 @@
     #include <netdb.h>
 #endif
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 static struct INTERFACE_VTABLE_TYPE(CLIENT_TYPE()) TYPE_MEMBER(CLIENT_TYPE(), INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())) = {
     .destroy_at = CLIENT_METHOD(destroy_at),
@@ -100,7 +100,7 @@ struct CLIENT_TYPE()* CLIENT_METHOD(reconnect)(struct CLIENT_TYPE()* const this)
         // TODO: add return value check for errors
         if (connect(this->socket.native_socket,
             current_address_info->native_address_info->ai_addr,
-            current_address_info->native_address_info->ai_addrlen
+            (int)(current_address_info->native_address_info->ai_addrlen)
         ) == -1) {
             SOCKET_METHOD(destroy_at)(&this->socket);
             continue;
@@ -126,12 +126,12 @@ struct CLIENT_TYPE()* CLIENT_METHOD(reconnect)(struct CLIENT_TYPE()* const this)
 }
 
 int CLIENT_METHOD(send)(struct CLIENT_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 ) {
     ASSERT(CLIENT_METHOD(is_connection_established)(this));
 
-    return send(this->socket.native_socket, buffer, buffer_size, 0);
+    return send(this->socket.native_socket, buffer, (int)buffer_size, 0);
 }
 
 int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
@@ -140,5 +140,5 @@ int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
 ) {
     ASSERT(CLIENT_METHOD(is_connection_established)(this));
 
-    return recv(this->socket.native_socket, buffer, buffer_size, 0);
+    return recv(this->socket.native_socket, buffer, (int)buffer_size, 0);
 }

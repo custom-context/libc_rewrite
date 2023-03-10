@@ -1,6 +1,7 @@
 #include "client_inheritance.h"
 
 int CLIENT_METHOD(on_success_connection)(struct CLIENT_TYPE() const* const this) {
+    UNUSED(this);
     return 0;
 }
 

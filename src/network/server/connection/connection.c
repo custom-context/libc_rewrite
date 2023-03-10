@@ -6,7 +6,7 @@
 
 #include <utils/debug.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int);
+DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 int CONNECTION_METHOD(is_established)(struct CONNECTION_TYPE() const* const this) {
     return SOCKET_METHOD(is_valid)(&this->socket);
@@ -36,12 +36,12 @@ struct RESULT_TYPE(int, int) CONNECTION_METHOD(status)(struct CONNECTION_TYPE() 
 }
 
 int CONNECTION_METHOD(send)(struct CONNECTION_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 ) {
     ASSERT(CONNECTION_METHOD(is_established)(this));
 
-    return send(this->socket.native_socket, buffer, buffer_size, 0);
+    return send(this->socket.native_socket, buffer, (int)buffer_size, 0);
 }
 
 int CONNECTION_METHOD(receive)(struct CONNECTION_TYPE() const* const this,
@@ -50,7 +50,7 @@ int CONNECTION_METHOD(receive)(struct CONNECTION_TYPE() const* const this,
 ) {
     ASSERT(CONNECTION_METHOD(is_established)(this));
 
-    return recv(this->socket.native_socket, buffer, buffer_size, 0);
+    return recv(this->socket.native_socket, buffer, (int)buffer_size, 0);
 }
 
 void* CONNECTION_METHOD(destroy_at)(struct CONNECTION_TYPE()* const this) {

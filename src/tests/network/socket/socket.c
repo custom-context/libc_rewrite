@@ -11,6 +11,7 @@
 #include <string.h>
 
 IMPLEMENT_TYPE_TESTS(socket) {
+    UNUSED(TYPE_NAME);
 #if defined(WIN32)
     WSADATA wsa_data;
     ASSERT(!WSAStartup(MAKEWORD(2, 2), &wsa_data));

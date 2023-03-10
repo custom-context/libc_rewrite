@@ -3,7 +3,7 @@
 #include <network/native/native.h>
 
 #if defined(WIN32)
-    #include <ws2tcpip.h>
+    #include <WS2tcpip.h>
 #else
     #include <sys/types.h>
     #include <netdb.h>
@@ -56,7 +56,7 @@ SOCKET_PROTOCOL_TYPE() ADDRESS_INFO_METHOD(get_socket_protocol)(struct ADDRESS_I
 
 int ADDRESS_INFO_METHOD(send)(
     struct ADDRESS_INFO_TYPE() const* const this,
-    void* const buffer,
+    void const* const buffer,
     size_t buffer_size
 ) {
     SOCKET_TYPE() socket;
@@ -87,9 +87,9 @@ int ADDRESS_INFO_METHOD(send)(
         return 0u;
     }
 
-    int return_value = sendto(socket.native_socket, buffer, buffer_size, 0, 
+    int return_value = sendto(socket.native_socket, buffer, (int)buffer_size, 0, 
         this->native_address_info->ai_addr,
-        this->native_address_info->ai_addrlen
+        (int)(this->native_address_info->ai_addrlen)
     );
 
     SOCKET_METHOD(destroy_at)(&socket);
@@ -132,11 +132,11 @@ int ADDRESS_INFO_METHOD(receive)(
     }
 
 #if defined(WIN32)
-    int native_sender_address_length = this->native_address_info->ai_addrlen;
+    int native_sender_address_length = (int)(this->native_address_info->ai_addrlen);
 #else
     socklen_t native_sender_address_length = this->native_address_info->ai_addrlen;
 #endif
-    int return_value = recvfrom(socket.native_socket, buffer, buffer_size, 0, 
+    int return_value = recvfrom(socket.native_socket, buffer, (int)buffer_size, 0, 
         this->native_address_info->ai_addr,
         &native_sender_address_length
     );
@@ -165,6 +165,7 @@ struct ADDRESS_INFO_ITERATOR_TYPE() ADDRESS_INFO_METHOD(begin)(struct ADDRESS_IN
 }
 
 struct ADDRESS_INFO_ITERATOR_TYPE() ADDRESS_INFO_METHOD(end)(struct ADDRESS_INFO_TYPE()* const this) {
+    UNUSED(this);
     struct ADDRESS_INFO_ITERATOR_TYPE() result;
     ADDRESS_INFO_ITERATOR_METHOD(construct_at)(&result, &(struct ADDRESS_INFO_TYPE()){NULL});
     return result;
@@ -218,6 +219,7 @@ struct ADDRESS_INFO_CONST_ITERATOR_TYPE() ADDRESS_INFO_METHOD(cbegin)(struct ADD
 }
 
 struct ADDRESS_INFO_CONST_ITERATOR_TYPE() ADDRESS_INFO_METHOD(cend)(struct ADDRESS_INFO_TYPE() const* const this) {
+    UNUSED(this);
     struct ADDRESS_INFO_CONST_ITERATOR_TYPE() result;
     ADDRESS_INFO_CONST_ITERATOR_METHOD(construct_at)(&result, &(struct ADDRESS_INFO_TYPE()){NULL});
     return result;
@@ -281,10 +283,10 @@ STRING_TYPE() SOCKET_ADDRESS_INFO_DESCRIPTOR_METHOD(get_ip_address)(struct SOCKE
 
     void const* variadic_address;
     if (this->socket_domain == SOCKET_DOMAIN_ENUM_VALUE(IPv4)) {
-        struct sockaddr_in const* socket_address = (struct sockaddr_in const*)(this->native_socket_address_info);
+        struct sockaddr_in const* socket_address = (struct sockaddr_in const*)(void*)(this->native_socket_address_info);
         variadic_address = &(socket_address->sin_addr);
     } else if (this->socket_domain == SOCKET_DOMAIN_ENUM_VALUE(IPv6)) {
-        struct sockaddr_in6 const* socket_address = (struct sockaddr_in6 const*)(this->native_socket_address_info);
+        struct sockaddr_in6 const* socket_address = (struct sockaddr_in6 const*)(void*)(this->native_socket_address_info);
         variadic_address = &(socket_address->sin6_addr);
     } else { // if assertion turned off
         STRING_METHOD(construct_at)(&result);
