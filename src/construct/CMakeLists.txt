@@ -4,4 +4,6 @@ target_sources(${PROJECT_NAME}
         numeric_helpers.h
         characters_helpers.h
         characters_helpers.c
+        data_model_helpers.h
+        data_model_helpers.c
 )
