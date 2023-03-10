@@ -3,6 +3,7 @@ target_sources(${PROJECT_NAME}
         common.h
 )
 
+add_subdirectory(pair)
 add_subdirectory(interface)
 add_subdirectory(iterator)
 add_subdirectory(dynamic)
