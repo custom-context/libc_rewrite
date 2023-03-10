@@ -7,7 +7,7 @@
 
 #include <stddef.h> // offsetof
 
-int NB_SERVER_METHOD(on_success_bind)(struct SERVER_TYPE() const* const base) {
+int NB_SERVER_METHOD(VTABLE_MEMBER(on_success_bind))(struct SERVER_TYPE() const* const base) {
     // boilerplate
     void const* const void_this = (char const* const)base - offsetof(struct NB_SERVER_TYPE(), base_server);
     struct NB_SERVER_TYPE() const* const this = (struct NB_SERVER_TYPE() const* const)(void_this);
@@ -20,7 +20,7 @@ int NB_SERVER_METHOD(on_success_bind)(struct SERVER_TYPE() const* const base) {
 #endif
 }
 
-void* NB_SERVER_METHOD(destroy_at)(struct NB_SERVER_TYPE()* const this) {
-    SERVER_METHOD(destroy_at)(&this->base_server);
+void* NB_SERVER_METHOD(VTABLE_MEMBER(destroy_at))(struct NB_SERVER_TYPE()* const this) {
+    SERVER_METHOD(VTABLE_MEMBER(destroy_at))(&this->base_server);
     return this;
 }

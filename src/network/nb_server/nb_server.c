@@ -4,15 +4,15 @@
 #include <stddef.h>
 
 // server destroy_at overloading
-static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(SERVER_TYPE()), SERVER_METHOD(destroy_at))(struct SERVER_TYPE()* const base) {
+static void* TYPE_METHOD(INTERFACE_VTABLE_TYPE(SERVER_TYPE()), SERVER_METHOD(VTABLE_MEMBER(destroy_at)))(struct SERVER_TYPE()* const base) {
     void* const void_this = (void* const)((char* const)base - offsetof(struct NB_SERVER_TYPE(), base_server));
     struct NB_SERVER_TYPE()* const this = (struct NB_SERVER_TYPE()* const)(void_this);
-    return NB_SERVER_METHOD(destroy_at)(this);
+    return NB_SERVER_METHOD(VTABLE_MEMBER(destroy_at))(this);
 }
 
 static struct INTERFACE_VTABLE_TYPE(SERVER_TYPE()) TYPE_MEMBER(NB_SERVER_TYPE(), INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())) = {
-    .destroy_at = TYPE_METHOD(INTERFACE_VTABLE_TYPE(SERVER_TYPE()), SERVER_METHOD(destroy_at)),
-    .on_success_bind = NB_SERVER_METHOD(on_success_bind)
+    .destroy_at = TYPE_METHOD(INTERFACE_VTABLE_TYPE(SERVER_TYPE()), SERVER_METHOD(VTABLE_MEMBER(destroy_at))),
+    .on_success_bind = NB_SERVER_METHOD(VTABLE_MEMBER(on_success_bind))
 };
 
 struct NB_SERVER_TYPE()* NB_SERVER_METHOD(construct_at)(struct NB_SERVER_TYPE()* const this) {

@@ -25,7 +25,6 @@ typedef struct SERVER_TYPE() {
 } SERVER_TYPE();
 
 #define SERVER_METHOD(METHOD) TYPE_METHOD(SERVER_TYPE(), METHOD)
-#define SERVER_DYNAMIC_METHOD(METHOD) TYPE_DYNAMIC_METHOD(SERVER_TYPE(), METHOD)
 
 struct SERVER_TYPE()* SERVER_METHOD(construct_at)(struct SERVER_TYPE()* const this);
 
@@ -48,9 +47,9 @@ struct CONNECTION_TYPE() SERVER_METHOD(accept)(struct SERVER_TYPE()* const this)
 struct SERVER_TYPE()* SERVER_METHOD(shutdown)(struct SERVER_TYPE()* const this);
 
 // dynamic methods
-inline static int SERVER_DYNAMIC_METHOD(on_success_bind)(struct SERVER_TYPE() const* const this) {
+inline static int SERVER_METHOD(on_success_bind)(struct SERVER_TYPE() const* const this) {
     return this->INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())->on_success_bind(this);
 }
-inline static void* SERVER_DYNAMIC_METHOD(destroy_at)(struct SERVER_TYPE()* const this) {
+inline static void* SERVER_METHOD(destroy_at)(struct SERVER_TYPE()* const this) {
     return this->INTERFACE_VTABLE_VARIABLE(SERVER_TYPE())->destroy_at(this);
 }

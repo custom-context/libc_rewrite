@@ -168,7 +168,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
         CLIENT_METHOD(destroy_at)(&client);
         STRING_METHOD(destroy_at)(&server_response);
         STRING_METHOD(destroy_at)(&client_request);
-        NB_SERVER_DYNAMIC_METHOD(destroy_at)(&server);
+        NB_SERVER_METHOD(destroy_at)(&server);
     }
 #if defined(WIN32)
     WSACleanup();
