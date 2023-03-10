@@ -178,8 +178,8 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
     TEST_BLOCK("`size` method on empty red-black tree set") {
         struct RBTREE_SET(int) rbtree_set;
         TYPE_METHOD(RBTREE_SET(int), construct_at)(&rbtree_set);
-        CHECK(!TYPE_DYNAMIC_METHOD(RBTREE_SET(int), size)(&rbtree_set));
-        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+        CHECK(!TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set));
+        TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
     }
     TEST_BLOCK("`find` on empty red-black tree set") {
         struct RBTREE_SET_ALLOCATOR(int) allocator;
@@ -194,15 +194,15 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         TYPE_METHOD(RBTREE_SET(int), construct_with_allocator_at)(&rbtree_set, &allocator);
         {
             int const value = 534343;
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
-            CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+            CHECK(TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
         }
-        CHECK(!TYPE_DYNAMIC_METHOD(RBTREE_SET(int), size)(&rbtree_set));
+        CHECK(!TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set));
         CHECK(!context.count_of_allocated_bytes);
         CHECK(!context.count_of_allocations);
 
-        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+        TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
         CHECK(!context.count_of_allocated_bytes);
         CHECK(!context.count_of_deallocations);
 
@@ -223,7 +223,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         // insert copy of one value
         {
             int const value = 232992;
-            TYPE_DYNAMIC_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
+            TYPE_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
         }
         CHECK(context.count_of_allocated_bytes == sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
         CHECK(context.count_of_allocations == 1u);
@@ -231,19 +231,19 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         // try find same value
         {
             int const value = 232992;
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
-            CHECK(!TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
-            CHECK(*TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), const_value)(&iterator) == value);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+            CHECK(!TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
+            CHECK(*TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), const_value)(&iterator) == value);
         }
         // try same call function with another value provided
         {
             int const value = 75383;
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
-            CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+            CHECK(TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
         }
-        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+        TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
         CHECK(context.count_of_deallocated_bytes == sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
         CHECK(context.count_of_deallocations == 1u);
 
@@ -301,7 +301,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         CHECK(node->child[0u] == NULL);
         CHECK(node->child[1u] == NULL);
 
-        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+        TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
         CHECK(context.count_of_deallocations == 4u);
         CHECK(context.count_of_deallocated_bytes == context.count_of_deallocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
 
@@ -323,33 +323,33 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
 
         STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const seed = -34345328;
         {
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
             for (size_t i = 0u; i < count_of_insertions; ++i) {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = generate_hash(prev_value, i);
                 prev_value = value;
-                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-                if (!TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator)) {
+                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+                if (!TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator)) {
                     ++count_of_repeated_values;
                 }
-                TYPE_DYNAMIC_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
+                TYPE_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
             }
         }
-        CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET(int), size)(&rbtree_set) == (count_of_insertions - count_of_repeated_values));
+        CHECK(TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set) == (count_of_insertions - count_of_repeated_values));
         CHECK(context.count_of_allocations == (count_of_insertions - count_of_repeated_values));
         CHECK(context.count_of_allocated_bytes == context.count_of_allocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
         {
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
-            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+            STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
             for (size_t i = 0u; i < count_of_insertions; ++i) {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = generate_hash(prev_value, i);
                 prev_value = value;
-                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-                CHECK(!TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
-                CHECK(*TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), const_value)(&iterator) == value);
+                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+                CHECK(!TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator));
+                CHECK(*TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), const_value)(&iterator) == value);
             }
         }
-        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+        TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
         CHECK(context.count_of_deallocations == (count_of_insertions - count_of_repeated_values));
         CHECK(context.count_of_deallocated_bytes == context.count_of_deallocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
 
@@ -446,7 +446,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
             CHECK(node->child[1u] == NULL);
 
             // destroy tree
-            TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+            TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
             CHECK(context.count_of_deallocations == 5u);
             CHECK(context.count_of_deallocated_bytes == context.count_of_deallocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
         }
@@ -475,11 +475,11 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const seed = 19834748;
             {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
-                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
+                STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
                 for (size_t i = 0u; i < count_of_insertions; ++i) {
                     STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = prev_value = generate_hash(prev_value, i);
-                    STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
-                    if (!TYPE_DYNAMIC_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator)) {
+                    STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
+                    if (!TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator)) {
                         ++count_of_repeated_values;
                     } else {
                         struct PAIR_TYPE(int, size_t)* element = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
@@ -490,14 +490,14 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
                         }
                         ++element->second;
                     }
-                    TYPE_DYNAMIC_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
+                    TYPE_METHOD(RBTREE_SET(int), insert_copy)(&rbtree_set, &value);
                 }
             }
-            CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET(int), size)(&rbtree_set) == (count_of_insertions - count_of_repeated_values));
+            CHECK(TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set) == (count_of_insertions - count_of_repeated_values));
             CHECK(context.count_of_allocations == (count_of_insertions - count_of_repeated_values));
             CHECK(context.count_of_allocated_bytes == context.count_of_allocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
             {
-                STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const end_iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), end)(&rbtree_set);
+                STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), end)(&rbtree_set);
                 size_t const erasement_shift = 7u;
                 for (size_t i = 0u; i < count_of_insertions; ++i) {
                     // 'couse we're using shifting => we need to generate right hash value starting from 0 to shifted index
@@ -506,22 +506,22 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
                         value = generate_hash(value, shift_i);                        
                     }
 
-                    STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const iterator = TYPE_DYNAMIC_METHOD(RBTREE_SET(int), mut_find)(&rbtree_set, &value);
+                    STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), mut_find)(&rbtree_set, &value);
 
                     // check is inserted value still exists and not erased using `index_to_insert_value_encounter`
                     struct PAIR_TYPE(int, size_t)* insert_value_encounter_pointer = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
                     CHECK(insert_value_encounter_pointer);
                     if (insert_value_encounter_pointer->second) {
                         // if so => check value by iterator...
-                        CHECK(!TYPE_DYNAMIC_METHOD(RBTREE_SET_ITERATOR(int), compare)(&iterator, &end_iterator));
-                        CHECK(*TYPE_DYNAMIC_METHOD(RBTREE_SET_ITERATOR(int), const_value)(&iterator) == value);
+                        CHECK(!TYPE_METHOD(RBTREE_SET_ITERATOR(int), compare)(&iterator, &end_iterator));
+                        CHECK(*TYPE_METHOD(RBTREE_SET_ITERATOR(int), const_value)(&iterator) == value);
                         // erase element by non-end iterator
-                        TYPE_DYNAMIC_METHOD(RBTREE_SET(int), erase_by_iterator)(&rbtree_set, iterator);
+                        TYPE_METHOD(RBTREE_SET(int), erase_by_iterator)(&rbtree_set, iterator);
                         // decrement counter;
                         --insert_value_encounter_pointer->second;
                     } else {
                         // else iterator must be equal to end-iterator
-                        CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET_ITERATOR(int), compare)(&iterator, &end_iterator));
+                        CHECK(TYPE_METHOD(RBTREE_SET_ITERATOR(int), compare)(&iterator, &end_iterator));
                     }
 
                     // check count of not erased elements with deallocations counters
@@ -530,12 +530,12 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
                         TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), data)(&index_to_insert_value_encounter),
                         TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), size)(&index_to_insert_value_encounter)
                     ).second;
-                    CHECK(TYPE_DYNAMIC_METHOD(RBTREE_SET(int), size)(&rbtree_set) == count_of_left_values);
+                    CHECK(TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set) == count_of_left_values);
                     CHECK(context.count_of_deallocations == (context.count_of_allocations - count_of_left_values));
                     CHECK(context.count_of_deallocated_bytes == (context.count_of_allocations - count_of_left_values) * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
                 }
             }
-            TYPE_DYNAMIC_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
+            TYPE_METHOD(RBTREE_SET(int), destroy_at)(&rbtree_set);
             CHECK(context.count_of_deallocations == context.count_of_allocations);
             CHECK(context.count_of_deallocated_bytes == context.count_of_allocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
             TYPE_METHOD(RBTREE_SET_ALLOCATOR(int), destroy_at)(&allocator);
