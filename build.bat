@@ -6,3 +6,5 @@ cd .\build
 cmake -T ClangCL ..
 @REM build project in Debug mode
 cmake --build .
+@REM go to project-directory
+cd ..
