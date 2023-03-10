@@ -1,6 +1,7 @@
 target_sources(${PROJECT_NAME}
     PRIVATE
         macros.h
+        limits.h
         format_print.h
         format_print.c
         format.h
