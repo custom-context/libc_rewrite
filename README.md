@@ -1,0 +1,42 @@
+Attempt to replace some c library functions & add some containers & macro helpers to emulate some stl functions/containers
+
+List of desirable features:
+- Memory:
+- - [x] Generic default allocators
+- - [x] No open C stdlib header
+- Containers:
+- - Static:
+- - - [x] Generic static array
+- - Dynamic:
+- - - [x] Generic dynamic array
+- - - [x] Generic string + char_type defined implementations (char|char8|char16|char32|char64)
+- - - Associative arrays:
+- - - - [x] Red-black tree set
+- - - - [-] Red-black tree map
+- - - - [-] Chaining hash table set
+- - - - [-] Chaining hash table map
+- - - - [-] Open addressing hash table set
+- - - - [-] Open addressing hash table map
+- Filesystem:
+- - Network:
+- - - [x] Cross-platform sockets (linux/windows)
+- - - [x] Cross-platform blocking client (linux/windows)
+- - - [x] Cross-platform non-blocking client (linux/windows)
+- - - [x] Cross-platform blocking server (linux/windows)
+- - - [x] Cross-platform non-blocking server (linux/windows)
+- - - [-] Connections/packages polling (select/poll(/epoll?))
+- - - [-] Secure connections establishing (handshakes/etc)
+- - - [-] Http/1.1 non-blocking client
+- - - [-] Http/1.1 non-blocking server
+- - - [-] Http/2 non-blocking client
+- - - [-] Http/2 non-blocking server
+- - File:
+- - - [-] Cross-platform blocking file handlers (linux/windows)
+- - - [-] Cross-platform non-blocking file handlers (linux/windows)
+- Multitasking:
+- - [-] Cross-platform threads managment
+- - [-] Cross-platform proccesses managment
+- - [-] Cross-platform daemons managment
+- - IPC:
+- - - [-] Cross-platform messages queue
+- - - [-] Cross-platform pipes
