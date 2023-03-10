@@ -11,8 +11,8 @@
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 
 static struct INTERFACE_VTABLE_TYPE(CLIENT_TYPE()) TYPE_MEMBER(CLIENT_TYPE(), INTERFACE_VTABLE_VARIABLE(CLIENT_TYPE())) = {
-    .destroy_at = CLIENT_METHOD(destroy_at),
-    .on_success_connection = CLIENT_METHOD(on_success_connection)
+    .destroy_at = CLIENT_METHOD(VTABLE_MEMBER(destroy_at)),
+    .on_success_connection = CLIENT_METHOD(VTABLE_MEMBER(on_success_connection))
 };
 
 struct CLIENT_TYPE()* CLIENT_METHOD(construct_at)(struct CLIENT_TYPE()* const this) {
