@@ -4,3 +4,4 @@ target_sources(${PROJECT_NAME}
 )
 
 add_subdirectory(set)
+add_subdirectory(map)
