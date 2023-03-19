@@ -7,6 +7,7 @@
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>
 #include <tests/containers/dynamic/tree/rb_tree/rb_tree_set/rb_tree_set.h>
+#include <tests/containers/dynamic/tree/rb_tree/map/map.h>
 #include <tests/utils/result/result.h>
 #include <tests/fs/file/encoding.h>
 #include <tests/network/socket/socket.h>
@@ -33,6 +34,7 @@ void exec_tests(void) {
     EXECUTE_TYPE_TESTS(array);
     EXECUTE_TYPE_TESTS(dynamic_array);
     EXECUTE_TYPE_TESTS(rb_tree_set);
+    EXECUTE_TYPE_TESTS(rb_tree_map);
     EXECUTE_TYPE_TESTS(string);
     EXECUTE_TYPE_TESTS(result);
     EXECUTE_TYPE_TESTS(encoding);
