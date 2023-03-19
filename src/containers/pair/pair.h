@@ -41,7 +41,7 @@ COMMON_MODIFIER struct PAIR_TYPE(TYPE1, TYPE2)*\
 /* --- Swap --- */\
 COMMON_MODIFIER void TYPE_METHOD(PAIR_TYPE(TYPE1, TYPE2), swap)(\
     struct PAIR_TYPE(TYPE1, TYPE2)* const this,\
-    struct PAIR_TYPE(TYPE1, TYPE2)* const another);
+    struct PAIR_TYPE(TYPE1, TYPE2)* const another)
 
 #define DEFINE_PAIR_METHODS_WITH_MODIFIER(COMMON_MODIFIER, TYPE1, TYPE2)\
 /* --- Construction/Destruction functions --- */\
