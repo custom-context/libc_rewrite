@@ -15,7 +15,7 @@ List of desirable features:
 - - - [x] Generic string + char_type defined implementations (char|char8|char16|char32|char64)
 - - - Associative arrays:
 - - - - [x] Red-black tree set
-- - - - [-] Red-black tree map
+- - - - [x] Red-black tree map
 - - - - [-] Chaining hash table set
 - - - - [-] Chaining hash table map
 - - - - [-] Open addressing hash table set
