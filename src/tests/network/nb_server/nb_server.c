@@ -3,7 +3,6 @@
 #include <network/nb_server/nb_server.h>
 #include <network/client/client.h>
 
-#include <utils/string/comparators_impl.h>
 #include <utils/string/helpers.h>
 
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
@@ -123,10 +122,9 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
 
                 CHECK(received_package_size > 0);
                 CHECK(received_package_size == (int)STRING_METHOD(size)(&client_request));
-                CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&client_request,
-                    (uint)received_package_size,
-                    server_request_buffer
-                ));
+                for (STRUCT_SUBTYPE(STRING_TYPE(), size_type) index = 0u; index < STRING_METHOD(size)(&client_request); ++index) {
+                    CHECK(*TYPE_METHOD(STRING_TYPE(), at)(&client_request, index) == server_request_buffer[index]);
+                }
             }
 
             /*send response to client*/{
@@ -154,10 +152,9 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
                 );
                 CHECK(received_package_size > 0);
                 CHECK(received_package_size == (int)STRING_METHOD(size)(&server_response));
-                CHECK(!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(&server_response,
-                    (uint)received_package_size,
-                    client_response_buffer
-                ));
+                for (STRUCT_SUBTYPE(STRING_TYPE(), size_type) index = 0u; index < STRING_METHOD(size)(&server_response); ++index) {
+                    CHECK(*TYPE_METHOD(STRING_TYPE(), at)(&server_response, index) == client_response_buffer[index]);
+                }
             }
 
             /*disconnect*/{
