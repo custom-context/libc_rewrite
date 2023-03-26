@@ -4,6 +4,8 @@
 
 // common primitive types
 #include <limits.h>
+#include "unsigned_types_aliases.h"
+
 #define MAX_VALUE_OF__char CHAR_MAX
 #define MAX_VALUE_OF__short SHRT_MAX
 #define MAX_VALUE_OF__int INT_MAX
@@ -30,6 +32,7 @@
 
 // fixed-width integers
 #include <stdint.h>
+#include "types_aliases.h"
 #define MAX_VALUE_OF__int8 INT8_MAX
 #define MAX_VALUE_OF__int16 INT16_MAX
 #define MAX_VALUE_OF__int32 INT32_MAX
@@ -51,15 +54,30 @@
 #define MIN_VALUE_OF__uint64 (uint64)0
 
 // character types
+#include "characters_types_aliases.h"
 #define MAX_VALUE_OF__char8 UINT8_MAX
 #define MAX_VALUE_OF__char16 UINT16_MAX
 #define MAX_VALUE_OF__char32 UINT32_MAX
 #define MAX_VALUE_OF__char64 UINT64_MAX
+#define MAX_VALUE_OF__wchar WCHAR_MAX
 
 #define MIN_VALUE_OF__char8 (char8)0
 #define MIN_VALUE_OF__char16 (char16)0
 #define MIN_VALUE_OF__char32 (char32)0
 #define MIN_VALUE_OF__char64 (char64)0
+#define MIN_VALUE_OF__wchar WCHAR_MIN
+
+// windows character type
+#if defined(_WIN32)
+    #ifdef _UNICODE
+        #define MAX_VALUE_OF__winchar WCHAR_MAX
+        #define MIN_VALUE_OF__winchar WCHAR_MIN
+    #else
+        #define MAX_VALUE_OF__winchar CHAR_MAX
+        #define MIN_VALUE_OF__winchar CHAR_MIN
+    #endif
+#endif
+
 
 // pointer/data related types
 #define MAX_VALUE_OF__size_t SIZE_MAX
