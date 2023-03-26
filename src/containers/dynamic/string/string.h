@@ -8,63 +8,18 @@
 #define SPECIALIZED_STRING_TYPE(CHAR_TYPE) NAMESPACE_CONTAINERS_DYNAMIC(CONCAT3(string, _, CHAR_TYPE))
 #define STRING_TYPE() SPECIALIZED_STRING_TYPE(char)
 #define WSTRING_TYPE() SPECIALIZED_STRING_TYPE(wchar)
-
-#if defined(_WIN32)
-    #define OS_STRING_TYPE() SPECIALIZED_STRING_TYPE(winchar)
-#else
-    #define OS_STRING_TYPE() STRING_TYPE()
-#endif
+#define OS_STRING_TYPE() SPECIALIZED_STRING_TYPE(OS_CHAR_TYPE)
 
 // define macros for string methods
 #define SPECIALIZED_STRING_METHOD(CHAR_TYPE, METHOD) TYPE_METHOD(SPECIALIZED_STRING_TYPE(CHAR_TYPE), METHOD)
 #define STRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(char, METHOD)
 #define WSTRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(wchar, METHOD)
+#define OS_STRING_METHOD(METHOD) TYPE_METHOD(OS_STRING_TYPE(), METHOD)
 
-#if defined(_WIN32)
-    #define OS_STRING_METHOD(METHOD) SPECIALIZED_STRING_METHOD(winchar, METHOD)
-#else
-    #define OS_STRING_METHOD(METHOD) STRING_METHOD(METHOD)
-#endif
-
-// define macro for string type & string methods declaration
-#define DECLARE_SPECIALIZED_STRING(TYPE)\
-struct SPECIALIZED_STRING_TYPE(TYPE);\
+// define macro for string type
+#define DECLARE_SPECIALIZED_STRING_TYPE(TYPE)\
 DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type, size_t);\
 DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), char_type, TYPE);\
-/* --- Construction/Destruction functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer);\
-void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
-/* --- Assignment functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer);\
-void SPECIALIZED_STRING_METHOD(TYPE, swap)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
-/* --- Memory managment functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_size, TYPE const* const value);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_capacity);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
-void SPECIALIZED_STRING_METHOD(TYPE, push_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const value);\
-void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* another_string);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const * const);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size);\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value);\
-/* --- Getters functions implementation --- */\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, capacity)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, size)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, length)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
-uchar SPECIALIZED_STRING_METHOD(TYPE, empty)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
-TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
-TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index);\
-TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index);\
-\
 typedef struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), dynamically_allocated_data) {\
     TYPE* buffer;\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) size;\
@@ -81,12 +36,54 @@ typedef struct SPECIALIZED_STRING_TYPE(TYPE) {\
     uchar is_stack_allocated;\
 } SPECIALIZED_STRING_TYPE(TYPE)
 
+// define macro for string type & string methods declaration
+#define DECLARE_SPECIALIZED_STRING_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
+/* --- Construction/Destruction functions implementation --- */\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer);\
+MODIFIER void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
+/* --- Assignment functions implementation --- */\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer);\
+/* --- Swap --- */\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, swap)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source);\
+/* --- Memory managment functions implementation --- */\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_size, TYPE const* const value);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_capacity);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, push_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const value);\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* another_string);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const * const);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size);\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value);\
+/* --- Getters functions implementation --- */\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, capacity)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, size)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, length)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
+MODIFIER uchar SPECIALIZED_STRING_METHOD(TYPE, empty)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
+MODIFIER TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this);\
+MODIFIER TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index);\
+MODIFIER TYPE* SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index)
+
+// define macro for string type & string methods declaration
+#define DECLARE_SPECIALIZED_STRING(TYPE)\
+DECLARE_SPECIALIZED_STRING_TYPE(TYPE);\
+DECLARE_SPECIALIZED_STRING_METHODS_WITH_MODIFIER(extern, TYPE)
+
 #define DECLARE_STRING() DECLARE_SPECIALIZED_STRING(char)
 #define DECLARE_WSTRING() DECLARE_SPECIALIZED_STRING(wchar)
 
-#define IMPLEMENT_SPECIALIZED_STRING(TYPE)\
+#define DEFINE_SPECIALIZED_STRING_WITH_MODIFIER(MODIFIER, TYPE)\
 /* --- Construction/Destruction functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     static_assert(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), dynamically_allocated_data)) / sizeof(TYPE) > 1, "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
     static_assert(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), dynamically_allocated_data)) / sizeof(TYPE) < MAX_VALUE(TYPE), "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
     this->is_stack_allocated = 1u;\
@@ -97,7 +94,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     TYPE_METHOD(TYPE, construct_copy_at)(stack_allocated_data__capacity_element, &casted_capacity);\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
     SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(source));\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const source_string_size = SPECIALIZED_STRING_METHOD(TYPE, size)(source);\
@@ -106,7 +103,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     }\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
     if (source->is_stack_allocated) {\
         SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(this, source);\
         return this;\
@@ -120,7 +117,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     source->is_stack_allocated = 1u;\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
     SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, size);\
     for (STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index = 0u; index < size; ++index) {\
@@ -128,7 +125,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     }\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
     SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, buffer_size);\
     for (STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index = 0u; index < buffer_size; ++index) {\
@@ -136,48 +133,49 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_
     }\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer) {\
     SPECIALIZED_STRING_METHOD(TYPE, construct_at)(this);\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size = RAW_STRING_FUNCTION(TYPE, length)(source_buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(this, buffer_size, source_buffer);\
     return this;\
 }\
-void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
+MODIFIER void* SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     if (!this->is_stack_allocated) {\
         NAMESPACE_MEMORY_NATIVE(free)(this->dynamic_data.buffer);\
     };\
     return this;\
 }\
 /* --- Assignment functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_move_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
     struct SPECIALIZED_STRING_TYPE(TYPE) temporary_string;\
     SPECIALIZED_STRING_METHOD(TYPE, construct_move_at)(&temporary_string, source);\
     SPECIALIZED_STRING_METHOD(TYPE, swap)(this, &temporary_string);\
     SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_copy_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE) const* const source) {\
     struct SPECIALIZED_STRING_TYPE(TYPE) temporary_string;\
     SPECIALIZED_STRING_METHOD(TYPE, construct_copy_at)(&temporary_string, source);\
     SPECIALIZED_STRING_METHOD(TYPE, swap)(this, &temporary_string);\
     SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_buffer_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size, TYPE const* const source_buffer) {\
     struct SPECIALIZED_STRING_TYPE(TYPE) temporary_string;\
     SPECIALIZED_STRING_METHOD(TYPE, construct_from_buffer_at)(&temporary_string, buffer_size, source_buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, swap)(this, &temporary_string);\
     SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, assign_from_c_string_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer) {\
     struct SPECIALIZED_STRING_TYPE(TYPE) temporary_string;\
     SPECIALIZED_STRING_METHOD(TYPE, construct_from_c_string_at)(&temporary_string, source_buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, swap)(this, &temporary_string);\
     SPECIALIZED_STRING_METHOD(TYPE, destroy_at)(&temporary_string);\
     return this;\
 }\
-void SPECIALIZED_STRING_METHOD(TYPE, swap)(\
+/* --- Swap --- */\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, swap)(\
     struct SPECIALIZED_STRING_TYPE(TYPE)* const this,\
     struct SPECIALIZED_STRING_TYPE(TYPE)* const source) {\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const stack_allocated_capacity = sizeof(this->dynamic_data) / sizeof(TYPE);\
@@ -225,7 +223,7 @@ void SPECIALIZED_STRING_METHOD(TYPE, swap)(\
     }\
 }\
 /* --- Memory managment functions implementation --- */\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_size, TYPE const* const value) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_size, TYPE const* const value) {\
     if (SPECIALIZED_STRING_METHOD(TYPE, size)(this) >= new_size) {\
         return this;\
     }\
@@ -249,7 +247,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, resize)(st
     TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, new_size));\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_capacity) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const new_capacity) {\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) current_capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
     if (current_capacity++ >= new_capacity) {\
         return this;\
@@ -269,7 +267,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, reserve)(s
     this->is_stack_allocated = 0;\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     if (!this->is_stack_allocated) {\
         this->dynamic_data.size = 0;\
     } else {\
@@ -281,7 +279,7 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, clear)(str
     TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, SPECIALIZED_STRING_METHOD(TYPE, capacity)(this)));\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_fit)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     if (this->is_stack_allocated) {\
         return this;\
     }\
@@ -307,10 +305,10 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, shrink_to_
     this->dynamic_data.capacity = string_size + 1;\
     return this;\
 }\
-void SPECIALIZED_STRING_METHOD(TYPE, push_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const value) {\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, push_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const value) {\
     SPECIALIZED_STRING_METHOD(TYPE, resize)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + 1, value);\
 }\
-void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
+MODIFIER void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this) {\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size = SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
     TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_METHOD(TYPE, mut_at)(this, size - 1));\
     if (this->is_stack_allocated) {\
@@ -322,23 +320,23 @@ void SPECIALIZED_STRING_METHOD(TYPE, pop_back)(struct SPECIALIZED_STRING_TYPE(TY
     }\
     this->dynamic_data.size = size - 1;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* another_string) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, struct SPECIALIZED_STRING_TYPE(TYPE)* another_string) {\
     SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, SPECIALIZED_STRING_METHOD(TYPE, data)(another_string), SPECIALIZED_STRING_METHOD(TYPE, size)(another_string));\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const * const source_buffer) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_c_string)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const * const source_buffer) {\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size = RAW_STRING_FUNCTION(TYPE, length)(source_buffer);\
     SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(this, source_buffer, buffer_size);\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_buffer)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, TYPE const* const source_buffer, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const buffer_size) {\
     SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + buffer_size);\
     for (STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index = 0u; index < buffer_size; ++index) {\
         SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, &source_buffer[index]);\
     }\
     return this;\
 }\
-struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value) {\
+MODIFIER struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fill)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const size, TYPE const* const value) {\
     SPECIALIZED_STRING_METHOD(TYPE, reserve)(this, SPECIALIZED_STRING_METHOD(TYPE, size)(this) + size);\
     for (STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index = 0u; index < size; ++index) {\
         SPECIALIZED_STRING_METHOD(TYPE, push_back)(this, value);\
@@ -346,37 +344,39 @@ struct SPECIALIZED_STRING_TYPE(TYPE)* SPECIALIZED_STRING_METHOD(TYPE, append_fil
     return this;\
 }\
 /* --- Getters functions implementation --- */\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, capacity)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, capacity)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated) {\
         return (sizeof(this->dynamic_data) / sizeof(TYPE)) - 1;\
     }\
     return this->dynamic_data.capacity;\
 }\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, size)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, size)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
     if (this->is_stack_allocated) {\
         STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) const capacity = SPECIALIZED_STRING_METHOD(TYPE, capacity)(this);\
         return (capacity - (STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type))(*SPECIALIZED_STRING_METHOD(TYPE, at)(this, capacity)));\
     }\
     return this->dynamic_data.size;\
 }\
-STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, length)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
+MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) SPECIALIZED_STRING_METHOD(TYPE, length)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
     return SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
 }\
-uchar SPECIALIZED_STRING_METHOD(TYPE, empty)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
+MODIFIER uchar SPECIALIZED_STRING_METHOD(TYPE, empty)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
     return (uchar)!!SPECIALIZED_STRING_METHOD(TYPE, size)(this);\
 }\
-TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
+MODIFIER TYPE const* SPECIALIZED_STRING_METHOD(TYPE, data)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this) {\
     return SPECIALIZED_STRING_METHOD(TYPE, at)(this, 0u);\
 }\
-TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index) {\
+MODIFIER TYPE const* SPECIALIZED_STRING_METHOD(TYPE, at)(struct SPECIALIZED_STRING_TYPE(TYPE) const* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index) {\
     return (this->is_stack_allocated ? this->stack_data.buffer : this->dynamic_data.buffer) + index;\
 }\
-TYPE * SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index) {\
+MODIFIER TYPE* SPECIALIZED_STRING_METHOD(TYPE, mut_at)(struct SPECIALIZED_STRING_TYPE(TYPE)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE(TYPE), size_type) index) {\
     return (this->is_stack_allocated ? this->stack_data.buffer : this->dynamic_data.buffer) + index;\
 }
 
-#define IMPLEMENT_STRING() IMPLEMENT_SPECIALIZED_STRING(char)
-#define IMPLEMENT_WSTRING() IMPLEMENT_SPECIALIZED_STRING(wchar)
+#define DEFINE_SPECIALIZED_STRING(TYPE) DEFINE_SPECIALIZED_STRING_WITH_MODIFIER(, TYPE)
+
+#define DEFINE_STRING() DEFINE_SPECIALIZED_STRING(char)
+#define DEFINE_WSTRING() DEFINE_SPECIALIZED_STRING(wchar)
 
 // predefine strings types/functions
 #include <construct/characters_helpers.h>
