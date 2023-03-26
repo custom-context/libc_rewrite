@@ -8,6 +8,7 @@ target_sources(${PROJECT_NAME}
         format.c
         result.h
         debug.h
+        convert.h
 )
 
 add_subdirectory(string)

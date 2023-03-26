@@ -1,8 +1,5 @@
 #include "format.h"
 
-#include <utils/string/comparators_impl.h>
-#include <utils/string/numeric_type_to_string_impl.h>
-
 #include <utils/string/helpers.h>
 #include <containers/dynamic/array/array.h>
 
@@ -125,13 +122,13 @@ static struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAME
     for (; format_string[result._index] != '\0'; ++result._index) {
         for (uint vec_index = 0u; vec_index < DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), size)(&patterns->_patterns); ++vec_index) {
             result._pattern = DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), at)(&patterns->_patterns, vec_index);
-            if (!NAMESPACE_UTILS_STRING(COMPARE_FUNCTION(STRING_TYPE(), buffer))(
-                &result._pattern->_string_representation,
-                STRING_METHOD(size)(&result._pattern->_string_representation),
-                format_string + result._index)
-            ) {
+            struct STRING_TYPE() temporary;
+            TYPE_METHOD(STRING_TYPE(), construct_from_buffer_at)(&temporary, STRING_METHOD(size)(&result._pattern->_string_representation), format_string + result._index);
+            if (!STRING_FUNCTION(STRING_TYPE(), compare)(&result._pattern->_string_representation, &temporary)) {
+                TYPE_METHOD(STRING_TYPE(), destroy_at)(&temporary);
                 return result;
             }
+            TYPE_METHOD(STRING_TYPE(), destroy_at)(&temporary);
         }
     }
     result._pattern = NULL;
@@ -181,7 +178,10 @@ struct STRING_TYPE() NAMESPACE_UTILS(va_format)(char const* const format_string,
                 }
             } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
-                struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT_FUNCTION(int, STRING_TYPE()))(va_arg(args, int));
+                struct STRING_TYPE() result;
+                TYPE_METHOD(STRING_TYPE(), construct_at)(&result);
+                int const value = va_arg(args, int);
+                NAMESPACE_UTILS_STRING(CONVERT(int, STRING_TYPE()))(&value, &result);
                 for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
                     STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
                 }
