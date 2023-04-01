@@ -17,20 +17,20 @@ typedef struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT) {\
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), context_type)* const context,\
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), allocator_type)* const this,\
         \
-        size_t count_of_elements);\
+        usize count_of_elements);\
     void (*on_deallocation)(\
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), context_type)* const context,\
         \
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), allocator_type)* const this,\
         STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-        size_t count_of_elements);\
+        usize count_of_elements);\
     void (*on_reallocation)(\
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), context_type)* const context,\
         \
         STRUCT_SUBTYPE(PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT), allocator_type)* const this,\
         STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-        size_t count_of_elements,\
-        size_t new_count_of_elements);\
+        usize count_of_elements,\
+        usize new_count_of_elements);\
 } PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)
 
 #define DECLARE_PROXY_ALLOCATOR_METHODS_WITH_MODIFIER(COMMON_MODIFIER, ALLOCATOR, CONTEXT)\
@@ -58,16 +58,16 @@ COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, swap)(struct PRO
 /* --- Memory managment functions implementation --- */\
 COMMON_MODIFIER STRUCT_SUBTYPE(ALLOCATOR, value_type)* PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, allocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
-    size_t count_of_elements);\
+    usize count_of_elements);\
 COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, deallocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
     STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-    size_t count_of_elements);\
+    usize count_of_elements);\
 COMMON_MODIFIER STRUCT_SUBTYPE(ALLOCATOR, value_type)* PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, reallocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
     STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-    size_t count_of_elements,\
-    size_t new_count_of_elements)
+    usize count_of_elements,\
+    usize new_count_of_elements)
 
 #define DECLARE_PROXY_ALLOCATOR_METHODS(COMMON_MODIFIER, ALLOCATOR, CONTEXT) DECLARE_PROXY_ALLOCATOR_METHODS_WITH_MODIFIER(, ALLOCATOR, CONTEXT)
 
@@ -137,17 +137,17 @@ COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, swap)(\
         another->context = temporary;\
     }\
     {\
-        void(*temporary)(CONTEXT* const, struct ALLOCATOR* const, size_t) = this->on_allocation;\
+        void(*temporary)(CONTEXT* const, struct ALLOCATOR* const, usize) = this->on_allocation;\
         this->on_allocation = another->on_allocation;\
         another->on_allocation = temporary;\
     }\
     {\
-        void(*temporary)(CONTEXT* const, struct ALLOCATOR* const, STRUCT_SUBTYPE(ALLOCATOR, value_type)* const, size_t) = this->on_deallocation;\
+        void(*temporary)(CONTEXT* const, struct ALLOCATOR* const, STRUCT_SUBTYPE(ALLOCATOR, value_type)* const, usize) = this->on_deallocation;\
         this->on_deallocation = another->on_deallocation;\
         another->on_deallocation = temporary;\
     }\
     {\
-        void (*temporary)(CONTEXT* const, struct ALLOCATOR* const, STRUCT_SUBTYPE(ALLOCATOR, value_type)* const, size_t, size_t) = this->on_reallocation;\
+        void (*temporary)(CONTEXT* const, struct ALLOCATOR* const, STRUCT_SUBTYPE(ALLOCATOR, value_type)* const, usize, usize) = this->on_reallocation;\
         this->on_reallocation = another->on_reallocation;\
         another->on_reallocation = temporary;\
     }\
@@ -156,7 +156,7 @@ COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, swap)(\
 /* --- Memory managment functions implementation --- */\
 COMMON_MODIFIER STRUCT_SUBTYPE(ALLOCATOR, value_type)* PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, allocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     if (this->on_allocation) {\
         this->on_allocation(this->context, &this->allocator, count_of_elements);\
     }\
@@ -165,7 +165,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(ALLOCATOR, value_type)* PROXY_ALLOCATOR_METHOD(AL
 COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, deallocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
     STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     if (this->on_deallocation) {\
         this->on_deallocation(this->context, &this->allocator, elements_buffer, count_of_elements);\
     }\
@@ -174,8 +174,8 @@ COMMON_MODIFIER void PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, deallocate)(\
 COMMON_MODIFIER STRUCT_SUBTYPE(ALLOCATOR, value_type)* PROXY_ALLOCATOR_METHOD(ALLOCATOR, CONTEXT, reallocate)(\
     struct PROXY_ALLOCATOR_TYPE(ALLOCATOR, CONTEXT)* const this,\
     STRUCT_SUBTYPE(ALLOCATOR, value_type)* const elements_buffer,\
-    size_t count_of_elements,\
-    size_t new_count_of_elements) {\
+    usize count_of_elements,\
+    usize new_count_of_elements) {\
     if (this->on_reallocation) {\
         this->on_reallocation(this->context, &this->allocator, elements_buffer, count_of_elements, new_count_of_elements);\
     }\

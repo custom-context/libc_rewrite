@@ -37,7 +37,7 @@ struct RESULT_TYPE(int, int) CONNECTION_METHOD(status)(struct CONNECTION_TYPE() 
 
 int CONNECTION_METHOD(send)(struct CONNECTION_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     ASSERT(CONNECTION_METHOD(is_established)(this));
 
@@ -46,7 +46,7 @@ int CONNECTION_METHOD(send)(struct CONNECTION_TYPE() const* const this,
 
 int CONNECTION_METHOD(receive)(struct CONNECTION_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     ASSERT(CONNECTION_METHOD(is_established)(this));
 

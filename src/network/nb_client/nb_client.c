@@ -54,14 +54,14 @@ struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(reconnect)(struct NB_CLIENT_TYPE()* co
 
 int NB_CLIENT_METHOD(send)(struct NB_CLIENT_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     return CLIENT_METHOD(send)(&this->base_client, buffer, buffer_size);
 }
 
 int NB_CLIENT_METHOD(receive)(struct NB_CLIENT_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     return CLIENT_METHOD(receive)(&this->base_client, buffer, buffer_size);
 }

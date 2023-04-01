@@ -1,6 +1,7 @@
 #include "array.h"
 
 #include <containers/static/array/array.h>
+#include <primitives/data_model_types_aliases.h>
 
 #define TEST_BUFFER_SIZE1 231
 DEFINE_ARRAY(int, TEST_BUFFER_SIZE1)
@@ -44,11 +45,11 @@ IMPLEMENT_TYPE_TESTS(array) {
 
         CHECK(ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer) == TEST_BUFFER_SIZE2);
 
-        for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
             *ARRAY_METHOD(int, TEST_BUFFER_SIZE2, mut_at)(&arr_buffer, (uint)(i)) = (int)(i * i);
         }
         
-        for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE2, size)(&arr_buffer); ++i) {
             CHECK(*ARRAY_METHOD(int, TEST_BUFFER_SIZE2, mut_at)(&arr_buffer, (uint)(i)) == (int)(i * i));
         }
     }
@@ -58,11 +59,11 @@ IMPLEMENT_TYPE_TESTS(array) {
 
         CHECK(ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer) == TEST_BUFFER_SIZE3);
 
-        for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
             *ARRAY_METHOD(int, TEST_BUFFER_SIZE3, mut_at)(&arr_buffer, (uint)(i)) = (int)(i * i);
         }
         
-        for (size_t i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(int, TEST_BUFFER_SIZE3, size)(&arr_buffer); ++i) {
             CHECK(*ARRAY_METHOD(int, TEST_BUFFER_SIZE3, at)(&arr_buffer, (uint)(i)) == (int)(i * i));
         }
     }
@@ -71,7 +72,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 
-        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
             ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, mut_at)(&arr_buffer, (uint)(i))->encounter_pointer = &encounter;
         }
         
@@ -83,7 +84,7 @@ IMPLEMENT_TYPE_TESTS(array) {
         ARRAY_TYPE(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4) arr_buffer;
         int encounter = 0;
 
-        for (size_t i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
+        for (usize i = 0u; i < ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, size)(&arr_buffer); ++i) {
             ARRAY_METHOD(test__inc_on_construction__dec_on_destruction, TEST_BUFFER_SIZE4, mut_at)(&arr_buffer, (uint)(i))->encounter_pointer = &encounter;
         }
         

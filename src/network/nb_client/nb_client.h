@@ -30,12 +30,12 @@ struct NB_CLIENT_TYPE()* NB_CLIENT_METHOD(reconnect)(struct NB_CLIENT_TYPE()* co
 
 int NB_CLIENT_METHOD(send)(struct NB_CLIENT_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 int NB_CLIENT_METHOD(receive)(struct NB_CLIENT_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 // dynamic methods

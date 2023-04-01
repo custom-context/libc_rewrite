@@ -41,12 +41,12 @@ struct CLIENT_TYPE()* CLIENT_METHOD(reconnect)(struct CLIENT_TYPE()* const this)
 
 int CLIENT_METHOD(send)(struct CLIENT_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 int CLIENT_METHOD(receive)(struct CLIENT_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 // dynamic methods

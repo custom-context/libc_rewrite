@@ -91,7 +91,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
     ASSERT(target);\
     ASSERT(source);\
     TYPE_METHOD(PAIR_TYPE(KEY, VALUE), construct_copy_at)(&target->value, &source->value);\
-    for (size_t child_index = 0u; child_index < sizeof(target->child) / sizeof(*target->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(target->child) / sizeof(*target->child); ++child_index) {\
         if (!source->child[child_index]) {\
             target->child[child_index] = NULL;\
             continue;\
@@ -402,7 +402,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const node) {\
     ASSERT(node);\
     node->parent = NULL;\
-    for (size_t child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
         node->child[child_index] = NULL;\
     }\
     node->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED);\
@@ -414,7 +414,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
     ASSERT(this);\
     ASSERT(node);\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* node_child;\
-    for (size_t child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
         node_child = node->child[child_index];\
         if (node_child) {\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(destroy_subtree_at))(this, node_child);\
@@ -437,7 +437,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
     node1->parent = node2->parent;\
     node2->parent = temporary;\
     /* swap children */\
-    for (size_t child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
         temporary = node1->child[child_index];\
         node1->child[child_index] = node2->child[child_index];\
         node2->child[child_index] = temporary;\
@@ -451,7 +451,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         node2->parent = node1;\
     }\
     /* relax children */\
-    for (size_t child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
         if (node1->child[child_index] == node1) {\
             node1->child[child_index] = node2;\
         }\
@@ -476,7 +476,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         this->root = node2;\
     }\
     /* swap children's pointers */\
-    for (size_t child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node1->child) / sizeof(*node1->child); ++child_index) {\
         if (node1->child[child_index]) {\
             node1->child[child_index]->parent = node1;\
         }\
@@ -520,7 +520,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
 COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(\
     struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const node,\
-    size_t const move_direction) {\
+    usize const move_direction) {\
     ASSERT(this);\
     ASSERT(node);\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const parent = node->parent;\
@@ -572,7 +572,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         if (debug_enabled) {\
             LOG_DEBUG("grandparent exists & it's black ('couse parent is red)\n");\
         }\
-        size_t parent_direction = grandparent->child[1u] == parent;\
+        usize parent_direction = grandparent->child[1u] == parent;\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const uncle = grandparent->child[1u - parent_direction];\
         if (uncle &&\
             uncle->color != RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK)) {\
@@ -615,7 +615,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
 COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_erasement))(\
     struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* node) {\
-    size_t node_index;\
+    usize node_index;\
     do {\
         node_index = node->parent->child[1u] == node;\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* parent = node->parent;\

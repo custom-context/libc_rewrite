@@ -73,7 +73,7 @@ static void* TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), destroy_at)(\
 /* --- Memory managment functions implementation --- */\
 static TYPE* TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), allocate)(\
     struct ALLOCATOR_WITH_COUNTER_TYPE(TYPE)* const this,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     ++*this->count_of_allocations_sub_deallocations;\
     *this->count_of_not_deallocated_bytes += sizeof(TYPE) * count_of_elements;\
     return NAMESPACE_MEMORY_NATIVE(malloc)(sizeof(TYPE) * count_of_elements);\
@@ -81,7 +81,7 @@ static TYPE* TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), allocate)(\
 static void TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), deallocate)(\
     struct ALLOCATOR_WITH_COUNTER_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     if (elements_buffer == NULL) {\
         return;\
     }\
@@ -92,8 +92,8 @@ static void TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), deallocate)(\
 static TYPE* TYPE_METHOD(ALLOCATOR_WITH_COUNTER_TYPE(TYPE), reallocate)(\
     struct ALLOCATOR_WITH_COUNTER_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements,\
-    size_t new_count_of_elements) {\
+    usize count_of_elements,\
+    usize new_count_of_elements) {\
     TYPE* buffer = NAMESPACE_MEMORY_NATIVE(realloc)(elements_buffer, new_count_of_elements * sizeof(TYPE));\
     if (buffer != NULL) {\
         ++*this->count_of_reallocations;\
@@ -131,7 +131,7 @@ IMPLEMENT_TYPE_TESTS(dynamic_array) {
         CHECK(!*allocator->count_of_allocations_sub_deallocations);
         CHECK(!*allocator->count_of_not_deallocated_bytes);
 
-        size_t const reserve_capacity = 33;
+        usize const reserve_capacity = 33;
         CA_DYNAMIC_ARRAY_METHOD(int, reserve)(&dynamic_array_int, reserve_capacity);
         CHECK(*allocator->count_of_allocations_sub_deallocations == 1u);
         CHECK(*allocator->count_of_not_deallocated_bytes);
@@ -148,7 +148,7 @@ IMPLEMENT_TYPE_TESTS(dynamic_array) {
         CHECK(!*allocator->count_of_allocations_sub_deallocations);
         CHECK(!*allocator->count_of_not_deallocated_bytes);
 
-        size_t const new_size = 63;
+        usize const new_size = 63;
         CA_DYNAMIC_ARRAY_METHOD(int, resize)(&dynamic_array_int, new_size, &(int const){2325});
         CHECK(*allocator->count_of_allocations_sub_deallocations == 1u);
         CHECK(*allocator->count_of_not_deallocated_bytes);
@@ -178,8 +178,8 @@ IMPLEMENT_TYPE_TESTS(dynamic_array) {
         CHECK(!allocator_counters_storage.count_of_allocations_sub_deallocations);
         CHECK(!allocator_counters_storage.count_of_not_deallocated_bytes);
 
-        size_t const new_size = 633;
-        for (size_t index = 0u; index < new_size; ++index) {
+        usize const new_size = 633;
+        for (usize index = 0u; index < new_size; ++index) {
             int const value = (int)index;
             CA_DYNAMIC_ARRAY_METHOD(int, push_back_by_copying)(&dynamic_array_int, &value);
         }
@@ -189,7 +189,7 @@ IMPLEMENT_TYPE_TESTS(dynamic_array) {
         CHECK(CA_DYNAMIC_ARRAY_METHOD(int, capacity)(&dynamic_array_int) >= new_size);
         CHECK(CA_DYNAMIC_ARRAY_METHOD(int, size)(&dynamic_array_int) == new_size);
 
-        for (size_t index = 0u; index < new_size; ++index) {
+        for (usize index = 0u; index < new_size; ++index) {
             int const value = (int)index;
             CHECK(*CA_DYNAMIC_ARRAY_METHOD(int, at)(&dynamic_array_int, index) == value);
         }
@@ -206,7 +206,7 @@ IMPLEMENT_TYPE_TESTS(dynamic_array) {
         CHECK(!*allocator->count_of_allocations_sub_deallocations);
         CHECK(!*allocator->count_of_not_deallocated_bytes);
 
-        size_t const new_size = 223;
+        usize const new_size = 223;
         CA_DYNAMIC_ARRAY_METHOD(int, reserve)(&dynamic_array_int, new_size);
         CHECK(*allocator->count_of_allocations_sub_deallocations == 1);
         CHECK(*allocator->count_of_not_deallocated_bytes > 0u);

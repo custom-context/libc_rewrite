@@ -241,7 +241,7 @@ COMMON_MODIFIER void DYNAMIC_ARRAY_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR_
     if (current_capacity >= new_capacity) {\
         return;\
     }\
-    if (new_capacity < (MAX_VALUE(size_t) >> 1)) {\
+    if (new_capacity < (MAX_VALUE(usize) >> 1)) {\
         if (!current_capacity) current_capacity = 1;\
         while ((current_capacity <<= 1) < new_capacity);\
     } else {\

@@ -41,7 +41,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
         CLIENT_TYPE() client;
         CLIENT_METHOD(construct_at)(&client);
         
-        size_t domain_encounter;
+        usize domain_encounter;
         for (domain_encounter = 0u; domain_encounter < sizeof(domains) / sizeof(*domains); ++domain_encounter) {
             SOCKET_DOMAIN_ENUM() const domain = domains[domain_encounter];
             address_info_criterias.socket_domain = domain;

@@ -4,6 +4,7 @@
 #include <network/common.h>
 
 #include <construct/numeric_helpers.h>
+#include <primitives/data_model_types_aliases.h>
 
 #ifndef NAMESPACE_NETWORK_SERVER
     #define NAMESPACE_NETWORK_SERVER(NAME) NAMESPACE_NETWORK(CONCAT3(server, __, NAME))
@@ -25,12 +26,12 @@ struct RESULT_TYPE(int, int) CONNECTION_METHOD(status)(struct CONNECTION_TYPE() 
 
 int CONNECTION_METHOD(send)(struct CONNECTION_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 int CONNECTION_METHOD(receive)(struct CONNECTION_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 );
 
 void* CONNECTION_METHOD(destroy_at)(struct CONNECTION_TYPE()* const this);

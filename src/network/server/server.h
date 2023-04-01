@@ -40,7 +40,7 @@ int SERVER_METHOD(is_binded)(struct SERVER_TYPE()* const this);
 
 struct RESULT_TYPE(int, int) SERVER_METHOD(status)(struct SERVER_TYPE() const* const this);
 
-int SERVER_METHOD(listen)(struct SERVER_TYPE()* const this, size_t system_connections_queue_capacity);
+int SERVER_METHOD(listen)(struct SERVER_TYPE()* const this, usize system_connections_queue_capacity);
 
 struct CONNECTION_TYPE() SERVER_METHOD(accept)(struct SERVER_TYPE()* const this);
 

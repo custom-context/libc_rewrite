@@ -57,7 +57,7 @@ SOCKET_PROTOCOL_TYPE() ADDRESS_INFO_METHOD(get_socket_protocol)(struct ADDRESS_I
 int ADDRESS_INFO_METHOD(send)(
     struct ADDRESS_INFO_TYPE() const* const this,
     void const* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     SOCKET_TYPE() socket;
 
@@ -100,7 +100,7 @@ int ADDRESS_INFO_METHOD(send)(
 int ADDRESS_INFO_METHOD(receive)(
     struct ADDRESS_INFO_TYPE() const* const this,
     void* const buffer,
-    size_t buffer_size
+    usize buffer_size
 ) {
     SOCKET_TYPE() socket;
 

@@ -1,11 +1,10 @@
 #pragma once
 
 #include "common.h"
-#include <primitives/unsigned_types_aliases.h>
-#include <primitives/characters_types_aliases.h>
+#include <primitives/primitives.h>
 
 #define DECLARE_RAW_STRING_LENGTH_FUNCTION_WITH_MODIFIER(MODIFIER, CHAR_TYPE)\
-MODIFIER size_t RAW_STRING_FUNCTION(CHAR_TYPE, length)(CHAR_TYPE const* const string)
+MODIFIER usize RAW_STRING_FUNCTION(CHAR_TYPE, length)(CHAR_TYPE const* const string)
 
 #define DECLARE_RAW_STRING_LENGTH_FUNCTION(CHAR_TYPE)\
     DECLARE_RAW_STRING_LENGTH_FUNCTION_WITH_MODIFIER(, CHAR_TYPE)
@@ -15,8 +14,8 @@ MODIFIER size_t RAW_STRING_FUNCTION(CHAR_TYPE, length)(CHAR_TYPE const* const st
     DECLARE_RAW_STRING_LENGTH_FUNCTION_WITH_MODIFIER(static, CHAR_TYPE)
 
 #define DEFINE_RAW_STRING_LENGTH_FUNCTION_WITH_MODIFIER(MODIFIER, CHAR_TYPE)\
-MODIFIER size_t RAW_STRING_FUNCTION(CHAR_TYPE, length)(CHAR_TYPE const* const string) {\
-    size_t length = 0u;\
+MODIFIER usize RAW_STRING_FUNCTION(CHAR_TYPE, length)(CHAR_TYPE const* const string) {\
+    usize length = 0u;\
     while (string[length] != '\0') {\
         ++length;\
     }\
