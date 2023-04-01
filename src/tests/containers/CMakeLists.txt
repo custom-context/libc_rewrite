@@ -1,2 +1,4 @@
+add_subdirectory(atomically_reference_counted)
+add_subdirectory(reference_counted)
 add_subdirectory(static)
 add_subdirectory(dynamic)
