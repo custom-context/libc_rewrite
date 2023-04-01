@@ -4,6 +4,7 @@ target_sources(${PROJECT_NAME}
 )
 
 add_subdirectory(reference_counted)
+add_subdirectory(atomically_reference_counted)
 add_subdirectory(pair)
 add_subdirectory(interface)
 add_subdirectory(iterator)
