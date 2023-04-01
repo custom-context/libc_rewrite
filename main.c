@@ -3,6 +3,8 @@
 
 #include <containers/dynamic/string/string.h>
 
+#include <tests/containers/reference_counted/reference_counted.h>
+#include <tests/concurrent/thread/native_thread.h>
 #include <tests/containers/static/array/array.h>
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>
@@ -31,6 +33,8 @@ int main(int const argc, char const* const argv[]) {
 }
 
 void exec_tests(void) {
+    EXECUTE_TYPE_TESTS(reference_counted);
+    EXECUTE_TYPE_TESTS(native_thread);
     EXECUTE_TYPE_TESTS(array);
     EXECUTE_TYPE_TESTS(dynamic_array);
     EXECUTE_TYPE_TESTS(rb_tree_set);
