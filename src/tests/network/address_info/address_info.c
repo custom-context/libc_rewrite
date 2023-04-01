@@ -16,9 +16,9 @@ IMPLEMENT_TYPE_TESTS(address_info) {
         address_info_criterias.socket_protocol.native_protocol = 0;
         address_info_criterias.native_extra_flags = 0;
 
-        size_t domain_encounter;
-        size_t address_encounter;
-        size_t ip_address_count = 0u;
+        usize domain_encounter;
+        usize address_encounter;
+        usize ip_address_count = 0u;
         for (domain_encounter = 0; domain_encounter < sizeof(domains) / sizeof(*domains); ++domain_encounter)
         for (address_encounter = 0; address_encounter < sizeof(domain_addresses) / sizeof(*domain_addresses); ++address_encounter) {
             char const* const domain_address = domain_addresses[address_encounter];

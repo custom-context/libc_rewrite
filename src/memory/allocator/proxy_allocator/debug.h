@@ -4,10 +4,10 @@
 #include <memory/allocator/allocator.h>
 
 typedef struct DebugAllocatorContext {
-    size_t count_of_allocations;
-    size_t count_of_deallocations;
-    size_t count_of_allocated_bytes;
-    size_t count_of_deallocated_bytes;
+    usize count_of_allocations;
+    usize count_of_deallocations;
+    usize count_of_allocated_bytes;
+    usize count_of_deallocated_bytes;
 } DebugAllocatorContext;
 
 #define DEBUG_PROXY_ALLOCATOR_TYPE(TYPE)\

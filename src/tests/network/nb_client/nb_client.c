@@ -46,13 +46,13 @@ IMPLEMENT_TYPE_TESTS(nb_client) {
         NB_CLIENT_TYPE() nb_client;
         NB_CLIENT_METHOD(construct_at)(&nb_client);
         
-        size_t domain_encounter;
-        size_t address_encounter;
+        usize domain_encounter;
+        usize address_encounter;
         for (domain_encounter = 0u; domain_encounter < sizeof(domains) / sizeof(*domains); ++domain_encounter)
         for (address_encounter = 0u; address_encounter < sizeof(domain_addresses_with_requests) / sizeof(*domain_addresses_with_requests); ++address_encounter) {
             char const* const domain_address = domain_addresses_with_requests[address_encounter].domain_address;
             char const* const request = domain_addresses_with_requests[address_encounter].request;
-            size_t const request_size = RAW_STRING_FUNCTION(char, length)(request);
+            usize const request_size = RAW_STRING_FUNCTION(char, length)(request);
             SOCKET_DOMAIN_ENUM() const domain = domains[domain_encounter];
             address_info_criterias.socket_domain = domain;
 

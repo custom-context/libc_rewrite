@@ -635,7 +635,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(MAP_INTERFACE_TYPE(KEY, VALUE), iterator_type)\
         (STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)*)position.element_storage;\
     /* find erasable-node's successor (another node, that close to erasable-node by value) */\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* successor = NULL;\
-    for (size_t child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
         /* start searching from 'higher'(next) value node, 'couse we want try to save pointer to 'higher'(next) successor to iterator's pointer*/\
         successor = node->child[1u - child_index];\
         if (successor) {\
@@ -669,7 +669,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(MAP_INTERFACE_TYPE(KEY, VALUE), iterator_type)\
         }\
     }\
     /* here erasable-node points to successor node (even if erase-node was an own successor node)*/\
-    size_t node_index = node->parent->child[1u] == node;\
+    usize node_index = node->parent->child[1u] == node;\
     if (node->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
         if (debug_enabled) {\
             LOG_DEBUG("node-successor color: RED\n");\
@@ -685,7 +685,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(MAP_INTERFACE_TYPE(KEY, VALUE), iterator_type)\
         LOG_DEBUG("node-successor color: BLACK\n");\
     }\
     /* if node has child => node has only one child & child is red, 'couse node is successor node */\
-    for (size_t child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
         if (node->child[child_index]) {\
             /* child found => repaint child, replace node by it & remove node */\
             if (debug_enabled) {\
@@ -736,7 +736,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(MAP_INTERFACE_TYPE(KEY, VALUE), iterator_type)\
     if (const_node->parent) {\
         node = const_node->parent->child[const_node->parent->child[1u] == const_node];\
     }\
-    for (size_t child_index = 0u; child_index < sizeof(const_node->child) / sizeof(*const_node->child); ++child_index) {\
+    for (usize child_index = 0u; child_index < sizeof(const_node->child) / sizeof(*const_node->child); ++child_index) {\
         if (const_node->child[child_index]) {\
             node = const_node->child[child_index]->parent;\
             break;\

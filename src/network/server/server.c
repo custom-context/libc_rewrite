@@ -168,7 +168,7 @@ struct RESULT_TYPE(int, int) SERVER_METHOD(status)(struct SERVER_TYPE() const* c
     return result;
 }
 
-int SERVER_METHOD(listen)(struct SERVER_TYPE()* const this, size_t system_connections_queue_capacity) {
+int SERVER_METHOD(listen)(struct SERVER_TYPE()* const this, usize system_connections_queue_capacity) {
     ASSERT(SERVER_METHOD(is_binded)(this));
 
     return listen(this->socket.native_socket, (int)(system_connections_queue_capacity));

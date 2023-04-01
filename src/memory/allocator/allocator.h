@@ -37,16 +37,16 @@ COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, swap)(struct DEFAULT_ALLOCAT
 /* --- Memory managment functions implementation --- */\
 COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-    size_t count_of_elements);\
+    usize count_of_elements);\
 COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements);\
+    usize count_of_elements);\
 COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements,\
-    size_t new_count_of_elements)
+    usize count_of_elements,\
+    usize new_count_of_elements)
 
 #define DECLARE_DEFAULT_ALLOCATOR_METHODS(COMMON_MODIFIER, TYPE) DECLARE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(, TYPE)
 
@@ -103,14 +103,14 @@ COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, swap)(struct DEFAULT_ALLOCAT
 /* --- Memory managment functions implementation --- */\
 COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     UNUSED(this);\
     return NAMESPACE_MEMORY_NATIVE(malloc)(count_of_elements * sizeof(TYPE));\
 }\
 COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements) {\
+    usize count_of_elements) {\
     UNUSED(this);\
     UNUSED(count_of_elements);\
     NAMESPACE_MEMORY_NATIVE(free)(elements_buffer);\
@@ -118,8 +118,8 @@ COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
 COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
-    size_t count_of_elements,\
-    size_t new_count_of_elements) {\
+    usize count_of_elements,\
+    usize new_count_of_elements) {\
     UNUSED(this);\
     UNUSED(count_of_elements);\
     return NAMESPACE_MEMORY_NATIVE(realloc)(elements_buffer, new_count_of_elements * sizeof(TYPE));\

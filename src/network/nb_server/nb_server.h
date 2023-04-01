@@ -30,7 +30,7 @@ int NB_SERVER_METHOD(is_binded)(struct NB_SERVER_TYPE()* const this);
 
 struct RESULT_TYPE(int, int) NB_SERVER_METHOD(status)(struct NB_SERVER_TYPE() const* const this);
 
-int NB_SERVER_METHOD(listen)(struct NB_SERVER_TYPE()* const this, size_t system_connections_queue_capacity);
+int NB_SERVER_METHOD(listen)(struct NB_SERVER_TYPE()* const this, usize system_connections_queue_capacity);
 
 struct CONNECTION_TYPE() NB_SERVER_METHOD(accept)(struct NB_SERVER_TYPE()* const this);
 

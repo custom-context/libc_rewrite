@@ -5,6 +5,7 @@
 #ifdef ENABLE_TESTS
 
 #include <stdio.h>
+#include <stdint.h>
 
 #define DECLARE_TYPE_TESTS(TYPE) extern void FUNCTION_FOR_TYPE(test, TYPE)(const char* TYPE_NAME)
 #define IMPLEMENT_TYPE_TESTS(TYPE) void FUNCTION_FOR_TYPE(test, TYPE)(const char* TYPE_NAME)
@@ -33,7 +34,7 @@ if (EXPR) {} else {\
 #define EXECUTE_TYPE_TESTS(TYPE)
 #define TEST_BLOCK(NAME)\
 for (char* TEST_BLOCK_NAME; 0;)\
-for (size_t TEST_BLOCK_COUNTER; 0;)
+for (unsigned TEST_BLOCK_COUNTER; 0;)
 
 #define CHECK(EXPR) {}
 

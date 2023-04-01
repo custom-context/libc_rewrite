@@ -59,12 +59,12 @@ DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_INHERI
 
 #define DEFINE_REDUCE_OVER_ARRAY_WITH_MODIFIER(MODIFIER, TYPE)\
 MODIFIER TYPE REDUCE_OVER_ARRAY(TYPE)(void(*callback)(TYPE* const result, TYPE const* const value),\
-    TYPE const* const array, size_t const size) {\
+    TYPE const* const array, usize const size) {\
     ASSERT(array);\
     ASSERT(callback);\
     TYPE result;\
     TYPE_METHOD(TYPE, construct_at)(&result);\
-    for (size_t index = 0u; index < size; ++index) {\
+    for (usize index = 0u; index < size; ++index) {\
         callback(&result, &array[index]);\
     }\
     return result;\
@@ -73,10 +73,10 @@ MODIFIER TYPE REDUCE_OVER_ARRAY(TYPE)(void(*callback)(TYPE* const result, TYPE c
 #define LAST_NON_ZERO_VALUE_OF_ARRAY(TYPE)\
     CONCAT3(last_non_zero_value_of_array, __, TYPE)
 #define DEFINE_LAST_NON_ZERO_VALUE_OF_ARRAY(TYPE)\
-static size_t LAST_NON_ZERO_VALUE_OF_ARRAY(TYPE)(TYPE const* const array, size_t const size) {\
+static usize LAST_NON_ZERO_VALUE_OF_ARRAY(TYPE)(TYPE const* const array, usize const size) {\
     TYPE result;\
     TYPE_METHOD(TYPE, construct_at)(&result);\
-    for (size_t index = 0u; index < size; ++index) {\
+    for (usize index = 0u; index < size; ++index) {\
         if (array[size - index - 1u]) {\
             return index;\
         };\
@@ -85,12 +85,12 @@ static size_t LAST_NON_ZERO_VALUE_OF_ARRAY(TYPE)(TYPE const* const array, size_t
 }
 
 #include <construct/data_model_helpers.h>
-DEFINE_LAST_NON_ZERO_VALUE_OF_ARRAY(size_t)
+DEFINE_LAST_NON_ZERO_VALUE_OF_ARRAY(usize)
 
 static void onAllocation(
     DebugAllocatorContext* const context,
     DEFAULT_ALLOCATOR_TYPE(RED_BLACK_TREE_SET_NODE_TYPE(int))* const allocator,
-    size_t count_of_elements) {
+    usize count_of_elements) {
     ASSERT(allocator);
     ++context->count_of_allocations;
     context->count_of_allocated_bytes += count_of_elements * sizeof(RED_BLACK_TREE_SET_NODE_TYPE(int));
@@ -100,18 +100,18 @@ static void onDeallocation(
     DebugAllocatorContext* const context,
     DEFAULT_ALLOCATOR_TYPE(RED_BLACK_TREE_SET_NODE_TYPE(int))* const allocator,
     STRUCT_SUBTYPE(RBTREE_SET(int), node_type)* const buffer,
-    size_t count_of_elements) {
+    usize count_of_elements) {
     ASSERT(allocator);
     ASSERT(buffer);
     ++context->count_of_deallocations;
     context->count_of_deallocated_bytes += count_of_elements * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type));
 }
 
-static int generate_hash(int const previous_value, size_t const hash_value) {
-    size_t const hash_value_1 = 173543437;
-    size_t const hash_value_2 = 15;
-    size_t const hash_value_3 = 8;
-    size_t const hash_value_4 = 10602500000;
+static int generate_hash(int const previous_value, usize const hash_value) {
+    usize const hash_value_1 = 173543437;
+    usize const hash_value_2 = 15;
+    usize const hash_value_3 = 8;
+    usize const hash_value_4 = 10602500000;
 
     return (int)(
         (
@@ -125,13 +125,13 @@ static int generate_hash(int const previous_value, size_t const hash_value) {
     ) ^ previous_value;
 }
 
-static void printRBTreeSubtree(STRUCT_SUBTYPE(RBTREE_SET(int), node_type) const * const node, size_t const depth) {
+static void printRBTreeSubtree(STRUCT_SUBTYPE(RBTREE_SET(int), node_type) const * const node, usize const depth) {
     ASSERT(node);
     if (node->child[0u]) {
         printRBTreeSubtree(node->child[0u], depth + 1u);
     }
 
-    for (size_t i = 0u; i < depth; ++i) {
+    for (usize i = 0u; i < depth; ++i) {
         putchar('\t');
     }
     printf("(%i, %s)\n", node->value, node->color == RED_BLACK_TREE_SET_NODE_COLOR_ENUM_VALUE(int, RED) ? "RED" : "BLACK");
@@ -142,19 +142,19 @@ static void printRBTreeSubtree(STRUCT_SUBTYPE(RBTREE_SET(int), node_type) const 
 }
 
 #include <containers/pair/pair.h>
-DEFINE_PAIR_TYPE(int, size_t);
-DEFINE_PAIR_METHODS_WITH_MODIFIER(static, int, size_t)
+DEFINE_PAIR_TYPE(int, usize);
+DEFINE_PAIR_METHODS_WITH_MODIFIER(static, int, usize)
 
 #include <memory/allocator/allocator.h>
-DEFINE_DEFAULT_ALLOCATOR_TYPE(PAIR_TYPE(int, size_t));
-DEFINE_DEFAULT_ALLOCATOR_STATIC_METHODS(PAIR_TYPE(int, size_t))
+DEFINE_DEFAULT_ALLOCATOR_TYPE(PAIR_TYPE(int, usize));
+DEFINE_DEFAULT_ALLOCATOR_STATIC_METHODS(PAIR_TYPE(int, usize))
 #include <containers/dynamic/array/array.h>
-DECLARE_DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t));
-IMPLEMENT_DYNAMIC_ARRAY_TYPE_STATIC_METHODS(PAIR_TYPE(int, size_t))
+DECLARE_DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize));
+IMPLEMENT_DYNAMIC_ARRAY_TYPE_STATIC_METHODS(PAIR_TYPE(int, usize))
 
-DEFINE_REDUCE_OVER_ARRAY_WITH_MODIFIER(static, PAIR_TYPE(int, size_t))
+DEFINE_REDUCE_OVER_ARRAY_WITH_MODIFIER(static, PAIR_TYPE(int, usize))
 
-static void sum_callback(struct PAIR_TYPE(int, size_t)* const accumulator, struct PAIR_TYPE(int, size_t) const* const value) {
+static void sum_callback(struct PAIR_TYPE(int, usize)* const accumulator, struct PAIR_TYPE(int, usize) const* const value) {
     ASSERT(accumulator);
     ASSERT(value);
     accumulator->second += value->second;
@@ -164,7 +164,7 @@ static void sum_callback(struct PAIR_TYPE(int, size_t)* const accumulator, struc
 MODIFIER struct PAIR_TYPE(TYPE1, TYPE2)* TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2)), findElementByFirstPairValue)(\
     struct DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2))* const this,\
     TYPE1 const* const value) {\
-    for (size_t index = 0u; index < TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2)), size)(this); ++index) {\
+    for (usize index = 0u; index < TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2)), size)(this); ++index) {\
         if (TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2)), at)(this, index)->first == *value) {\
             return TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(TYPE1, TYPE2)), mut_at)(this, index);\
         }\
@@ -172,7 +172,7 @@ MODIFIER struct PAIR_TYPE(TYPE1, TYPE2)* TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYP
     return NULL;\
 }
 
-DEFINE_FIND_ELEMENT_BY_PAIR_FIRST_VALUE_TYPE_WITH_MODIFIER(static, int, size_t)
+DEFINE_FIND_ELEMENT_BY_PAIR_FIRST_VALUE_TYPE_WITH_MODIFIER(static, int, usize)
 
 IMPLEMENT_TYPE_TESTS(rb_tree_set) {
     TEST_BLOCK("`size` method on empty red-black tree set") {
@@ -318,14 +318,14 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
 
         struct RBTREE_SET(int) rbtree_set;
         TYPE_METHOD(RBTREE_SET(int), construct_with_allocator_at)(&rbtree_set, &allocator);
-        size_t const count_of_insertions = 20000000;
-        size_t count_of_repeated_values = 0u;
+        usize const count_of_insertions = 20000000;
+        usize count_of_repeated_values = 0u;
 
         STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const seed = -34345328;
         {
             STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
-            for (size_t i = 0u; i < count_of_insertions; ++i) {
+            for (usize i = 0u; i < count_of_insertions; ++i) {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = generate_hash(prev_value, i);
                 prev_value = value;
                 STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
@@ -341,7 +341,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         {
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
             STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
-            for (size_t i = 0u; i < count_of_insertions; ++i) {
+            for (usize i = 0u; i < count_of_insertions; ++i) {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = generate_hash(prev_value, i);
                 prev_value = value;
                 STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
@@ -453,13 +453,13 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
         TYPE_METHOD(RBTREE_SET_ALLOCATOR(int), destroy_at)(&allocator);
     }
     TEST_BLOCK("`emplace` many elements + `erase` all of them in different order on red-black tree set") {
-        size_t const max_count_of_insertions = 2000u;
-        struct DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)) index_to_insert_value_encounter;
+        usize const max_count_of_insertions = 2000u;
+        struct DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)) index_to_insert_value_encounter;
         /* construct index_to_insert_value_encounter array with zeroes */{
-            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), construct_at)(&index_to_insert_value_encounter);
-            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), reserve)(&index_to_insert_value_encounter, max_count_of_insertions);
+            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), construct_at)(&index_to_insert_value_encounter);
+            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), reserve)(&index_to_insert_value_encounter, max_count_of_insertions);
         }
-        for (size_t count_of_insertions = 1u; count_of_insertions <= max_count_of_insertions; ++count_of_insertions) {
+        for (usize count_of_insertions = 1u; count_of_insertions <= max_count_of_insertions; ++count_of_insertions) {
             struct RBTREE_SET_ALLOCATOR(int) allocator;
             TYPE_METHOD(RBTREE_SET_ALLOCATOR(int), construct_at)(&allocator);
             // set callbacks for allocator
@@ -470,22 +470,22 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
 
             struct RBTREE_SET(int) rbtree_set;
             TYPE_METHOD(RBTREE_SET(int), construct_with_allocator_at)(&rbtree_set, &allocator);
-            size_t count_of_repeated_values = 0u;
+            usize count_of_repeated_values = 0u;
 
             STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const seed = 19834748;
             {
                 STRUCT_SUBTYPE(RBTREE_SET(int), value_type) prev_value = seed;
                 STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), cend)(&rbtree_set);
-                for (size_t i = 0u; i < count_of_insertions; ++i) {
+                for (usize i = 0u; i < count_of_insertions; ++i) {
                     STRUCT_SUBTYPE(RBTREE_SET(int), value_type) const value = prev_value = generate_hash(prev_value, i);
                     STRUCT_SUBTYPE(RBTREE_SET(int), const_iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), find)(&rbtree_set, &value);
                     if (!TYPE_METHOD(RBTREE_SET_CONST_ITERATOR(int), compare)(&iterator, &end_iterator)) {
                         ++count_of_repeated_values;
                     } else {
-                        struct PAIR_TYPE(int, size_t)* element = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
+                        struct PAIR_TYPE(int, usize)* element = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
                         if (!element) {
-                            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), push_back_by_copying)(&index_to_insert_value_encounter, &(struct PAIR_TYPE(int, size_t) const){0, 0u});
-                            element = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), mut_at)(&index_to_insert_value_encounter, TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), size)(&index_to_insert_value_encounter) - 1u);
+                            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), push_back_by_copying)(&index_to_insert_value_encounter, &(struct PAIR_TYPE(int, usize) const){0, 0u});
+                            element = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), mut_at)(&index_to_insert_value_encounter, TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), size)(&index_to_insert_value_encounter) - 1u);
                             element->first = value;
                         }
                         ++element->second;
@@ -498,18 +498,18 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
             CHECK(context.count_of_allocated_bytes == context.count_of_allocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
             {
                 STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const end_iterator = TYPE_METHOD(RBTREE_SET(int), end)(&rbtree_set);
-                size_t const erasement_shift = 7u;
-                for (size_t i = 0u; i < count_of_insertions; ++i) {
+                usize const erasement_shift = 7u;
+                for (usize i = 0u; i < count_of_insertions; ++i) {
                     // 'couse we're using shifting => we need to generate right hash value starting from 0 to shifted index
                     STRUCT_SUBTYPE(RBTREE_SET(int), value_type) value = seed;
-                    for (size_t shift_i = 0u; shift_i < (i + erasement_shift) % count_of_insertions + 1u; ++shift_i) {
+                    for (usize shift_i = 0u; shift_i < (i + erasement_shift) % count_of_insertions + 1u; ++shift_i) {
                         value = generate_hash(value, shift_i);                        
                     }
 
                     STRUCT_SUBTYPE(RBTREE_SET(int), iterator_type) const iterator = TYPE_METHOD(RBTREE_SET(int), mut_find)(&rbtree_set, &value);
 
                     // check is inserted value still exists and not erased using `index_to_insert_value_encounter`
-                    struct PAIR_TYPE(int, size_t)* insert_value_encounter_pointer = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
+                    struct PAIR_TYPE(int, usize)* insert_value_encounter_pointer = TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), findElementByFirstPairValue)(&index_to_insert_value_encounter, &value);
                     CHECK(insert_value_encounter_pointer);
                     if (insert_value_encounter_pointer->second) {
                         // if so => check value by iterator...
@@ -525,10 +525,10 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
                     }
 
                     // check count of not erased elements with deallocations counters
-                    size_t const count_of_left_values = REDUCE_OVER_ARRAY(PAIR_TYPE(int, size_t))(
+                    usize const count_of_left_values = REDUCE_OVER_ARRAY(PAIR_TYPE(int, usize))(
                         &sum_callback,
-                        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), data)(&index_to_insert_value_encounter),
-                        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), size)(&index_to_insert_value_encounter)
+                        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), data)(&index_to_insert_value_encounter),
+                        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), size)(&index_to_insert_value_encounter)
                     ).second;
                     CHECK(TYPE_METHOD(RBTREE_SET(int), size)(&rbtree_set) == count_of_left_values);
                     CHECK(context.count_of_deallocations == (context.count_of_allocations - count_of_left_values));
@@ -539,8 +539,8 @@ IMPLEMENT_TYPE_TESTS(rb_tree_set) {
             CHECK(context.count_of_deallocations == context.count_of_allocations);
             CHECK(context.count_of_deallocated_bytes == context.count_of_allocations * sizeof(STRUCT_SUBTYPE(RBTREE_SET(int), node_type)));
             TYPE_METHOD(RBTREE_SET_ALLOCATOR(int), destroy_at)(&allocator);
-            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), clear)(&index_to_insert_value_encounter);
+            TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), clear)(&index_to_insert_value_encounter);
         }
-        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, size_t)), destroy_at)(&index_to_insert_value_encounter);
+        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), destroy_at)(&index_to_insert_value_encounter);
     }
 }

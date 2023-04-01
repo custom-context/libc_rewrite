@@ -25,7 +25,7 @@
 
 // define macro for string type
 #define DECLARE_SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)\
-DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type, size_t);\
+DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type, usize);\
 DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), char_type, TYPE);\
 DECLARE_STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), allocator_type, ALLOCATOR);\
 typedef struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), dynamically_allocated_data) {\
@@ -195,7 +195,7 @@ MODIFIER void SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, s
     struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* const source) {\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type) const stack_allocated_capacity = sizeof(this->dynamic_data) / sizeof(TYPE);\
     if (this->is_stack_allocated && source->is_stack_allocated) {\
-        for (size_t index = 0u; index < stack_allocated_capacity; ++index) {\
+        for (usize index = 0u; index < stack_allocated_capacity; ++index) {\
             TYPE const temporary = this->stack_data.buffer[index];\
             this->stack_data.buffer[index] = source->stack_data.buffer[index];\
             source->stack_data.buffer[index] = temporary;\
@@ -225,14 +225,14 @@ MODIFIER void SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, s
     ASSERT(stack_allocated_string != dynamically_allocated_string);\
     {\
         TYPE temporary[sizeof(this->dynamic_data) / sizeof(TYPE)];\
-        for (size_t index = 0u; index < stack_allocated_capacity; ++index) {\
+        for (usize index = 0u; index < stack_allocated_capacity; ++index) {\
             temporary[index] = stack_allocated_string->stack_data.buffer[index];\
         }\
         stack_allocated_string->dynamic_data.buffer = dynamically_allocated_string->dynamic_data.buffer;\
         stack_allocated_string->dynamic_data.size = dynamically_allocated_string->dynamic_data.size;\
         stack_allocated_string->dynamic_data.capacity = dynamically_allocated_string->dynamic_data.capacity;\
         stack_allocated_string->is_stack_allocated = !(dynamically_allocated_string->is_stack_allocated = 1u);\
-        for (size_t index = 0u; index < stack_allocated_capacity; ++index) {\
+        for (usize index = 0u; index < stack_allocated_capacity; ++index) {\
             dynamically_allocated_string->stack_data.buffer[index] = temporary[index];\
         }\
     }\
