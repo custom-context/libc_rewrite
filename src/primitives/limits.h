@@ -30,9 +30,13 @@
 #define MIN_VALUE_OF__ulong (ulong)(0)
 #define MIN_VALUE_OF__ullong (ullong)(0)
 
+// bool type
+#include "bool_type_alias.h"
+#define MAX_VALUE_OF__bool UCHAR_MAX
+#define MIN_VALUE_OF__bool (uchar)(0)
+
 // fixed-width integers
-#include <stdint.h>
-#include "types_aliases.h"
+#include "fixed_size_types_aliases.h"
 #define MAX_VALUE_OF__int8 INT8_MAX
 #define MAX_VALUE_OF__int16 INT16_MAX
 #define MAX_VALUE_OF__int32 INT32_MAX
@@ -80,8 +84,9 @@
 
 
 // pointer/data related types
-#define MAX_VALUE_OF__size_t SIZE_MAX
-#define MIN_VALUE_OF__size_t (size_t)0
+#include "data_model_types_aliases.h"
+#define MAX_VALUE_OF__usize SIZE_MAX
+#define MIN_VALUE_OF__usize (usize)0
 
 #define MAX_VALUE_OF__ptrdiff_t PTRDIFF_MAX
 #define MIN_VALUE_OF__ptrdiff_t PTRDIFF_MIN
