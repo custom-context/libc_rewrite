@@ -1,0 +1,9 @@
+#pragma once
+
+#include <concurrent/common.h>
+
+#define NAMESPACE_CONCURRENT_THREAD(NAME)\
+    NAMESPACE_CONCURRENT(NAMESPACE(thread, NAME))
+
+#define NAMESPACE_CONCURRENT_NATIVE_THREAD(NAME)\
+    NAMESPACE_CONCURRENT(NAMESPACE(native, NAMESPACE(thread, NAME)))
