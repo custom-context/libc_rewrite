@@ -11,4 +11,7 @@ target_sources(${PROJECT_NAME}
 
         allocator.h
         allocator.c
+
+        atomic.h
+        atomic.c
 )
