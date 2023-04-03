@@ -1,5 +1,6 @@
 add_subdirectory(construct)
 add_subdirectory(containers)
+add_subdirectory(concurrent)
 add_subdirectory(fs)
 add_subdirectory(memory)
 add_subdirectory(network)
