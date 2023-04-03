@@ -5,7 +5,8 @@ target_sources(${PROJECT_NAME}
         format_print.h
         format_print.c
         format.h
-        format.c
+        cformat.c
+        wformat.c
         result.h
         debug.h
         convert.h
