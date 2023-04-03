@@ -22,7 +22,13 @@
 void exec_tests(void);
 void print_formatted_args(int const argc, char const* const argv[const]);
 
-int main(int const argc, char const* const argv[]) {
+#if defined(_WIN32)
+    #define MAIN _tmain
+#else
+    #define MAIN main
+#endif
+
+int MAIN(int const argc, OS_CHAR_TYPE const* const argv[]) {
     UNUSED(argc);
     UNUSED(argv);
     exec_tests();
@@ -50,12 +56,12 @@ void exec_tests(void) {
     EXECUTE_TYPE_TESTS(nb_server);
 }
 
-void print_formatted_args(int const argc, char const* const argv[const]) {
-    STRING_TYPE() formatted_string = utils__format("argc: %d\n", argc);
-    utils__format_print(STRING_METHOD(data)(&formatted_string));
-    STRING_METHOD(destroy_at)(&formatted_string);
+void print_formatted_args(int const argc, OS_CHAR_TYPE const* const argv[const]) {
+    struct OS_STRING_TYPE() formatted_string = NAMESPACE_UTILS(format)(OS_STRING_LITERAL("argc: %d\n"), argc);
+    NAMESPACE_UTILS(format_print)(OS_STRING_METHOD(data)(&formatted_string), NULL);
+    OS_STRING_METHOD(destroy_at)(&formatted_string);
 
     for (int index = 0u; index < argc; ++index) {
-        utils__format_print("argv[%d]: %s\n", index, argv[index]);
+        NAMESPACE_UTILS(format_print)(OS_STRING_LITERAL("argv[%d]: %s\n"), index, argv[index]);
     }
 }
