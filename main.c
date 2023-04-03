@@ -3,6 +3,7 @@
 
 #include <containers/dynamic/string/string.h>
 
+#include <tests/utils/format/format.h>
 #include <tests/containers/reference_counted/reference_counted.h>
 #include <tests/concurrent/thread/native_thread.h>
 #include <tests/containers/static/array/array.h>
@@ -20,7 +21,6 @@
 #include <tests/network/nb_server/nb_server.h>
 
 void exec_tests(void);
-void print_formatted_args(int const argc, char const* const argv[const]);
 
 #if defined(_WIN32)
     #define MAIN _tmain
@@ -33,12 +33,11 @@ int MAIN(int const argc, OS_CHAR_TYPE const* const argv[]) {
     UNUSED(argv);
     exec_tests();
 
-    print_formatted_args(argc, argv);
-
     return 0;
 }
 
 void exec_tests(void) {
+    EXECUTE_TYPE_TESTS(format);
     EXECUTE_TYPE_TESTS(reference_counted);
     EXECUTE_TYPE_TESTS(native_thread);
     EXECUTE_TYPE_TESTS(array);
@@ -54,14 +53,4 @@ void exec_tests(void) {
     EXECUTE_TYPE_TESTS(server);
     EXECUTE_TYPE_TESTS(nb_client);
     EXECUTE_TYPE_TESTS(nb_server);
-}
-
-void print_formatted_args(int const argc, OS_CHAR_TYPE const* const argv[const]) {
-    struct OS_STRING_TYPE() formatted_string = NAMESPACE_UTILS(format)(OS_STRING_LITERAL("argc: %d\n"), argc);
-    NAMESPACE_UTILS(format_print)(OS_STRING_METHOD(data)(&formatted_string), NULL);
-    OS_STRING_METHOD(destroy_at)(&formatted_string);
-
-    for (int index = 0u; index < argc; ++index) {
-        NAMESPACE_UTILS(format_print)(OS_STRING_LITERAL("argv[%d]: %s\n"), index, argv[index]);
-    }
 }
