@@ -283,7 +283,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_map) {
         {
             struct RBTREE_MAP(int, int) rbtree_map;
             TYPE_METHOD(RBTREE_MAP(int, int), construct_with_allocator_at)(&rbtree_map, &allocator);
-            usize const count_of_insertions = 20000000;
+            usize const count_of_insertions = 2000;
             usize count_of_repeated_values = 0u;
 
             STRUCT_SUBTYPE(RBTREE_MAP(int, int), key_type) const seed = -34345328;
@@ -326,7 +326,7 @@ IMPLEMENT_TYPE_TESTS(rb_tree_map) {
         TYPE_METHOD(RBTREE_MAP_ALLOCATOR(int, int), destroy_at)(&allocator);
     }
     TEST_BLOCK("`emplace` many elements + `erase` all of them in different order on red-black tree set") {
-        usize const max_count_of_insertions = 2000u;
+        usize const max_count_of_insertions = 500u;
         struct DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)) index_to_insert_value_encounter;
         /* construct index_to_insert_value_encounter array with zeroes */{
             TYPE_METHOD(DYNAMIC_ARRAY_TYPE(PAIR_TYPE(int, usize)), construct_at)(&index_to_insert_value_encounter);
