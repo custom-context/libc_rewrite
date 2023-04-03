@@ -260,5 +260,11 @@ struct STRUCT_NAME/*const*/ INTERFACE_VARIABLE(STRUCT_NAME)
 
 	#define ASSERT(EXPR) assert(EXPR)
 #else
-	#define ASSERT(EXPR)
+	#define ASSERT(EXPR) UNUSED(EXPR)
 #endif
+
+#define STATIC_ASSERT(EXPR)\
+_Static_assert(EXPR, "("#EXPR")")
+
+#define STATIC_ASSERT_WITH_MESSAGE(EXPR, MSG)\
+_Static_assert(EXPR, MSG)
