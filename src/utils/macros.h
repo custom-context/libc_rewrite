@@ -33,8 +33,8 @@
 #define ENUM_TYPE(TYPE)\
     CONCAT3(enum, __, TYPE)
 
-#define ENUM_VALUE(ENUM_NAME, VALUE)\
-    TYPE_MEMBER(ENUM_TYPE(TYPE), VALUE)
+#define ENUM_VALUE(ENUM_TYPE, VALUE)\
+    TYPE_MEMBER(ENUM_TYPE, VALUE)
 
 // interfaces' macro helpers definitions
 #define VTABLE_MEMBER(MEMBER) TYPE_MEMBER(vtable, MEMBER)
