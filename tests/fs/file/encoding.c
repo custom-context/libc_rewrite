@@ -31,10 +31,10 @@ IMPLEMENT_TYPE_TESTS(encoding) {
     TEST_BLOCK("check files encoding over test files") {
 #if defined(_WIN32)
         static char const *const current_directory_path =
-          "\\src\\tests\\fs\\file\\";
+          "\\fs\\file\\";
         static char const *const encoded_files_relative_path = "utf_encoded_files\\";
 #elif defined(__unix__) || defined(__APPLE__)
-        static char const *const current_directory_path = "/src/tests/fs/file/";
+        static char const *const current_directory_path = "/fs/file/";
         static char const* const encoded_files_relative_path = "utf_encoded_files/";
 #endif
         STRING_TYPE() directory_path;
@@ -67,6 +67,8 @@ IMPLEMENT_TYPE_TESTS(encoding) {
             STRING_METHOD(construct_copy_at)(&filepath, &directory_path);
             STRING_METHOD(append_c_string)(&filepath, encoding_type_to_filename(encodings_to_check[index]));
             
+            LOG_DEBUG_FORMAT("filename: %s\n", STRING_METHOD(data)(&filepath));
+
             CHECK(get_file_encoding(TYPE_NAME, TEST_BLOCK_NAME, &TEST_BLOCK_COUNTER, STRING_METHOD(data)(&filepath)).encoding_ == encodings_to_check[index]);
 
             STRING_METHOD(destroy_at)(&filepath);

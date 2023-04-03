@@ -1,9 +1,6 @@
 #pragma once
 
 #include <utils/macros.h>
-
-#ifdef ENABLE_TESTS
-
 #include <stdio.h>
 #include <stdint.h>
 
@@ -20,22 +17,6 @@ for (size_t TEST_BLOCK_COUNTER = 0; TEST_BLOCK_COUNTER != 1; TEST_BLOCK_COUNTER 
 
 #define CHECK_(EXPR)\
 if (EXPR) {} else {\
-    printf("[%s][%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TYPE_NAME, TEST_BLOCK_NAME, TEST_BLOCK_COUNTER++, __LINE__);\
+    fprintf(stderr, "[%s][%s][%zu]: at " __FILE__ ":%d: Assertion `" #EXPR "` failed\n", TYPE_NAME, TEST_BLOCK_NAME, TEST_BLOCK_COUNTER++, __LINE__);\
 } UNUSED(EXPR)
 #define CHECK(EXPR) CHECK_(EXPR)
-
-#else
-
-#include <stddef.h>
-
-#define DECLARE_TYPE_TESTS(TYPE) extern void FUNCTION_FOR_TYPE(test, TYPE)(const char* TYPE_NAME)
-#define IMPLEMENT_TYPE_TESTS(TYPE) void FUNCTION_FOR_TYPE(test, TYPE)(const char* TYPE_NAME)
-#define DEFINE_TYPE_TESTS(TYPE) inline static void FUNCTION_FOR_TYPE(test, TYPE)(const char* TYPE_NAME)
-#define EXECUTE_TYPE_TESTS(TYPE)
-#define TEST_BLOCK(NAME)\
-for (char* TEST_BLOCK_NAME; 0;)\
-for (unsigned TEST_BLOCK_COUNTER; 0;)
-
-#define CHECK(EXPR) {}
-
-#endif

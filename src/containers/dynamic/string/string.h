@@ -106,8 +106,8 @@ DECLARE_SPECIALIZED_STRING_METHODS_WITH_MODIFIER(extern, TYPE)
 #define DEFINE_SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHODS_WITH_MODIFIER(MODIFIER, TYPE, ALLOCATOR)\
 /* --- Construction/Destruction functions implementation --- */\
 MODIFIER struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, construct_at)(struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* const this) {\
-    static_assert(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), dynamically_allocated_data)) / sizeof(TYPE) > 1, "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
-    static_assert(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), dynamically_allocated_data)) / sizeof(TYPE) < MAX_VALUE(TYPE), "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
+    STATIC_ASSERT_WITH_MESSAGE(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), dynamically_allocated_data)) / sizeof(TYPE) > 1, "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
+    STATIC_ASSERT_WITH_MESSAGE(sizeof(struct STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), dynamically_allocated_data)) / sizeof(TYPE) < MAX_VALUE(TYPE), "sizeof(" "##TYPE##" ") is higher than size of 3x pointers");\
     this->is_stack_allocated = 1u;\
     TYPE_METHOD(TYPE, construct_at)(SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, mut_at)(this, 0u));\
     STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type) const capacity = SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, capacity)(this);\
