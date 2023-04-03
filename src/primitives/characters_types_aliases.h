@@ -14,9 +14,11 @@ typedef wchar_t wchar;
 // windows character type
     #include <tchar.h>
     typedef TCHAR winchar;
+#endif
 
-    #define OS_CHAR_TYPE winchar
+#if defined(_WIN32) && defined(_UNICODE)
+    #define OS_CHAR_TYPE wchar
 #else
-// utf-8 oriented character type
+    // utf-8 oriented character type
     #define OS_CHAR_TYPE char
 #endif
