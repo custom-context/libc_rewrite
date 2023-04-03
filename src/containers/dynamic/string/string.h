@@ -5,6 +5,13 @@
 #include <primitives/limits.h>
 #include <primitives/allocator.h>
 
+// define OS_STRING_LITERAL
+#if defined(_WIN32)
+    #define OS_STRING_LITERAL(STR) _TEXT(STR)
+#else
+    #define OS_STRING_LITERAL(STR) STR
+#endif
+
 // define macros for `string_type`
 #define SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)\
     NAMESPACE_CONTAINERS_DYNAMIC(CONCAT7(string, __, TYPE, _, with_allocator, _, ALLOCATOR))
