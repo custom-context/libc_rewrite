@@ -206,6 +206,7 @@ Debug/*
 x64/*
 *.dir/*
 build/*
+build-tests/*
 
 ## Ignore python virtualenv generated files ##
 Scripts/*
