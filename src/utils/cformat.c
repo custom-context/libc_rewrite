@@ -135,16 +135,16 @@ static struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAME
     return result;
 }
 
-struct STRING_TYPE() NAMESPACE_UTILS(format)(char const* const format_string, ...) {
+struct STRING_TYPE() NAMESPACE_UTILS(cformat)(char const* const format_string, ...) {
     va_list args;
     va_start(args, format_string);
-    struct STRING_TYPE() result = NAMESPACE_UTILS(va_format)(format_string, args);
+    struct STRING_TYPE() result = NAMESPACE_UTILS(va_cformat)(format_string, args);
     va_end(args);
 
     return result;
 }
 
-struct STRING_TYPE() NAMESPACE_UTILS(va_format)(char const* const format_string, va_list args) {
+struct STRING_TYPE() NAMESPACE_UTILS(va_cformat)(char const* const format_string, va_list args) {
     struct STRING_TYPE() formatted_string;
     STRING_METHOD(construct_at)(&formatted_string);
 
