@@ -3,10 +3,6 @@ project(unicstm VERSION 0.1.0)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 add_executable(${PROJECT_NAME})
-target_sources(${PROJECT_NAME}
-    PRIVATE
-        main.c
-)
 
 add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
 set_target_properties(${PROJECT_NAME} PROPERTIES C_STANDARD 17)

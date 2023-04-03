@@ -1,3 +1,7 @@
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        main.c
+)
 add_subdirectory(containers)
 add_subdirectory(fs)
 add_subdirectory(network)
