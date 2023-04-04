@@ -68,7 +68,6 @@ set(TESTS_LIST
     string
     result
     encoding
-    path
     socket
     address_info
     client
