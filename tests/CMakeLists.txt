@@ -31,7 +31,6 @@ if(WIN32)
         -Wno-disabled-macro-expansion
         -fmacro-backtrace-limit=0)
 else()
-    set(CMAKE_C_COMPILER "clang-16")
     target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread)
     target_compile_options(${PROJECT_NAME} PRIVATE
         -pedantic
