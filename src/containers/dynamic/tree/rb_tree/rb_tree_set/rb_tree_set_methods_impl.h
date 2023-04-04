@@ -8,32 +8,9 @@ static int debug_enabled = 0u;
 static int debug_rebalance_iteration = 0u;
 
 // set methods definition
-#define DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(COMMON_MODIFIER, TYPE, COMPARATOR, ALLOCATOR)\
-/* --- Set interface methods --- */\
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(COMMON_MODIFIER, TYPE, COMPARATOR, ALLOCATOR)\
+/* --- Set methods --- */\
 struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR);\
-/* --- Static cast to set interface --- */\
-DECLARE_INTERFACE_STATIC_CAST_WITH_MODIFIER(COMMON_MODIFIER,\
-    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-    SET_INTERFACE_TYPE(TYPE)) {\
-    return &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE));\
-}\
-DECLARE_CONST_INTERFACE_STATIC_CAST_WITH_MODIFIER(COMMON_MODIFIER,\
-    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-    SET_INTERFACE_TYPE(TYPE)) {\
-    return &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE));\
-}\
-DECLARE_INTERFACE_STATIC_CAST_WITH_MODIFIER(COMMON_MODIFIER,\
-    SET_INTERFACE_TYPE(TYPE),\
-    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)) {\
-    return (void*)((char*)this -\
-        offsetof(struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))));\
-}\
-DECLARE_CONST_INTERFACE_STATIC_CAST_WITH_MODIFIER(COMMON_MODIFIER,\
-    SET_INTERFACE_TYPE(TYPE),\
-    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)) {\
-    return (void const*)((char const*)this -\
-        offsetof(struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))));\
-}\
 /* --- Construction/Destruction functions --- */\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_with_allocator_at)(\
@@ -41,10 +18,6 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYP
         struct ALLOCATOR const* const allocator) {\
     ASSERT(this);\
     ASSERT(allocator);\
-    TYPE_METHOD(SET_INTERFACE_TYPE(TYPE), construct_at)(&this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)) =\
-        &CONTAINER_INTERFACE_VTABLE_STATIC_VARIABLE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-            SET_INTERFACE_TYPE(TYPE));\
     TYPE_METHOD(ALLOCATOR, construct_copy_at)(&this->allocator, allocator);\
     TYPE_METHOD(COMPARATOR, construct_at)(&this->comparator);\
     this->root = NULL;\
@@ -55,10 +28,6 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYP
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_at)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    TYPE_METHOD(SET_INTERFACE_TYPE(TYPE), construct_at)(&this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)) =\
-        &CONTAINER_INTERFACE_VTABLE_STATIC_VARIABLE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-            SET_INTERFACE_TYPE(TYPE));\
     TYPE_METHOD(ALLOCATOR, construct_at)(&this->allocator);\
     TYPE_METHOD(COMPARATOR, construct_at)(&this->comparator);\
     this->root = NULL;\
@@ -120,11 +89,8 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYP
 COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, destroy_at)(\
     struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->destroy_at);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->destroy_at(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-    );\
+    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, clear)(this);\
+    return this;\
 }\
 /* --- Assign functions --- */\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
@@ -171,20 +137,17 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, size)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->size);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->size(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-    );\
+    return this->size;\
 }\
 COMMON_MODIFIER void RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, clear)(\
     struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->clear);\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->clear(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-    );\
+    if (!this->root) {\
+        return;\
+    }\
+    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(destroy_subtree_at))(this, this->root);\
+    this->root = NULL;\
+    this->size = 0u;\
 }\
 /* --- Elements' manipulation functions --- */\
 /* --- --- insert element --- --- */\
@@ -193,14 +156,40 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this,\
         TYPE const* const value) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->insert_copy);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->insert_copy(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            value\
-        )\
-    };\
+    ASSERT(value);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!this->root) {\
+        /* first insertion */\
+        this->root = RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(construct_node_at))(\
+            TYPE_METHOD(ALLOCATOR, allocate)(&this->allocator, 1u)\
+        );\
+        TYPE_METHOD(TYPE, construct_copy_at)(&this->root->value, value);\
+        iterator.element_storage = this->root;\
+        ++this->size;\
+        return iterator;\
+    }\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* parent =\
+        RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(find_parent_for_value_insertion))(this,\
+            this->root,\
+            value);\
+    /* if parent contain same value => no insertion will be performed => return iterator to parent */\
+    if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value, value) && !TYPE_METHOD(COMPARATOR, compare)(value, &parent->value)) {\
+        iterator.element_storage = parent;\
+        return iterator;\
+    }\
+    /* no node with provided value found => create new one & copy value to it */\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(construct_node_at))(\
+            TYPE_METHOD(ALLOCATOR, allocate)(&this->allocator, 1u)\
+        );\
+    TYPE_METHOD(TYPE, construct_copy_at)(&node->value, value);\
+    iterator.element_storage = node;\
+    node->parent = parent;\
+    parent->child[TYPE_METHOD(COMPARATOR, compare)(&node->value, &parent->value)] = node;\
+    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
+        node);\
+    ++this->size;\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type)\
@@ -208,14 +197,40 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this,\
         TYPE* const value) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->insert_move);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->insert_move(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            value\
-        )\
-    };\
+    ASSERT(value);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!this->root) {\
+        /* first insertion */\
+        this->root = RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(construct_node_at))(\
+            TYPE_METHOD(ALLOCATOR, allocate)(&this->allocator, 1u)\
+        );\
+        TYPE_METHOD(TYPE, construct_move_at)(&this->root->value, value);\
+        iterator.element_storage = this->root;\
+        ++this->size;\
+        return iterator;\
+    }\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* parent =\
+        RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(find_parent_for_value_insertion))(this,\
+            this->root,\
+            value);\
+    /* if parent contains same value => no insertion will be performed => return iterator to parent */\
+    if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value, value) && !TYPE_METHOD(COMPARATOR, compare)(value, &parent->value)) {\
+        iterator.element_storage = parent;\
+        return iterator;\
+    }\
+    /* no node with provided value found => create new one & copy value to it */\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(construct_node_at))(\
+            TYPE_METHOD(ALLOCATOR, allocate)(&this->allocator, 1u)\
+        );\
+    TYPE_METHOD(TYPE, construct_move_at)(&node->value, value);\
+    iterator.element_storage = node;\
+    node->parent = parent;\
+    parent->child[TYPE_METHOD(COMPARATOR, compare)(&node->value, &parent->value)] = node;\
+    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
+        node);\
+    ++this->size;\
     return iterator;\
 }\
 /* --- --- find element --- --- */\
@@ -224,14 +239,28 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const this,\
         TYPE const* const value) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->find);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->find(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            value\
-        )\
-    };\
+    ASSERT(value);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node = this->root;\
+    while (node) {\
+        if (TYPE_METHOD(COMPARATOR, compare)(&node->value, value)) {\
+            if (node->child[0u]) {\
+                node = node->child[0u];\
+                continue;\
+            }\
+            break;\
+        }\
+        if (TYPE_METHOD(COMPARATOR, compare)(value, &node->value)) {\
+            if (node->child[1u]) {\
+                node = node->child[1u];\
+                continue;\
+            }\
+            break;\
+        }\
+        iterator.element_storage = node;\
+        break;\
+    }\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type)\
@@ -239,14 +268,28 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this,\
         TYPE const* const value) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->mut_find);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->mut_find(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            value\
-        )\
-    };\
+    ASSERT(value);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node = this->root;\
+    while (node) {\
+        if (TYPE_METHOD(COMPARATOR, compare)(&node->value, value)) {\
+            if (node->child[0u]) {\
+                node = node->child[0u];\
+                continue;\
+            }\
+            break;\
+        }\
+        if (TYPE_METHOD(COMPARATOR, compare)(value, &node->value)) {\
+            if (node->child[1u]) {\
+                node = node->child[1u];\
+                continue;\
+            }\
+            break;\
+        }\
+        iterator.element_storage = node;\
+        break;\
+    }\
     return iterator;\
 }\
 /* --- --- erase element --- --- */\
@@ -255,14 +298,88 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) position) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->erase_by_iterator);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->erase_by_iterator(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            position.INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-        )\
-    };\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!position.element_storage) {\
+        return iterator;\
+    }\
+    /* get pointer to erasable-node from position iterator*/\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        (STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)*)position.element_storage;\
+    /* find erasable-node's successor (another node, that close to erasable-node by value) */\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* successor = NULL;\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+        /* start searching from 'higher'(next) value node, 'couse we want try to save pointer to 'higher'(next) successor to iterator's pointer*/\
+        successor = node->child[1u - child_index];\
+        if (successor) {\
+            while (successor->child[child_index]) {\
+                successor = successor->child[child_index];\
+            }\
+            if (!child_index) {\
+                iterator.element_storage = successor;\
+            }\
+            break;\
+        }\
+    }\
+    /* destroying element from erasable-node && decrement size */\
+    TYPE_METHOD(TYPE, destroy_at)(&node->value);\
+    --this->size;\
+    /* check successor node */\
+    if (!successor) {\
+        /* if successor node not exists => erasable-node is an own successor node */\
+        if (!node->parent) {\
+            /* case 1: if erasable-node has no parent => it's a root without children => just remove it */\
+            TYPE_MEMBER(ALLOCATOR, deallocate)(&this->allocator, node, 1u);\
+            this->root = NULL;\
+            return iterator;\
+        }\
+    } else {\
+        /* successor node was found => swap erasable-node with successor node */\
+        RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(swap_nodes))(this,\
+            node, successor);\
+        if (debug_enabled) {\
+            LOG_DEBUG_FORMAT("node-successor value: %d\n", successor->value);\
+        }\
+    }\
+    /* here erasable-node points to successor node (even if erase-node was an own successor node)*/\
+    usize node_index = node->parent->child[1u] == node;\
+    if (node->color == RED_BLACK_TREE_SET_NODE_COLOR_ENUM_VALUE(TYPE, RED)) {\
+        if (debug_enabled) {\
+            LOG_DEBUG("node-successor color: RED\n");\
+        }\
+        /* if current node is red => node have no child (it's a successor node) => just remove it */\
+        STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* const parent = node->parent;\
+        parent->child[node_index] = NULL;\
+        TYPE_MEMBER(ALLOCATOR, deallocate)(&this->allocator, node, 1u);\
+        return iterator;\
+    }\
+    /* node is black here */\
+    if (debug_enabled) {\
+        LOG_DEBUG("node-successor color: BLACK\n");\
+    }\
+    /* if node has child => node has only one child & child is red, 'couse node is successor node */\
+    for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
+        if (node->child[child_index]) {\
+            /* child found => repaint child, replace node by it & remove node */\
+            if (debug_enabled) {\
+                LOG_DEBUG("node-successor has one red child -> replace it by child (with repaint) & remove it\n");\
+            }\
+            node->child[child_index]->color = RED_BLACK_TREE_SET_NODE_COLOR_ENUM_VALUE(TYPE, BLACK);\
+            node->parent->child[node_index] = node->child[child_index];\
+            node->child[child_index]->parent = node->parent;\
+            TYPE_MEMBER(ALLOCATOR, deallocate)(&this->allocator, node, 1u);\
+            return iterator;\
+        }\
+    }\
+    /* node is black & has no child here => rebalance tree */\
+    if (debug_enabled) {\
+        LOG_DEBUG("node-successor has no children\n");\
+    }\
+    RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_erasement))(this,\
+        node);\
+    /* erase node after rebalancing */\
+    node->parent->child[node->parent->child[1u] == node] = NULL;\
+    TYPE_MEMBER(ALLOCATOR, deallocate)(&this->allocator, node, 1u);\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type)\
@@ -270,15 +387,36 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) position) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->erase_by_const_iterator);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->erase_by_const_iterator(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)),\
-            position.INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-        )\
-    };\
-    return iterator;\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!position.element_storage) {\
+        return iterator;\
+    }\
+    /* get pointer to node (const) from position const-iterator*/\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* const_node =\
+        (STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const*)position.element_storage;\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node = NULL;\
+    /* try get non-const pointer to node */\
+    if (const_node->parent) {\
+        node = const_node->parent->child[const_node->parent->child[1u] == const_node];\
+    }\
+    for (usize child_index = 0u; child_index < sizeof(const_node->child) / sizeof(*const_node->child); ++child_index) {\
+        if (const_node->child[child_index]) {\
+            node = const_node->child[child_index]->parent;\
+            break;\
+        }\
+    }\
+    if (!node) {\
+        /* node has no non-null pointers => it's a root without children => simply remove root */\
+        ASSERT(this->root == const_node);\
+        TYPE_METHOD(TYPE, destroy_at)(&this->root->value);\
+        TYPE_METHOD(ALLOCATOR, deallocate)(&this->allocator, this->root, 1u);\
+        this->root = NULL;\
+        --this->size;\
+        return iterator;\
+    }\
+    iterator.element_storage = node;\
+    return RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, erase_by_iterator)(this, iterator);\
 }\
 /* --- Nodes related private methods --- */\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)*\
@@ -585,52 +723,50 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOC
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, begin)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->begin);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->begin(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-        )\
-    };\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!this->root) {\
+        return iterator;\
+    }\
+    /* get pointer to root */\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node = this->root;\
+    while (node->child[0u]) {\
+        node = node->child[0u];\
+    }\
+    iterator.element_storage = node;\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type)\
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, end)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->end);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->end(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-        )\
-    };\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type)\
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, cbegin)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->cbegin);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->cbegin(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-        )\
-    };\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
+    if (!this->root) {\
+        return iterator;\
+    }\
+    /* get pointer to root */\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node = this->root;\
+    while (node->child[0u]) {\
+        node = node->child[0u];\
+    }\
+    iterator.element_storage = node;\
     return iterator;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type)\
     RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, cend)(\
         struct RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->cend);\
-    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator = {\
-        .INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)) = this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_TYPE(TYPE))->cend(\
-            &this->INTERFACE_VARIABLE(SET_INTERFACE_TYPE(TYPE))\
-        )\
-    };\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
     return iterator;\
 }\
 /* --- Mutable iterator's methods --- */\
@@ -639,10 +775,7 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLO
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_at)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    TYPE_METHOD(SET_INTERFACE_ITERATOR_TYPE(TYPE), construct_at)(&this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)) =\
-        &CONTAINER_INTERFACE_VTABLE_STATIC_VARIABLE(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-            SET_INTERFACE_ITERATOR_TYPE(TYPE));\
+    this->element_storage = NULL;\
     return this;\
 }\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
@@ -658,17 +791,13 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLO
     ASSERT(this);\
     ASSERT(source);\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_at)(this);\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage = source->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage;\
+    this->element_storage = source->element_storage;\
     return this;\
 }\
 COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, destroy_at)(\
     struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->destroy_at);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->destroy_at(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    return this;\
 }\
 /* --- Assign functions --- */\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
@@ -697,30 +826,24 @@ COMMON_MODIFIER void RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCA
     struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const another) {\
     ASSERT(this);\
     ASSERT(another);\
-    void* const temporary = this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage;\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage = another->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage;\
-    another->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).element_storage = temporary;\
+    void* const temporary = this->element_storage;\
+    this->element_storage = another->element_storage;\
+    another->element_storage = temporary;\
 }\
 /* --- Element access functions --- */\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), value_type)*\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, value)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->value);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->value(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    ASSERT(this->element_storage);\
+    return &this->element_storage->value;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), value_type) const*\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, const_value)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->const_value);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->const_value(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    ASSERT(this->element_storage);\
+    return &this->element_storage->value;\
 }\
 /* --- Compare functions --- */\
 /* return 0 if equals, !0 either */\
@@ -729,58 +852,121 @@ COMMON_MODIFIER int RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCAT
     struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const source) {\
     ASSERT(this);\
     ASSERT(source);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->compare);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->compare(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)),\
-        &source->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    return this->element_storage == source->element_storage;\
 }\
 /* --- Increment functions --- */\
 /* point this to next value & return this-value */\
-COMMON_MODIFIER struct SET_INTERFACE_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, next)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->next);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->next(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    if (node->child[1u]) {\
+        node = node->child[1u];\
+        while (node->child[0u]) {\
+            node = node->child[0u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[1u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    return iterator;\
 }\
 /* return this-value & point this to next value */\
-COMMON_MODIFIER struct SET_INTERFACE_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, pnext)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->pnext);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->pnext(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    if (node->child[1u]) {\
+        node = node->child[1u];\
+        while (node->child[0u]) {\
+            node = node->child[0u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[1u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    return iterator;\
 }\
 /* --- Decrement functions --- */\
 /* point this to previous value & return this-value */\
-COMMON_MODIFIER struct SET_INTERFACE_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, prev)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->prev);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->prev(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    if (node->child[0u]) {\
+        node = node->child[0u];\
+        while (node->child[1u]) {\
+            node = node->child[1u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[0u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    return iterator;\
 }\
 /* return this-value & point this to previous value */\
-COMMON_MODIFIER struct SET_INTERFACE_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, pprev)(\
         struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->pprev);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))->pprev(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type)* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    struct RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    if (node->child[0u]) {\
+        node = node->child[0u];\
+        while (node->child[1u]) {\
+            node = node->child[1u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[0u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    return iterator;\
 }\
 /* --- Const iterator's methods --- */\
 /* --- Construction/Destruction functions --- */\
@@ -788,10 +974,7 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AN
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_at)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    TYPE_METHOD(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE), construct_at)(&this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)) =\
-        &CONTAINER_INTERFACE_VTABLE_STATIC_VARIABLE(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR),\
-            SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE));\
+    this->element_storage = NULL;\
     return this;\
 }\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
@@ -807,17 +990,13 @@ COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AN
     ASSERT(this);\
     ASSERT(source);\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, construct_at)(this);\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage = source->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage;\
+    this->element_storage = source->element_storage;\
     return this;\
 }\
 COMMON_MODIFIER void* RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, destroy_at)(\
     struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->destroy_at);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->destroy_at(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    return this;\
 }\
 /* --- Assign functions --- */\
 COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)*\
@@ -846,30 +1025,24 @@ COMMON_MODIFIER void RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_
     struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const another) {\
     ASSERT(this);\
     ASSERT(another);\
-    void const* const temporary = this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage;\
-    this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage = another->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage;\
-    another->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).element_storage = temporary;\
+    void const* const temporary = this->element_storage;\
+    this->element_storage = another->element_storage;\
+    another->element_storage = temporary;\
 }\
 /* --- Element access functions --- */\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), value_type)*\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, value)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->value);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->value(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    ASSERT(this->element_storage);\
+    return &this->element_storage->value;\
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), value_type) const*\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, const_value)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->const_value);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->const_value(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    ASSERT(this->element_storage);\
+    return &this->element_storage->value;\
 }\
 /* --- Compare functions --- */\
 /* return 0 if equals, !0 either */\
@@ -878,62 +1051,125 @@ COMMON_MODIFIER int RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_A
     struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) const* const source) {\
     ASSERT(this);\
     ASSERT(source);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->compare);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->compare(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)),\
-        &source->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    return this->element_storage == source->element_storage;\
 }\
 /* --- Increment functions --- */\
 /* point this to next value & return this-value */\
-COMMON_MODIFIER struct SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, next)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->next);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->next(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    if (node->child[1u]) {\
+        node = node->child[1u];\
+        while (node->child[0u]) {\
+            node = node->child[0u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[1u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    return iterator;\
 }\
 /* return this-value & point this to next value */\
-COMMON_MODIFIER struct SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, pnext)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->pnext);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->pnext(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    if (node->child[1u]) {\
+        node = node->child[1u];\
+        while (node->child[0u]) {\
+            node = node->child[0u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[1u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    return iterator;\
 }\
 /* --- Decrement functions --- */\
 /* point this to previous value & return this-value */\
-COMMON_MODIFIER struct SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, prev)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->prev);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->prev(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    if (node->child[0u]) {\
+        node = node->child[0u];\
+        while (node->child[1u]) {\
+            node = node->child[1u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[0u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    return iterator;\
 }\
 /* return this-value & point this to previous value */\
-COMMON_MODIFIER struct SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)\
+COMMON_MODIFIER struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)\
     RED_BLACK_TREE_SET_TYPE_CONST_ITERATOR_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, pprev)(\
         struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR)* const this) {\
     ASSERT(this);\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)));\
-    ASSERT(this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->pprev);\
-    return this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE)).INTERFACE_VTABLE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))->pprev(\
-        &this->INTERFACE_VARIABLE(SET_INTERFACE_CONST_ITERATOR_TYPE(TYPE))\
-    );\
+    STRUCT_SUBTYPE(RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), node_type) const* node =\
+        this->element_storage;\
+    ASSERT(node);\
+    struct RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR) iterator;\
+    TYPE_METHOD(RED_BLACK_TREE_SET_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(TYPE, COMPARATOR, ALLOCATOR), construct_copy_at)(&iterator, this);\
+    if (node->child[0u]) {\
+        node = node->child[0u];\
+        while (node->child[1u]) {\
+            node = node->child[1u];\
+        }\
+    } else {\
+        while (node->parent && node->parent->child[0u] == node) {\
+            node = node->parent;\
+        }\
+        if (!node->parent) {\
+            node = NULL;\
+        } else {\
+            node = node->parent;\
+        }\
+    }\
+    this->element_storage = node;\
+    return iterator;\
 }
 
-#define DEFINE_SET_INTERFACE_WITH_COMPARATOR_AND_ALLOCATOR_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(, TYPE, COMPARATOR, ALLOCATOR)
-#define DEFINE_SET_INTERFACE_WITH_COMPARATOR_AND_ALLOCATOR_STATIC_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(static, TYPE, COMPARATOR, ALLOCATOR)
-#define DEFINE_SET_INTERFACE_WITH_COMPARATOR_AND_ALLOCATOR_INLINE_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(inline, TYPE, COMPARATOR, ALLOCATOR)
-#define DEFINE_SET_INTERFACE_WITH_COMPARATOR_AND_ALLOCATOR_EXTERNAL_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(extern, TYPE, COMPARATOR, ALLOCATOR)
-#define DEFINE_SET_INTERFACE_WITH_COMPARATOR_AND_ALLOCATOR_EXTERNAL_INLINE_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(extern inline, TYPE, COMPARATOR, ALLOCATOR)
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(, TYPE, COMPARATOR, ALLOCATOR)
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_STATIC_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(static, TYPE, COMPARATOR, ALLOCATOR)
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_INLINE_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(inline, TYPE, COMPARATOR, ALLOCATOR)
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_EXTERNAL_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(extern, TYPE, COMPARATOR, ALLOCATOR)
+#define DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_EXTERNAL_INLINE_METHODS(TYPE, COMPARATOR, ALLOCATOR) DEFINE_RED_BLACK_TREE_SET_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(extern inline, TYPE, COMPARATOR, ALLOCATOR)
