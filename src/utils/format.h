@@ -17,6 +17,7 @@
 struct STRING_TYPE() NAMESPACE_UTILS(cformat)(char const* const format_string, ...);
 struct WSTRING_TYPE() NAMESPACE_UTILS(wformat)(wchar const* const format_string, ...);
 
+#if defined(_WIN32)
 #define utils__format(FORMAT_STRING, ...)\
 _Generic((0,FORMAT_STRING),\
     char const*: NAMESPACE_UTILS(cformat),\
@@ -24,6 +25,15 @@ _Generic((0,FORMAT_STRING),\
     wchar const*: NAMESPACE_UTILS(wformat),\
     wchar*: NAMESPACE_UTILS(wformat)\
 )(FORMAT_STRING, __VA_ARGS__)
+#else
+#define utils__format(FORMAT_STRING, ...)\
+_Generic((FORMAT_STRING),\
+    char const*: NAMESPACE_UTILS(cformat),\
+    char*: NAMESPACE_UTILS(cformat),\
+    wchar const*: NAMESPACE_UTILS(wformat),\
+    wchar*: NAMESPACE_UTILS(wformat)\
+)(FORMAT_STRING, __VA_ARGS__)
+#endif
 
 /**
  * @brief 
@@ -38,6 +48,7 @@ _Generic((0,FORMAT_STRING),\
 struct STRING_TYPE() NAMESPACE_UTILS(va_cformat)(char const* const format_string, va_list args);
 struct WSTRING_TYPE() NAMESPACE_UTILS(va_wformat)(wchar const* const format_string, va_list args);
 
+#if defined(_WIN32)
 #define utils__va_format(FORMAT_STRING, ...)\
 _Generic((0,FORMAT_STRING),\
     char const*: NAMESPACE_UTILS(va_cformat),\
@@ -45,3 +56,12 @@ _Generic((0,FORMAT_STRING),\
     wchar const*: NAMESPACE_UTILS(va_wformat),\
     wchar*: NAMESPACE_UTILS(va_wformat)\
 )
+#else
+#define utils__va_format(FORMAT_STRING, ...)\
+_Generic((FORMAT_STRING),\
+    char const*: NAMESPACE_UTILS(va_cformat),\
+    char*: NAMESPACE_UTILS(va_cformat),\
+    wchar const*: NAMESPACE_UTILS(va_wformat),\
+    wchar*: NAMESPACE_UTILS(va_wformat)\
+)
+#endif

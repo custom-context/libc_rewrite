@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define ALIAS_SIGNED_TYPE_T_AS_TYPE_AND_UNSIGNED_TYPE(TYPE) \
     typedef TYPE##_t TYPE;\
