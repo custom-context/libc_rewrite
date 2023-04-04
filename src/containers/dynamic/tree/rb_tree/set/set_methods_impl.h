@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rb_tree_set_methods_decl.h"
+#include "set_methods_decl.h"
 
 #include <stddef.h>
 

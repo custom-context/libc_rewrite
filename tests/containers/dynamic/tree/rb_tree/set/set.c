@@ -1,9 +1,9 @@
-#include "rb_tree_set.h"
+#include "set.h"
 
 #include <memory/allocator/proxy_allocator/debug.h>
 #include <memory/allocator/allocator.h>
 
-#include <containers/dynamic/tree/rb_tree/rb_tree_set/rb_tree_set.h>
+#include <containers/dynamic/tree/rb_tree/set/set.h>
 DEFINE_DEFAULT_COMPARATOR_TYPE(greater, int);
 DECLARE_RED_BLACK_TREE_SET_NODE_TYPE(int);
 
