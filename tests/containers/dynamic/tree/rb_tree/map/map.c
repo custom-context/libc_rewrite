@@ -13,7 +13,6 @@ DECLARE_RED_BLACK_TREE_MAP_NODE_TYPE(int, int);
 DEFINE_DEFAULT_ALLOCATOR_TYPE(RED_BLACK_TREE_MAP_NODE_TYPE(int, int));
 DEFINE_DEBUG_PROXY_ALLOCATOR_TYPE(RED_BLACK_TREE_MAP_NODE_TYPE(int, int));
 
-DECLARE_MAP_INTERFACE_TYPE(int, int);
 DECLARE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(
     int, int,
     COMPARATOR_TYPE(greater, int),
@@ -28,37 +27,8 @@ DEFINE_DEBUG_PROXY_ALLOCATOR_METHODS_WITH_MODIFIER(static, RED_BLACK_TREE_MAP_NO
 // define greater comparator methods
 DEFINE_GREATER_COMPARATOR_METHODS_WITH_MODIFIER(static, int)
 
-#include <containers/interface/map/map_inheritance_vtable.h>
-// map interface's inheritance methods
-DEFINE_MAP_INTERFACE_INHERITANCE_METHODS_WITH_MODIFIER(static, int, int)
-
-// map interface's vtable
-DEFINE_MAP_INTERFACE_VTABLES_VARIABLES_WITH_MODIFIER(static, int, int);
-
-// map interface's methods
-DECLARE_MAP_INTERFACE_METHODS_WITH_MODIFIER(static, int, int);
-DEFINE_MAP_INTERFACE_METHODS_WITH_MODIFIER(static, int, int)
-
 // red-black tree map's methods declaration
 DECLARE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(
-    static,
-    int, int,
-    COMPARATOR_TYPE(greater, int),
-    DEBUG_PROXY_ALLOCATOR_TYPE(RED_BLACK_TREE_MAP_NODE_TYPE(int, int))
-);
-
-#include <containers/dynamic/tree/rb_tree/map/map_inheritance_methods_impl.h>
-// red-black tree map's inheritance methods declaration
-DECLARE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_INHERITANCE_METHODS(
-    static,
-    int, int,
-    COMPARATOR_TYPE(greater, int),
-    DEBUG_PROXY_ALLOCATOR_TYPE(RED_BLACK_TREE_MAP_NODE_TYPE(int, int))
-);
-
-#include <containers/dynamic/tree/rb_tree/map/map_inheritance_vtable.h>
-// red-black tree map's vtable
-DEFINE_RED_BLACK_TREE_MAP_INTERFACE_VTABLES_VARIABLES_WITH_MODIFIER(
     static,
     int, int,
     COMPARATOR_TYPE(greater, int),
@@ -71,14 +41,6 @@ DEFINE_PAIR_METHODS_WITH_MODIFIER(static, int, int)
 
 // red-black tree map's methods definition
 DEFINE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(
-    static,
-    int, int,
-    COMPARATOR_TYPE(greater, int),
-    DEBUG_PROXY_ALLOCATOR_TYPE(RED_BLACK_TREE_MAP_NODE_TYPE(int, int))
-)
-
-// red-black tree map's inheritance methods definition
-DEFINE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_INHERITANCE_METHODS(
     static,
     int, int,
     COMPARATOR_TYPE(greater, int),
