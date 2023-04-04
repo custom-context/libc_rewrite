@@ -3,5 +3,5 @@ target_sources(${PROJECT_NAME}
         rb_tree.h
 )
 
-add_subdirectory(rb_tree_set)
+add_subdirectory(set)
 add_subdirectory(map)

@@ -10,7 +10,7 @@
 #include <tests/containers/static/array/array.h>
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>
-#include <tests/containers/dynamic/tree/rb_tree/rb_tree_set/rb_tree_set.h>
+#include <tests/containers/dynamic/tree/rb_tree/set/set.h>
 #include <tests/containers/dynamic/tree/rb_tree/map/map.h>
 #include <tests/utils/result/result.h>
 #include <tests/fs/file/encoding.h>

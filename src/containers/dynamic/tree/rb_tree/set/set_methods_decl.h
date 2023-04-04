@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rb_tree_set_types_decl.h"
+#include "set_types_decl.h"
 
 // set method
 #define RED_BLACK_TREE_SET_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(TYPE, COMPARATOR, ALLOCATOR, METHOD)\
