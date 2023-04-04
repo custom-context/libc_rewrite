@@ -4,6 +4,7 @@
 #include <network/client/client.h>
 
 #include <utils/string/helpers.h>
+#include <errno.h>
 
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 

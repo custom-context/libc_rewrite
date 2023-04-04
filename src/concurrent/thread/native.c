@@ -8,7 +8,7 @@
 static DWORD WINAPI callback_wrapper(LPVOID lpParam);
 #else
 #include <pthread.h>
-static void callback_wrapper(void* arg);
+static void* callback_wrapper(void* arg);
 #endif
 
 #define CALLBACK_PAYLOAD_TYPE STRUCT_SUBTYPE(NATIVE_THREAD_TYPE(), callback_payload)
@@ -123,11 +123,11 @@ static DWORD WINAPI callback_wrapper(LPVOID lpParam) {
     return 0u;
 }
 #else
-static void callback_wrapper(void* arg) {
+static void* callback_wrapper(void* arg) {
     struct ARC_CALLBACK_PAYLOAD* const arc_payload = (struct ARC_CALLBACK_PAYLOAD* const)(arg);
     ASSERT(arc_payload);
     {
-        CALLBACK_PAYLOAD_TYPE* const payload = TYPE_METHOD(ARC_CALLBACK_PAYLOAD, mut_get)(&arc_payload);
+        CALLBACK_PAYLOAD_TYPE* const payload = TYPE_METHOD(ARC_CALLBACK_PAYLOAD, mut_get)(arc_payload);
         ASSERT(payload->callback);
         {
             payload->return_value = payload->callback(payload->arg);
@@ -140,5 +140,6 @@ static void callback_wrapper(void* arg) {
         DEFAULT_ALLOCATOR_METHOD(ARC_CALLBACK_PAYLOAD, deallocate)(&temporary_allocator, arc_payload, 1u);
         DEFAULT_ALLOCATOR_METHOD(ARC_CALLBACK_PAYLOAD, destroy_at)(&temporary_allocator);
     }
+    return NULL;
 }
 #endif

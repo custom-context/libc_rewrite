@@ -1,6 +1,6 @@
 #include "nb_client.h"
-
 #include <network/nb_client/nb_client.h>
+#include <errno.h>
 
 DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
 

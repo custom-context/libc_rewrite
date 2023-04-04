@@ -1,4 +1,7 @@
 #include "nb_connection.h"
+#if !defined(WIN32)
+    #include <fcntl.h>
+#endif
 
 int NAMESPACE_NETWORK_NB_SERVER_NB_CONNECTION(make_non_blocking)(struct CONNECTION_TYPE()* const connection) {
 #if defined(WIN32)
