@@ -8,3 +8,5 @@
 
 #define DEFINE_NATIVE_ATOMIC_TYPE(TYPE)\
     typedef _Atomic TYPE NATIVE_ATOMIC_TYPE(TYPE)
+
+#include "fence.h"
