@@ -62,6 +62,7 @@ set(TESTS_LIST
     format
     reference_counted
     native_thread
+    thread
     array
     dynamic_array
     rb_tree_set

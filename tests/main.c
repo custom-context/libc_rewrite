@@ -7,6 +7,7 @@
 #include <tests/utils/format/format.h>
 #include <tests/containers/reference_counted/reference_counted.h>
 #include <tests/concurrent/native_thread/native_thread.h>
+#include <tests/concurrent/thread/thread.h>
 #include <tests/containers/static/array/array.h>
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>
@@ -63,6 +64,7 @@ void execute_test_by_name(OS_CHAR_TYPE const* test_name) {
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, format)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, reference_counted)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, native_thread)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, thread)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, array)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, dynamic_array)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, rb_tree_set)
