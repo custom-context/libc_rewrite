@@ -6,7 +6,7 @@
 #include <tests/utils/string/raw_string/compare/compare.h>
 #include <tests/utils/format/format.h>
 #include <tests/containers/reference_counted/reference_counted.h>
-#include <tests/concurrent/thread/native_thread.h>
+#include <tests/concurrent/native_thread/native_thread.h>
 #include <tests/containers/static/array/array.h>
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>

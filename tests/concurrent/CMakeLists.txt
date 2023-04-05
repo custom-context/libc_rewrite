@@ -1,1 +1,1 @@
-add_subdirectory(thread)
+add_subdirectory(native_thread)
