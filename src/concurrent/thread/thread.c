@@ -2,6 +2,10 @@
 
 #include <process/native.h>
 
+#if !defined(_WIN32)
+    #include <pthread.h>
+#endif
+
 #define CALLBACK_PAYLOAD_TYPE STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable))
 
 // runnable vtable definition
