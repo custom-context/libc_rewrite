@@ -4,16 +4,13 @@
 
 #include <stddef.h>
 
-static int debug_enabled = 0u;
-static int debug_rebalance_iteration = 0u;
-
 // map methods definition
 #define DEFINE_RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_AND_MODIFIER_METHODS(COMMON_MODIFIER, KEY, VALUE, COMPARATOR, ALLOCATOR)\
 /* --- Map interface methods --- */\
 struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR);\
 DEFINE_PAIR_METHODS_WITH_MODIFIER(COMMON_MODIFIER,\
     RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR),\
-    char\
+    bool\
 )\
 /* --- Construction/Destruction functions --- */\
 COMMON_MODIFIER struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)*\
@@ -155,7 +152,7 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
 }\
 /* --- Elements' manipulation functions --- */\
 /* --- --- insert element --- --- */\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_copy)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), value_type) const* const value) {\
@@ -171,9 +168,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(PAIR_TYPE(KEY, VALUE), construct_copy_at)(&this->root->value, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -184,9 +181,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     /* if parent contain same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, &value->first) && !TYPE_METHOD(COMPARATOR, compare)(&value->first, &parent->value.first)) {\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -202,13 +199,13 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_move)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), value_type)* const value) {\
@@ -224,9 +221,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(PAIR_TYPE(KEY, VALUE), construct_move_at)(&this->root->value, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -237,9 +234,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     /* if parent contains same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, &value->first) && !TYPE_METHOD(COMPARATOR, compare)(&value->first, &parent->value.first)) {\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -255,14 +252,14 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
 /* --- --- insert or assign key-value --- --- */\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_or_assign_with_key_copy_value_copy)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), key_type) const* const key,\
@@ -281,9 +278,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(VALUE, construct_copy_at)(&this->root->value.second, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -296,9 +293,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(KEY, assign_copy_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_copy_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -315,13 +312,13 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_or_assign_with_key_move_value_copy)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), key_type)* const key,\
@@ -340,9 +337,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(VALUE, construct_copy_at)(&this->root->value.second, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -355,9 +352,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(KEY, assign_move_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_copy_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -374,13 +371,13 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_or_assign_with_key_copy_value_move)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), key_type) const* const key,\
@@ -399,9 +396,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(VALUE, construct_move_at)(&this->root->value.second, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -414,9 +411,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(KEY, assign_copy_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_move_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -433,13 +430,13 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
-COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char)\
+COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, insert_or_assign_with_key_move_value_move)(\
         struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this,\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), key_type)* const key,\
@@ -458,9 +455,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(VALUE, construct_move_at)(&this->root->value.second, value);\
         iterator.element_storage = this->root;\
         ++this->size;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 1u\
+            .second = true\
         };\
         return result;\
     }\
@@ -473,9 +470,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
         TYPE_METHOD(KEY, assign_move_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_move_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
-        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+        struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
             .first = iterator,\
-            .second = 0u\
+            .second = false\
         };\
         return result;\
     }\
@@ -492,9 +489,9 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_insertion))(this,\
         node);\
     ++this->size;\
-    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), char) result = {\
+    struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
         .first = iterator,\
-        .second = 1u\
+        .second = true\
     };\
     return result;\
 }\
@@ -657,16 +654,10 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
         /* successor node was found => swap erasable-node with successor node */\
         RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(swap_nodes))(this,\
             node, successor);\
-        if (debug_enabled) {\
-            LOG_DEBUG_FORMAT("node-successor key: %d\n", successor->value.first);\
-        }\
     }\
     /* here erasable-node points to successor node (even if erase-node was an own successor node)*/\
     usize node_index = node->parent->child[1u] == node;\
     if (node->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
-        if (debug_enabled) {\
-            LOG_DEBUG("node-successor color: RED\n");\
-        }\
         /* if current node is red => node have no child (it's a successor node) => just remove it */\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const parent = node->parent;\
         parent->child[node_index] = NULL;\
@@ -674,16 +665,10 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
         return iterator;\
     }\
     /* node is black here */\
-    if (debug_enabled) {\
-        LOG_DEBUG("node-successor color: BLACK\n");\
-    }\
     /* if node has child => node has only one child & child is red, 'couse node is successor node */\
     for (usize child_index = 0u; child_index < sizeof(node->child) / sizeof(*node->child); ++child_index) {\
         if (node->child[child_index]) {\
             /* child found => repaint child, replace node by it & remove node */\
-            if (debug_enabled) {\
-                LOG_DEBUG("node-successor has one red child -> replace it by child (with repaint) & remove it\n");\
-            }\
             node->child[child_index]->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
             node->parent->child[node_index] = node->child[child_index];\
             node->child[child_index]->parent = node->parent;\
@@ -692,9 +677,6 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
         }\
     }\
     /* node is black & has no child here => rebalance tree */\
-    if (debug_enabled) {\
-        LOG_DEBUG("node-successor has no children\n");\
-    }\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rebalance_after_erasement))(this,\
         node);\
     /* erase node after rebalancing */\
@@ -893,37 +875,20 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
     ASSERT(node);\
     while (node->parent &&\
         node->parent->color != RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK)) {\
-        if (debug_enabled) { debug_rebalance_iteration++; }\
-        if (debug_enabled) {\
-            LOG_DEBUG_FORMAT("rebalance iteration: %d\n", debug_rebalance_iteration);\
-        }\
         /* parent exists & it's red */\
-        if (debug_enabled) {\
-            LOG_DEBUG("parent exists & it's red\n");\
-        }\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* parent = node->parent;\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* grandparent = parent->parent;\
         if (!grandparent) {\
             /* case 4: parent is a root => repaint it & return */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 4: parent is a root => repaint it & return\n");\
-            }\
             parent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
-            if (debug_enabled) { debug_rebalance_iteration = 0u; }\
             return;\
         }\
         /* grandparent exists & it's black ('couse parent is red) */\
-        if (debug_enabled) {\
-            LOG_DEBUG("grandparent exists & it's black ('couse parent is red)\n");\
-        }\
         usize parent_direction = grandparent->child[1u] == parent;\
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* const uncle = grandparent->child[1u - parent_direction];\
         if (uncle &&\
             uncle->color != RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK)) {\
             /* case 2: uncle exists is red => repaint parent/grandparent/uncle, set node <- grandparent & continue */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 2: uncle exists is red => repaint parent/grandparent/uncle, set node <- grandparent & continue\n");\
-            }\
             parent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
             uncle->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
             grandparent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED);\
@@ -931,28 +896,18 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
             continue;\
         }\
         /* uncle isn't exist or it's black */\
-        if (debug_enabled) {\
-            LOG_DEBUG("uncle isn't exist or it's black\n");\
-        }\
         if (node == parent->child[1u - parent_direction]) {\
             /* case 5: node is an inner node => rotate parent/node & set node <- parent */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 5: node is an inner node => rotate parent/node & set node <- parent\n");\
-            }\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
                 parent, parent_direction);\
             node = parent;\
             parent = grandparent->child[parent_direction];\
         }\
         /* case 6: node is an outer node => rotate grandparent/parent, repaint them & return */\
-        if (debug_enabled) {\
-            LOG_DEBUG("case 6: node is an outer node => rotate grandparent/parent, repaint them & return\n");\
-        }\
         RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
             grandparent, 1u - parent_direction);\
         parent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
         grandparent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED);\
-        if (debug_enabled) { debug_rebalance_iteration = 0u; }\
         return;\
     }\
 }\
@@ -970,9 +925,6 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), node_type)* sibling_close_child = sibling->child[node_index];\
         if (sibling->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
             /* case 3: sibling is red => parent & sibling's children exist and they're black */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 3: sibling is red => parent & sibling's children exist and they're black\n");\
-            }\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
                 parent,\
                 node_index);\
@@ -986,9 +938,6 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         if (sibling_distant_child != NULL &&\
             sibling_distant_child->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
             /* case 6: sibling's distant child exists & it's red => sibling is black */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 6: sibling's distant child exists & it's red => sibling is black\n");\
-            }\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
                 parent,\
                 node_index);\
@@ -1000,9 +949,6 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         if (sibling_close_child != NULL &&\
             sibling_close_child->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
             /* case 5: sibling's close child exists & it's red (& sibling's distant child is null/black) => sibling is black */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 5: sibling's close child exists & it's red (& sibling's distant child is null/black) => sibling is black\n");\
-            }\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
                 sibling,\
                 1u - node_index);\
@@ -1012,9 +958,6 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
             sibling = sibling_close_child;\
             /* sibling_distant_child is red & sibling is black -> go to 6! [we're don't use goto, sorry] */\
             /* case 6: sibling's distant child exists & it's red => sibling is black */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 6 (from 5): sibling's distant child exists & it's red => sibling is black\n");\
-            }\
             RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, PRIVATE(rotate))(this,\
                 parent,\
                 node_index);\
@@ -1025,17 +968,11 @@ COMMON_MODIFIER void RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHO
         }\
         if (parent->color == RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED)) {\
             /* case 4: parent is red => sibling & its' children are black */\
-            if (debug_enabled) {\
-                LOG_DEBUG("case 4: parent is red => sibling & its' children are black\n");\
-            }\
             sibling->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED);\
             parent->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, BLACK);\
             break;\
         }\
         /* case 2: parent/sibling & its' children are black */\
-        if (debug_enabled) {\
-            LOG_DEBUG("case 2: parent/sibling & its' children are black\n");\
-        }\
         sibling->color = RED_BLACK_TREE_MAP_NODE_COLOR_ENUM_VALUE(KEY, VALUE, RED);\
         node = parent;\
     } while (node->parent);\
@@ -1069,7 +1006,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), const_iterator_type)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, cbegin)(\
-        struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this) {\
+        struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR) const* const this) {\
     ASSERT(this);\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator;\
     TYPE_METHOD(RED_BLACK_TREE_MAP_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
@@ -1086,7 +1023,7 @@ COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOC
 }\
 COMMON_MODIFIER STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), const_iterator_type)\
     RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR_METHOD(KEY, VALUE, COMPARATOR, ALLOCATOR, cend)(\
-        struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR)* const this) {\
+        struct RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR) const* const this) {\
     ASSERT(this);\
     STRUCT_SUBTYPE(RED_BLACK_TREE_MAP_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), const_iterator_type) iterator;\
     TYPE_METHOD(RED_BLACK_TREE_MAP_CONST_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), construct_at)(&iterator);\
