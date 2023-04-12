@@ -55,6 +55,7 @@ add_subdirectory(concurrent)
 add_subdirectory(containers)
 add_subdirectory(encoding)
 add_subdirectory(fs)
+add_subdirectory(json)
 add_subdirectory(network)
 add_subdirectory(utils)
 
@@ -71,6 +72,7 @@ set(TESTS_LIST
     string
     encoding_base64
     result
+    json_value
     socket
     address_info
     client
