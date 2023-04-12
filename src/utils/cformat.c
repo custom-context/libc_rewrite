@@ -179,10 +179,8 @@ struct STRING_TYPE() NAMESPACE_UTILS(va_cformat)(char const* const format_string
                 }
             } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
-                struct STRING_TYPE() result;
-                TYPE_METHOD(STRING_TYPE(), construct_at)(&result);
                 int const value = va_arg(args, int);
-                NAMESPACE_UTILS_STRING(CONVERT(int, STRING_TYPE()))(&value, &result);
+                struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(int, STRING_TYPE()))(&value);
                 for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
                     STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
                 }

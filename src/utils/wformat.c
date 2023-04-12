@@ -179,10 +179,8 @@ struct WSTRING_TYPE() NAMESPACE_UTILS(va_wformat)(wchar const* const format_stri
                 }
             } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
-                struct WSTRING_TYPE() result;
-                TYPE_METHOD(WSTRING_TYPE(), construct_at)(&result);
                 int const value = va_arg(args, int);
-                NAMESPACE_UTILS_STRING(CONVERT(int, WSTRING_TYPE()))(&value, &result);
+                struct WSTRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(int, WSTRING_TYPE()))(&value);
                 for (uint index = 0u; index < WSTRING_METHOD(size)(&result); ++index) {
                     WSTRING_METHOD(push_back)(&formatted_string, WSTRING_METHOD(at)(&result, index));
                 }

@@ -90,3 +90,8 @@
 
 #define MAX_VALUE_OF__ptrdiff_t PTRDIFF_MAX
 #define MIN_VALUE_OF__ptrdiff_t PTRDIFF_MIN
+
+#include <float.h>
+// float-point types
+#define EPSILON_VALUE_OF__float FLT_EPSILON
+#define EPSILON_VALUE_OF__double DBL_EPSILON
