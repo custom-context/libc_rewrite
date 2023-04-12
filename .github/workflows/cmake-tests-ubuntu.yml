@@ -38,4 +38,5 @@ jobs:
 
     - name: If some tests failed show logs
       if: ${{ failure() && steps.run_tests.conclusion == 'failure' }}
+      working-directory: ${{github.workspace}}/build-tests
       run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure
