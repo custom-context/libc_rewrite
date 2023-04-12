@@ -51,10 +51,11 @@ target_compile_definitions(${PROJECT_NAME}
 )
 
 add_subdirectory(${PRIMARY_PROJECT_ROOT_DIR}/src primary_project_sources)
+add_subdirectory(concurrent)
 add_subdirectory(containers)
+add_subdirectory(encoding)
 add_subdirectory(fs)
 add_subdirectory(network)
-add_subdirectory(concurrent)
 add_subdirectory(utils)
 
 set(TESTS_LIST
@@ -68,8 +69,8 @@ set(TESTS_LIST
     rb_tree_set
     rb_tree_map
     string
+    encoding_base64
     result
-    encoding
     socket
     address_info
     client

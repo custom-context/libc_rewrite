@@ -13,6 +13,7 @@
 #include <tests/containers/dynamic/string/string.h>
 #include <tests/containers/dynamic/tree/rb_tree/set/set.h>
 #include <tests/containers/dynamic/tree/rb_tree/map/map.h>
+#include <tests/encoding/base64/base64.h>
 #include <tests/utils/result/result.h>
 #include <tests/fs/file/encoding.h>
 #include <tests/network/socket/socket.h>
@@ -70,6 +71,7 @@ void execute_test_by_name(OS_CHAR_TYPE const* test_name) {
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, rb_tree_set)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, rb_tree_map)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, string)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, encoding_base64)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, result)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, encoding)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, socket)
