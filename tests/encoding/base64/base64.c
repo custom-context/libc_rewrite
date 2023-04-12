@@ -39,6 +39,7 @@ IMPLEMENT_TYPE_TESTS(encoding_base64) {
         for (usize i = 0u; i < decoded_value_size; ++i) {
             CHECK(*(uint8 const*)(value + i) == *TYPE_METHOD(DYNAMIC_ARRAY_TYPE(uint8), at)(&decoded_value, i));
         }
+        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(uint8), destroy_at)(&decoded_value);
         TYPE_METHOD(STRING_TYPE(), destroy_at)(&encoded_value);
     }
     TEST_BLOCK("encode string with padding & decode it back") {
@@ -53,6 +54,7 @@ IMPLEMENT_TYPE_TESTS(encoding_base64) {
         for (usize i = 0u; i < decoded_value_size; ++i) {
             CHECK(*(uint8 const*)(value + i) == *TYPE_METHOD(DYNAMIC_ARRAY_TYPE(uint8), at)(&decoded_value, i));
         }
+        TYPE_METHOD(DYNAMIC_ARRAY_TYPE(uint8), destroy_at)(&decoded_value);
         TYPE_METHOD(STRING_TYPE(), destroy_at)(&encoded_value);
     }
 }
