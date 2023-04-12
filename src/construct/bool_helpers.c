@@ -1,0 +1,3 @@
+#include "bool_helpers.h"
+
+IMPLEMENT_CONSTRUCTORS_AND_DESTRUCTORS_FOR_NUMERIC_TYPE(bool)

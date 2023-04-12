@@ -2,6 +2,8 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         numeric_helpers.c
         numeric_helpers.h
+        bool_helpers.h
+        bool_helpers.c
         characters_helpers.h
         characters_helpers.c
         data_model_helpers.h
