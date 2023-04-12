@@ -19,13 +19,13 @@ IMPLEMENT_TYPE_TESTS(json_value) {
     // construct from type
     TEST_BLOCK("check base json_value construction from null type") {
         struct JSON_VALUE_TYPE() json_value;
-        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_value_at)(&json_value, JSON_ENUM_VALUE(null));
+        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_type_at)(&json_value, JSON_ENUM_VALUE(null));
         CHECK(TYPE_METHOD(JSON_VALUE_TYPE(), type)(&json_value) == JSON_ENUM_VALUE(null));
         TYPE_METHOD(JSON_VALUE_TYPE(), destroy_at)(&json_value);
     }
     TEST_BLOCK("check base json_value construction from number type") {
         struct JSON_VALUE_TYPE() json_value;
-        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_value_at)(&json_value, JSON_ENUM_VALUE(number));
+        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_type_at)(&json_value, JSON_ENUM_VALUE(number));
         CHECK(TYPE_METHOD(JSON_VALUE_TYPE(), type)(&json_value) == JSON_ENUM_VALUE(number));
         STRUCT_SUBTYPE(JSON_VALUE_TYPE(), number_type) const* value_ptr =
             TYPE_METHOD(JSON_VALUE_TYPE(), as)(STRUCT_SUBTYPE(JSON_VALUE_TYPE(), number_type) const)(&json_value);
@@ -35,7 +35,7 @@ IMPLEMENT_TYPE_TESTS(json_value) {
     }
     TEST_BLOCK("check base json_value construction from string type") {
         struct JSON_VALUE_TYPE() json_value;
-        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_value_at)(&json_value, JSON_ENUM_VALUE(string));
+        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_type_at)(&json_value, JSON_ENUM_VALUE(string));
         CHECK(TYPE_METHOD(JSON_VALUE_TYPE(), type)(&json_value) == JSON_ENUM_VALUE(string));
         STRUCT_SUBTYPE(JSON_VALUE_TYPE(), string_type) const* value_ptr =
             TYPE_METHOD(JSON_VALUE_TYPE(), as)(STRUCT_SUBTYPE(JSON_VALUE_TYPE(), string_type) const)(&json_value);
@@ -45,7 +45,7 @@ IMPLEMENT_TYPE_TESTS(json_value) {
     }
     TEST_BLOCK("check base json_value construction from array type") {
         struct JSON_VALUE_TYPE() json_value;
-        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_value_at)(&json_value, JSON_ENUM_VALUE(array));
+        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_type_at)(&json_value, JSON_ENUM_VALUE(array));
         CHECK(TYPE_METHOD(JSON_VALUE_TYPE(), type)(&json_value) == JSON_ENUM_VALUE(array));
         STRUCT_SUBTYPE(JSON_VALUE_TYPE(), array_type) const* value_ptr =
             TYPE_METHOD(JSON_VALUE_TYPE(), as)(STRUCT_SUBTYPE(JSON_VALUE_TYPE(), array_type) const)(&json_value);
@@ -55,7 +55,7 @@ IMPLEMENT_TYPE_TESTS(json_value) {
     }
     TEST_BLOCK("check base json_value construction from object type") {
         struct JSON_VALUE_TYPE() json_value;
-        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_value_at)(&json_value, JSON_ENUM_VALUE(object));
+        TYPE_METHOD(JSON_VALUE_TYPE(), construct_from_type_at)(&json_value, JSON_ENUM_VALUE(object));
         CHECK(TYPE_METHOD(JSON_VALUE_TYPE(), type)(&json_value) == JSON_ENUM_VALUE(object));
         STRUCT_SUBTYPE(JSON_VALUE_TYPE(), object_type) const* value_ptr =
             TYPE_METHOD(JSON_VALUE_TYPE(), as)(STRUCT_SUBTYPE(JSON_VALUE_TYPE(), object_type) const)(&json_value);
