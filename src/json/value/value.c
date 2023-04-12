@@ -265,7 +265,7 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_move_from_object_at)(struc
 struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(assign_from_type_at)(struct JSON_VALUE_TYPE()* const this, enum JSON_ENUM_TYPE() type) {
     ASSERT(this);
     struct JSON_VALUE_TYPE() temporary;
-    JSON_VALUE_METHOD(construct_from_value_at)(&temporary, type);
+    JSON_VALUE_METHOD(construct_from_type_at)(&temporary, type);
     JSON_VALUE_METHOD(swap)(&temporary, this);
     JSON_VALUE_METHOD(destroy_at)(&temporary);
     return this;
