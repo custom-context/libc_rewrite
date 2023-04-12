@@ -31,7 +31,7 @@ if(WIN32)
         -Wno-disabled-macro-expansion
         -fmacro-backtrace-limit=0)
 else()
-    target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread)
+    target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread -lm)
     target_compile_options(${PROJECT_NAME} PRIVATE
         -pedantic
         -Wall
