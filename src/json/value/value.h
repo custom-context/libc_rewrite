@@ -116,7 +116,7 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_copy_from_object_at)(struc
 struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_move_from_object_at)(struct JSON_VALUE_TYPE()* const this, STRUCT_SUBTYPE(JSON_VALUE_TYPE(), object_type)* const value);
 /// JSON_VALUE_METHOD(construct_from_value_at)
 #define json__value__construct_from_value_at(THIS, VALUE) _Generic((VALUE),\
-    JSON_ENUM_TYPE()                                     : JSON_VALUE_METHOD(construct_from_type_at),\
+    int                                                  : JSON_VALUE_METHOD(construct_from_type_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), boolean_type)      : JSON_VALUE_METHOD(construct_from_boolean_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), number_type)       : JSON_VALUE_METHOD(construct_from_number_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), string_type) const*: JSON_VALUE_METHOD(construct_copy_from_string_at),\
@@ -138,7 +138,7 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(assign_copy_from_object_at)(struct J
 struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(assign_move_from_object_at)(struct JSON_VALUE_TYPE()* const this, STRUCT_SUBTYPE(JSON_VALUE_TYPE(), object_type)* const value);
 /// JSON_VALUE_METHOD(assign_from_value)
 #define json__value__assign_from_value(THIS, VALUE) _Generic((VALUE),\
-    JSON_ENUM_TYPE()                                     : JSON_VALUE_METHOD(assign_from_type_at),\
+    int                                                  : JSON_VALUE_METHOD(assign_from_type_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), boolean_type)      : JSON_VALUE_METHOD(assign_from_boolean_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), number_type)       : JSON_VALUE_METHOD(assign_from_number_at),\
     STRUCT_SUBTYPE(JSON_VALUE_TYPE(), string_type) const*: JSON_VALUE_METHOD(assign_copy_from_string_at),\
