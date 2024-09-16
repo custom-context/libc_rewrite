@@ -1,1 +1,5 @@
 add_subdirectory(value)
+add_subdirectory(serialize)
+add_subdirectory(lexer)
+add_subdirectory(parser)
+add_subdirectory(deserialize)

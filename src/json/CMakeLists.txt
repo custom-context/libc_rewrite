@@ -3,3 +3,4 @@ target_sources(${PROJECT_NAME}
         json.h
 )
 add_subdirectory(value)
+add_subdirectory(serialize)

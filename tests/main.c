@@ -19,6 +19,10 @@
 #include <tests/utils/result/result.h>
 #include <tests/fs/file/encoding.h>
 #include <tests/json/value/value.h>
+#include <tests/json/serialize/serialize.h>
+#include <tests/json/lexer/lexer.h>
+#include <tests/json/parser/parser.h>
+#include <tests/json/deserialize/deserialize.h>
 #include <tests/network/socket/socket.h>
 #include <tests/network/address_info/address_info.h>
 #include <tests/network/client/client.h>
@@ -80,6 +84,10 @@ void execute_test_by_name(OS_CHAR_TYPE const* test_name) {
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, result)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, encoding)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, json_value)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, json_serialize)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, json_lexer)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, json_parser)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, json_deserialize)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, socket)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, address_info)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, client)

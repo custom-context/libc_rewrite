@@ -457,7 +457,7 @@ struct STRING_TYPE() NAMESPACE_UTILS_STRING(CONVERT(JSON_VALUE_TYPE(), STRING_TY
             STRING_METHOD(construct_by_value_at)(&result, 1u, &(STRUCT_SUBTYPE(STRING_TYPE(), char_type)){'{'});
             STRUCT_SUBTYPE(JSON_OBJECT_TYPE, const_iterator_type) iterator = TYPE_METHOD(JSON_OBJECT_TYPE, cbegin)(&json->object);
             STRUCT_SUBTYPE(JSON_OBJECT_TYPE, const_iterator_type) const end_iterator = TYPE_METHOD(JSON_OBJECT_TYPE, cend)(&json->object);
-            while (true) {
+            while (!TYPE_METHOD(JSON_OBJECT_CONST_ITERATOR_TYPE, compare)(&iterator, &end_iterator)) {
                 struct STRING_TYPE() const* const key = TYPE_METHOD(JSON_OBJECT_CONST_ITERATOR_TYPE, key)(&iterator);
                 {
                     STRUCT_SUBTYPE(STRING_TYPE(), char_type) const value = '\"';
