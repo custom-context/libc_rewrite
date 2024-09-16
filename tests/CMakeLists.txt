@@ -31,6 +31,7 @@ if(WIN32)
         -Wno-c2x-compat # prevents boolean keywords compatibility error
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
+        -Wno-switch-enum
         -fmacro-backtrace-limit=0)
 else()
     target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread -lm)
@@ -41,6 +42,7 @@ else()
         -Wno-unused-function
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
+        -Wno-switch-enum
         -fsanitize=address
         -O0
         -Wno-sequence-point
@@ -78,6 +80,10 @@ set(TESTS_LIST
     encoding_base64
     result
     json_value
+    json_serialize
+    json_lexer
+    json_parser
+    json_deserialize
     socket
     address_info
     client
