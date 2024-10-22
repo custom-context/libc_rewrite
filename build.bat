@@ -1,17 +1,24 @@
+@REM read arguments
 SET argument1=%~1
+
 @REM change directory to 'build.bat' file directory (project directory)
 cd /D "%~dp0"
+
 IF "%argument1%" == "" (
-    GOTO :build
-) 
-IF "%argument1%" == "-t" (
-    GOTO :tests
+    GOTO :plain_build
 )
-IF "%argument1%" == "--tests" (
-    GOTO :tests
+IF "%argument1%" == "-t" SET build_type=build_tests
+IF "%argument1%" == "--tests" SET build_type=build_tests
+IF "%argument1%" == "-e" SET build_type=run_tests
+IF "%argument1%" == "--exec-tests" SET build_type=run_tests
+
+IF defined build_type (
+    GOTO :build_tests
 )
+
 GOTO :eof
-:tests
+
+:build_tests
     @REM create sub-directory 'test' if it's not exists
     IF NOT EXIST .\build-tests (
         mkdir .\build-tests
@@ -22,10 +29,15 @@ GOTO :eof
     cmake -T ClangCL ..\tests
     @REM build project in Debug mode
     cmake --build .
+    @REM run tests if related option was set
+    IF %errorlevel% == 0 if "%build_type%" == "run_tests" (
+        ctest -C Debug --output-on-failure
+    )
     @REM go to project-directory
     cd ..
 GOTO :eof
-:build
+
+:plain_build
     @REM create sub-directory 'test' if it's not exists
     IF NOT EXIST .\build (
         mkdir .\build

@@ -27,6 +27,7 @@ if(WIN32)
         -Wall
         -Werror
         -Wno-unused-function
+        -Wno-unsafe-buffer-usage # main function's argv array usage is trigger compile error
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -fmacro-backtrace-limit=0)
