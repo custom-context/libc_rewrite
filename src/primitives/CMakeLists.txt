@@ -14,4 +14,7 @@ target_sources(${PROJECT_NAME}
 
         atomic.h
         atomic.c
+
+        optional.h
+        optional.c
 )
