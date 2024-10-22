@@ -10,6 +10,7 @@
 #include <tests/concurrent/thread/thread.h>
 #include <tests/containers/optional/optional.h>
 #include <tests/containers/static/array/array.h>
+#include <tests/containers/static/string_view/string_view.h>
 #include <tests/containers/dynamic/array/array.h>
 #include <tests/containers/dynamic/string/string.h>
 #include <tests/containers/dynamic/tree/rb_tree/set/set.h>
@@ -69,6 +70,7 @@ void execute_test_by_name(OS_CHAR_TYPE const* test_name) {
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, thread)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, optional)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, array)
+    EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, string_view)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, dynamic_array)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, rb_tree_set)
     EXECUTE_TYPE_TESTS_ON_EQUAL_TEST_NAME(test_name, rb_tree_map)

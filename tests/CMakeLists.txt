@@ -69,6 +69,7 @@ set(TESTS_LIST
     thread
     optional
     array
+    string_view
     dynamic_array
     rb_tree_set
     rb_tree_map
