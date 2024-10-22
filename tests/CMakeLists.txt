@@ -42,6 +42,7 @@ else()
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -fsanitize=address
+        -O0
         -Wno-sequence-point
         -g)
 endif()
