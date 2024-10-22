@@ -28,6 +28,7 @@ if(WIN32)
         -Werror
         -Wno-unused-function
         -Wno-unsafe-buffer-usage # main function's argv array usage is trigger compile error
+        -Wno-c2x-compat # prevents boolean keywords compatibility error
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -fmacro-backtrace-limit=0)
