@@ -14,6 +14,7 @@ if(WIN32)
         -Wall
         -Werror
         -Wno-unused-function
+        -Wno-c2x-compat # prevents boolean keywords compatibility error
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -fmacro-backtrace-limit=0)
