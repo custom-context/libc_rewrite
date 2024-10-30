@@ -128,8 +128,8 @@ MODIFIER struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* 
     this->dynamic_data.size = source->dynamic_data.size;\
     this->dynamic_data.capacity = source->dynamic_data.capacity;\
 \
-    SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, destroy_at)(source);\
     source->is_stack_allocated = 1u;\
+    source->stack_data.buffer[sizeof(source->stack_data.buffer) / sizeof(TYPE) - 1u] = '\0';\
     return this;\
 }\
 MODIFIER struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, construct_by_value_at)(struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* const this, STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type) const size, TYPE const* const value) {\
@@ -361,7 +361,7 @@ MODIFIER struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR)* 
 /* --- Getters functions implementation --- */\
 MODIFIER STRUCT_SUBTYPE(SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR), size_type) SPECIALIZED_STRING_WITH_CUSTOM_ALLOCATOR_METHOD(TYPE, ALLOCATOR, capacity)(struct SPECIALIZED_STRING_TYPE_WITH_CUSTOM_ALLOCATOR(TYPE, ALLOCATOR) const* const this) {\
     if (this->is_stack_allocated) {\
-        return (sizeof(this->dynamic_data) / sizeof(TYPE)) - 1;\
+        return (sizeof(this->stack_data) / sizeof(TYPE)) - 1;\
     }\
     return this->dynamic_data.capacity;\
 }\
