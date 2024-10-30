@@ -1,0 +1,79 @@
+#pragma once
+
+#include "common.h"
+#include <primitives/primitives.h>
+
+#define DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(MODIFIER, TYPE)\
+MODIFIER int RAW_ARRAY_FUNCTION(TYPE, compare)(\
+    TYPE const* const array1, usize const array1_size,\
+    TYPE const* const array2, usize const array2_size)
+
+#define DECLARE_RAW_ARRAY_COMPARE_FUNCTION(TYPE)\
+    DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(, TYPE)
+
+#define DEFINE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(MODIFIER, TYPE)\
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(MODIFIER, TYPE) {\
+    ASSERT(array1);\
+    ASSERT(array2);\
+    usize index;\
+    for (index = 0u; index < array1_size && index < array2_size; ++index) {\
+        if (array1[index] > array2[index]) {\
+            return 1;\
+        }\
+        if (array1[index] < array2[index]) {\
+            return -1;\
+        }\
+    }\
+    if (index < array1_size) {\
+        return 1;\
+    }\
+    if (index < array2_size) {\
+        return -1;\
+    }\
+    return 0;\
+}
+
+#define DEFINE_RAW_ARRAY_COMPARE_FUNCTION(TYPE)\
+    DEFINE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(, TYPE)
+
+// unsigned_types_aliases.h
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, char);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uchar);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, short);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, ushort);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, int);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uint);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, long);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, ulong);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, llong);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, ullong);
+
+// fixed_size_types_aliases.h
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, int8);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uint8);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, int16);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uint16);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, int32);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uint32);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, int64);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uint64);
+
+// data_model_types_aliases.h
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, intptr);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, uintptr);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, usize);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, ptrdiff);
+
+// characters_types_aliases.h
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, char8);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, char16);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, char32);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, char64);
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, wchar);
+
+#if defined(_WIN32)
+    DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, winchar);
+#endif
+
+// bool_type_alias.h
+DECLARE_RAW_ARRAY_COMPARE_FUNCTION_WITH_MODIFIER(extern, bool);

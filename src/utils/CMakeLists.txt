@@ -13,5 +13,6 @@ target_sources(${PROJECT_NAME}
 )
 
 add_subdirectory(string)
+add_subdirectory(array)
 add_subdirectory(comparator)
 add_subdirectory(character)
