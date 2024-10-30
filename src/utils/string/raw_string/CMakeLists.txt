@@ -6,4 +6,7 @@ target_sources(${PROJECT_NAME}
 
         compare.h
         compare.c
+
+        convert.h
+        convert.c
 )
