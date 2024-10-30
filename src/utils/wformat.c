@@ -1,69 +1,76 @@
 #include "format.h"
 
+#include <containers/static/string_view/string_view.h>
 #include <utils/string/helpers.h>
 #include <containers/dynamic/array/array.h>
 
 #include <utils/macros.h>
 
-#define LOCAL_NAMESPACE(NAME) NAMESPACE_UTILS(format_string__##NAME)
+#define LOCAL_NAMESPACE(NAME) NAMESPACE_UTILS(CONCAT3(format_string, __, NAME))
 
-#define STRUCT_FN(STRUCT_NAME, FN_NAME) TYPE_METHOD(STRUCT_NAME, FN_NAME)
+#define PATTERN_ENUM_TYPE() LOCAL_NAMESPACE(ENUM_TYPE(pattern))
+#define PATTERN_ENUM_VALUE(VALUE) ENUM_VALUE(PATTERN_ENUM_TYPE(), VALUE)
 
-enum LOCAL_NAMESPACE(format_string_pattern_type) {
-    ESCAPED_PERCENT,
-    CHARACTER,
-    NULL_TERMINATED_STRING,
-    SIGNED_INTEGER_TO_DECIMAL
-};
+typedef enum PATTERN_ENUM_TYPE() {
+    PATTERN_ENUM_VALUE(ESCAPED_PERCENT) = 0u,
+    PATTERN_ENUM_VALUE(CHARACTER),
+    PATTERN_ENUM_VALUE(NULL_TERMINATED_STRING),
+    PATTERN_ENUM_VALUE(STRING_VIEW),
+    PATTERN_ENUM_VALUE(USIZE_TO_DECIMAL),
+    PATTERN_ENUM_VALUE(INT_TO_DECIMAL),
+    PATTERN_ENUM_VALUE(DOUBLE)
+} PATTERN_ENUM_TYPE();
 
 typedef struct LOCAL_NAMESPACE(pattern) {
-    struct WSTRING_TYPE() _string_representation;
-    enum LOCAL_NAMESPACE(format_string_pattern_type) _type;
+    struct WSTRING_VIEW_TYPE() view;
+    enum PATTERN_ENUM_TYPE() type;
 } LOCAL_NAMESPACE(pattern);
-#define PATTERN_FN(FN_NAME) STRUCT_FN(LOCAL_NAMESPACE(pattern), FN_NAME)
 
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
+#define PATTERN_METHOD(FN_NAME) TYPE_METHOD(LOCAL_NAMESPACE(pattern), FN_NAME)
+
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(construct_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
     ASSERT(this);
+    ASSERT(false);
     return this;
 }
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(construct_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
     ASSERT(this);
     ASSERT(src);
-    WSTRING_METHOD(construct_copy_at)(&this->_string_representation, &src->_string_representation);
-    this->_type = src->_type;
+    WSTRING_VIEW_METHOD(construct_copy_at)(&this->view, &src->view);
+    this->type = src->type;
     return this;
 }
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_move_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern)* const src) {
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(construct_move_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern)* const src) {
     ASSERT(this);
     ASSERT(src);
-    WSTRING_METHOD(construct_move_at)(&this->_string_representation, &src->_string_representation);
-    this->_type = src->_type;
+    WSTRING_VIEW_METHOD(construct_move_at)(&this->view, &src->view);
+    this->type = src->type;
     return this;
 }
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(assign_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(assign_copy_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern) const* const src) {
     ASSERT(this);
     ASSERT(src);
-    WSTRING_METHOD(assign_copy_at)(&this->_string_representation, &src->_string_representation);
-    this->_type = src->_type;
+    WSTRING_VIEW_METHOD(assign_copy_at)(&this->view, &src->view);
+    this->type = src->type;
     return this;
 }
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(assign_move_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern)* const src) {
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(assign_move_at)(struct LOCAL_NAMESPACE(pattern) * const this, struct LOCAL_NAMESPACE(pattern)* const src) {
     ASSERT(this);
     ASSERT(src);
-    WSTRING_METHOD(assign_move_at)(&this->_string_representation, &src->_string_representation);
-    this->_type = src->_type;
+    WSTRING_VIEW_METHOD(assign_move_at)(&this->view, &src->view);
+    this->type = src->type;
     return this;
 }
-static void* PATTERN_FN(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
+static void* PATTERN_METHOD(destroy_at)(struct LOCAL_NAMESPACE(pattern) * const this) {
     ASSERT(this);
-    WSTRING_METHOD(destroy_at)(&this->_string_representation);
+    WSTRING_VIEW_METHOD(destroy_at)(&this->view);
     return this;
 }
 
-static struct LOCAL_NAMESPACE(pattern)* PATTERN_FN(construct_with_values_at)(struct LOCAL_NAMESPACE(pattern) * const this,
-    enum LOCAL_NAMESPACE(format_string_pattern_type) type, wchar const* const pattern_string_representation) {
-    WSTRING_METHOD(construct_from_c_string_at)(&this->_string_representation, pattern_string_representation);
-    this->_type = type;
+static struct LOCAL_NAMESPACE(pattern)* PATTERN_METHOD(construct_with_values_at)(struct LOCAL_NAMESPACE(pattern) * const this,
+    enum PATTERN_ENUM_TYPE() type, wchar const* const pattern_string_representation) {
+    WSTRING_VIEW_METHOD(construct_from_raw_string_at)(&this->view, pattern_string_representation);
+    this->type = type;
     return this;
 }
 
@@ -74,65 +81,88 @@ DECLARE_DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern));
 DECLARE_DYNAMIC_ARRAY_TYPE_STATIC_METHODS(LOCAL_NAMESPACE(pattern));
 IMPLEMENT_DYNAMIC_ARRAY_TYPE_STATIC_METHODS(LOCAL_NAMESPACE(pattern))
 
-typedef struct LOCAL_NAMESPACE(patterns) {
-    struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern)) _patterns;
-} LOCAL_NAMESPACE(patterns);
-#define PATTERNS_FN(FN_NAME) STRUCT_FN(LOCAL_NAMESPACE(patterns), FN_NAME)
-
-static struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(construct_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
-    struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern)) * patterns = &this->_patterns;
-
-    DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), construct_at)(patterns);
+static void initialize_patterns(struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern))* const patterns) {
+    ASSERT(patterns);
 
     struct LOCAL_NAMESPACE(pattern) pattern;
     { // "%%"
-        PATTERN_FN(construct_with_values_at)(&pattern, ESCAPED_PERCENT, L"%%");
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(ESCAPED_PERCENT), L"%%");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
     }
     { // "%c"
-        PATTERN_FN(construct_with_values_at)(&pattern, CHARACTER, L"%c");
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(CHARACTER), L"%c");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
     }
     { // "%s"
-        PATTERN_FN(construct_with_values_at)(&pattern, NULL_TERMINATED_STRING, L"%s");
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(NULL_TERMINATED_STRING), L"%s");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
+    }
+    { // "%vs"
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(STRING_VIEW), L"%vs");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
     }
     { // "%d"
-        PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, L"%d");
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(INT_TO_DECIMAL), L"%d");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
+    }
+    { // "%zu"
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(USIZE_TO_DECIMAL), L"%zu");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
     }
     { // "%i"
-        PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, L"%i");
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(INT_TO_DECIMAL), L"%i");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
     }
-    return this;
-}
-static void* PATTERNS_FN(destroy_at)(struct LOCAL_NAMESPACE(patterns) * const this) {
-    ASSERT(this);
-    struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern)) * patterns = &this->_patterns;
-    DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), destroy_at)(patterns);
-    return this;
+    { // "%lf"
+        PATTERN_METHOD(construct_with_values_at)(&pattern, PATTERN_ENUM_VALUE(DOUBLE), L"%lf");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+        PATTERN_METHOD(destroy_at)(&pattern);
+    }
 }
 
 typedef struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) {
-    LOCAL_NAMESPACE(pattern) const* _pattern;
-    uint _index;
+    LOCAL_NAMESPACE(pattern) const* ppattern;
+    usize index;
 } LOCAL_NAMESPACE(format_string_pattern_occurrence_index);
-static struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index) LOCAL_NAMESPACE(search_pattern_occurence)(wchar const* const format_string, LOCAL_NAMESPACE(patterns) const* const patterns) {
-    LOCAL_NAMESPACE(format_string_pattern_occurrence_index) result = {._pattern = NULL, ._index = 0u};
-    for (; format_string[result._index] != (wchar)'\0'; ++result._index) {
-        for (uint vec_index = 0u; vec_index < DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), size)(&patterns->_patterns); ++vec_index) {
-            result._pattern = DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), at)(&patterns->_patterns, vec_index);
-            struct WSTRING_TYPE() temporary;
-            TYPE_METHOD(WSTRING_TYPE(), construct_from_buffer_at)(&temporary, WSTRING_METHOD(size)(&result._pattern->_string_representation), format_string + result._index);
-            if (!STRING_FUNCTION(WSTRING_TYPE(), compare)(&result._pattern->_string_representation, &temporary)) {
-                TYPE_METHOD(WSTRING_TYPE(), destroy_at)(&temporary);
+
+static struct LOCAL_NAMESPACE(format_string_pattern_occurrence_index)
+    LOCAL_NAMESPACE(search_pattern_occurence)(
+        struct WSTRING_VIEW_TYPE() const* const pformat_string_view,
+        usize const format_string_view_start_index,
+        struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern)) const* const ppatterns) {
+    LOCAL_NAMESPACE(format_string_pattern_occurrence_index) result = {
+        .ppattern = NULL
+    };
+
+    // TODO: replace to aho-corasick algo
+    for (result.index = format_string_view_start_index; result.index < WSTRING_VIEW_METHOD(size)(pformat_string_view); ++result.index) {
+        for (usize vec_index = 0u; vec_index < DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), size)(ppatterns); ++vec_index) {
+            result.ppattern = DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), at)(ppatterns, vec_index);
+
+            struct WSTRING_VIEW_TYPE() temporary;
+            usize const window_size =
+                (WSTRING_VIEW_METHOD(size)(&result.ppattern->view) < WSTRING_VIEW_METHOD(size)(pformat_string_view) - result.index) ?
+                    WSTRING_VIEW_METHOD(size)(&result.ppattern->view) :
+                    (WSTRING_VIEW_METHOD(size)(pformat_string_view) - result.index)
+            ;
+            TYPE_METHOD(WSTRING_VIEW_TYPE(), construct_from_buffer_at)(&temporary,
+                WSTRING_VIEW_METHOD(data)(pformat_string_view) + result.index, window_size);
+
+            if (!STRING_FUNCTION(WSTRING_VIEW_TYPE(), compare)(&result.ppattern->view, &temporary)) {
+                TYPE_METHOD(WSTRING_VIEW_TYPE(), destroy_at)(&temporary);
                 return result;
             }
-            TYPE_METHOD(WSTRING_TYPE(), destroy_at)(&temporary);
+            TYPE_METHOD(WSTRING_VIEW_TYPE(), destroy_at)(&temporary);
         }
     }
-    result._pattern = NULL;
+    result.ppattern = NULL;
     return result;
 }
 
@@ -146,50 +176,83 @@ struct WSTRING_TYPE() NAMESPACE_UTILS(wformat)(wchar const* const format_string,
 }
 
 struct WSTRING_TYPE() NAMESPACE_UTILS(va_wformat)(wchar const* const format_string, va_list args) {
+    struct WSTRING_VIEW_TYPE() format_string_view;
+    WSTRING_VIEW_METHOD(construct_from_raw_string_at)(&format_string_view, format_string);
+
     struct WSTRING_TYPE() formatted_string;
     WSTRING_METHOD(construct_at)(&formatted_string);
+    WSTRING_METHOD(reserve)(&formatted_string, WSTRING_VIEW_METHOD(size)(&format_string_view));
 
-    struct LOCAL_NAMESPACE(patterns) patterns;
-    PATTERNS_FN(construct_at)(&patterns);
-    for (uint format_string_index = 0u; format_string[format_string_index] != (wchar)'\0';) {
+    struct DYNAMIC_ARRAY_TYPE(LOCAL_NAMESPACE(pattern)) patterns;
+    DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), construct_at)(&patterns);
+    initialize_patterns(&patterns);
+    for (usize format_string_index = 0u; format_string_index < WSTRING_VIEW_METHOD(size)(&format_string_view);) {
         // find index of first pattern occurrence & return pointer to pattern
-        LOCAL_NAMESPACE(format_string_pattern_occurrence_index) pattern_n_index = LOCAL_NAMESPACE(search_pattern_occurence)(format_string + format_string_index, &patterns);
-        // copy passed substring from format_string
-        for (uint index = 0u; index < pattern_n_index._index; ++index, ++format_string_index) {
-            WSTRING_METHOD(push_back)(&formatted_string, &format_string[format_string_index]);
-        }
-        LOCAL_NAMESPACE(pattern) const* const pattern = pattern_n_index._pattern;
-        // stop if no patterns matched
-        if (!pattern) {
+        LOCAL_NAMESPACE(format_string_pattern_occurrence_index) pattern_n_index =
+            LOCAL_NAMESPACE(search_pattern_occurence)(&format_string_view, format_string_index, &patterns);
+
+        // copy passed substring from format_string before first found pattern
+        WSTRING_METHOD(append_buffer)(&formatted_string,
+            WSTRING_VIEW_METHOD(data)(&format_string_view) + format_string_index,
+            pattern_n_index.index - format_string_index);
+
+        format_string_index = pattern_n_index.index;
+        LOCAL_NAMESPACE(pattern) const* const ppattern = pattern_n_index.ppattern;
+
+        // stop if no pattern was matched
+        if (!ppattern) {
             break;
         }
-        switch (pattern->_type) {
-            case ESCAPED_PERCENT: {
-                wchar value = '%';
+        switch (ppattern->type) {
+            case PATTERN_ENUM_VALUE(ESCAPED_PERCENT): {
+                wchar value = L'%';
                 WSTRING_METHOD(push_back)(&formatted_string, &value);
             } break;
-            case CHARACTER: {
+            case PATTERN_ENUM_VALUE(CHARACTER): {
                 wchar value = (wchar)va_arg(args, int);
                 WSTRING_METHOD(push_back)(&formatted_string, &value);
             } break;
-            case NULL_TERMINATED_STRING: {
-                wchar const* const null_terminated_string = va_arg(args, wchar*);
-                for (uint index = 0u; null_terminated_string[index] != (wchar)'\0'; ++index) {
+            case PATTERN_ENUM_VALUE(NULL_TERMINATED_STRING): {
+                wchar const* const null_terminated_string = va_arg(args, wchar const*);
+                for (usize index = 0u; null_terminated_string[index] != L'\0'; ++index) {
                     WSTRING_METHOD(push_back)(&formatted_string, &null_terminated_string[index]);
                 }
             } break;
-            case SIGNED_INTEGER_TO_DECIMAL: {
+            case PATTERN_ENUM_VALUE(STRING_VIEW): {
+                struct WSTRING_VIEW_TYPE() const* const view = va_arg(args, WSTRING_VIEW_TYPE() const*);
+                for (usize index = 0u; index < WSTRING_VIEW_METHOD(size)(view); ++index) {
+                    WSTRING_METHOD(push_back)(&formatted_string, WSTRING_VIEW_METHOD(at)(view, index));
+                }
+            } break;
+            case PATTERN_ENUM_VALUE(USIZE_TO_DECIMAL): {
+                usize const value = va_arg(args, usize);
+                struct WSTRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(usize, WSTRING_TYPE()))(&value);
+                for (usize index = 0u; index < WSTRING_METHOD(size)(&result); ++index) {
+                    WSTRING_METHOD(push_back)(&formatted_string, WSTRING_METHOD(at)(&result, index));
+                }
+                WSTRING_METHOD(destroy_at)(&result);
+            } break;
+            case PATTERN_ENUM_VALUE(INT_TO_DECIMAL): {
                 int const value = va_arg(args, int);
                 struct WSTRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(int, WSTRING_TYPE()))(&value);
-                for (uint index = 0u; index < WSTRING_METHOD(size)(&result); ++index) {
+                for (usize index = 0u; index < WSTRING_METHOD(size)(&result); ++index) {
+                    WSTRING_METHOD(push_back)(&formatted_string, WSTRING_METHOD(at)(&result, index));
+                }
+                WSTRING_METHOD(destroy_at)(&result);
+            } break;
+            case PATTERN_ENUM_VALUE(DOUBLE): {
+                double const value = va_arg(args, double);
+                struct WSTRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(double, WSTRING_TYPE()))(&value);
+                for (usize index = 0u; index < WSTRING_METHOD(size)(&result); ++index) {
                     WSTRING_METHOD(push_back)(&formatted_string, WSTRING_METHOD(at)(&result, index));
                 }
                 WSTRING_METHOD(destroy_at)(&result);
             } break;
         }
-        format_string_index += WSTRING_METHOD(size)(&pattern->_string_representation);
+        format_string_index += WSTRING_VIEW_METHOD(size)(&ppattern->view);
     }
-    PATTERNS_FN(destroy_at)(&patterns);
 
+    DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), destroy_at)(&patterns);
+    WSTRING_VIEW_METHOD(destroy_at)(&format_string_view);
     return formatted_string;
 }

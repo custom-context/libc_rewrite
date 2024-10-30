@@ -1,0 +1,7 @@
+#pragma once
+#include <utils/common.h>
+
+#define NAMESPACE_UTILS_ARRAY(NAME) NAMESPACE_UTILS(CONCAT3(array, __, NAME))
+
+#define RAW_ARRAY_FUNCTION(ARRAY_TYPE, NAME)\
+    NAMESPACE_UTILS_ARRAY(TYPE_METHOD(CONCAT3(ARRAY_TYPE, _, fn), NAME))
