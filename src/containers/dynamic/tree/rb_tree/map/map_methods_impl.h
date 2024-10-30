@@ -290,7 +290,6 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
             key);\
     /* if parent contain same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, key) && !TYPE_METHOD(COMPARATOR, compare)(key, &parent->value.first)) {\
-        TYPE_METHOD(KEY, assign_copy_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_copy_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
         struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
@@ -349,7 +348,6 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
             key);\
     /* if parent contain same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, key) && !TYPE_METHOD(COMPARATOR, compare)(key, &parent->value.first)) {\
-        TYPE_METHOD(KEY, assign_move_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_copy_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
         struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
@@ -408,7 +406,6 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
             key);\
     /* if parent contain same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, key) && !TYPE_METHOD(COMPARATOR, compare)(key, &parent->value.first)) {\
-        TYPE_METHOD(KEY, assign_copy_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_move_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
         struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
@@ -467,7 +464,6 @@ COMMON_MODIFIER struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATO
             key);\
     /* if parent contain same value => no insertion will be performed => return iterator to parent */\
     if (!TYPE_METHOD(COMPARATOR, compare)(&parent->value.first, key) && !TYPE_METHOD(COMPARATOR, compare)(key, &parent->value.first)) {\
-        TYPE_METHOD(KEY, assign_move_at)(&parent->value.first, key);\
         TYPE_METHOD(VALUE, assign_move_at)(&parent->value.second, value);\
         iterator.element_storage = parent;\
         struct PAIR_TYPE(RED_BLACK_TREE_MAP_ITERATOR_TYPE_WITH_COMPARATOR_AND_ALLOCATOR(KEY, VALUE, COMPARATOR, ALLOCATOR), bool) result = {\
