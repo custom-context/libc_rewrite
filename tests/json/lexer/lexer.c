@@ -7,10 +7,6 @@
 #include <primitives/limits.h>
 #include <utils/format.h>
 
-// struct STRING_TYPE() NAMESPACE_JSON(serialize)(struct JSON_VALUE_TYPE() const* const json);
-// struct RESULT_TYPE(JSON_VALUE_TYPE(), JSON_DESERIALIZATION_ERROR_TYPE()) NAMESPACE_JSON(deserialize)(struct CSTRING_VIEW_TYPE() const string_view);
-
-
 IMPLEMENT_TYPE_TESTS(json_lexer) {
     TEST_BLOCK("check base json value tokenization (from null)") {
         char const target_value_raw_string[] = "null";
