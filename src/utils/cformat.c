@@ -1,5 +1,6 @@
 #include "format.h"
 
+#include <containers/static/string_view/string_view.h>
 #include <utils/string/helpers.h>
 #include <containers/dynamic/array/array.h>
 
@@ -13,7 +14,10 @@ enum LOCAL_NAMESPACE(format_string_pattern_type) {
     ESCAPED_PERCENT,
     CHARACTER,
     NULL_TERMINATED_STRING,
-    SIGNED_INTEGER_TO_DECIMAL
+    STRING_VIEW,
+    UNSIGNED_SIZE_TO_DECIMAL,
+    SIGNED_INTEGER_TO_DECIMAL,
+    DOUBLE
 };
 
 typedef struct LOCAL_NAMESPACE(pattern) {
@@ -97,12 +101,24 @@ static struct LOCAL_NAMESPACE(patterns) * PATTERNS_FN(construct_at)(struct LOCAL
         PATTERN_FN(construct_with_values_at)(&pattern, NULL_TERMINATED_STRING, "%s");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
     }
+    { // "%vs"
+        PATTERN_FN(construct_with_values_at)(&pattern, STRING_VIEW, "%vs");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+    }
     { // "%d"
         PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, "%d");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
     }
+    { // "%zu"
+        PATTERN_FN(construct_with_values_at)(&pattern, UNSIGNED_SIZE_TO_DECIMAL, "%zu");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+    }
     { // "%i"
         PATTERN_FN(construct_with_values_at)(&pattern, SIGNED_INTEGER_TO_DECIMAL, "%i");
+        DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
+    }
+    { // "%lf"
+        PATTERN_FN(construct_with_values_at)(&pattern, DOUBLE, "%f");
         DYNAMIC_ARRAY_METHOD(LOCAL_NAMESPACE(pattern), push_back_by_moving)(patterns, &pattern);
     }
     return this;
@@ -173,14 +189,36 @@ struct STRING_TYPE() NAMESPACE_UTILS(va_cformat)(char const* const format_string
                 STRING_METHOD(push_back)(&formatted_string, &value);
             } break;
             case NULL_TERMINATED_STRING: {
-                char const* const null_terminated_string = va_arg(args, char*);
+                char const* const null_terminated_string = va_arg(args, char const*);
                 for (uint index = 0u; null_terminated_string[index] != '\0'; ++index) {
                     STRING_METHOD(push_back)(&formatted_string, &null_terminated_string[index]);
                 }
             } break;
+            case STRING_VIEW: {
+                struct CSTRING_VIEW_TYPE() const* const view = va_arg(args, CSTRING_VIEW_TYPE() const*);
+                for (uint index = 0u; index < CSTRING_VIEW_METHOD(size)(view); ++index) {
+                    STRING_METHOD(push_back)(&formatted_string, CSTRING_VIEW_METHOD(at)(view, index));
+                }
+            } break;
+            case UNSIGNED_SIZE_TO_DECIMAL: {
+                usize const value = va_arg(args, usize);
+                struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(usize, STRING_TYPE()))(&value);
+                for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
+                    STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
+                }
+                STRING_METHOD(destroy_at)(&result);
+            } break;
             case SIGNED_INTEGER_TO_DECIMAL: {
                 int const value = va_arg(args, int);
                 struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(int, STRING_TYPE()))(&value);
+                for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
+                    STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
+                }
+                STRING_METHOD(destroy_at)(&result);
+            } break;
+            case DOUBLE: {
+                double const value = va_arg(args, double);
+                struct STRING_TYPE() result = NAMESPACE_UTILS_STRING(CONVERT(double, STRING_TYPE()))(&value);
                 for (uint index = 0u; index < STRING_METHOD(size)(&result); ++index) {
                     STRING_METHOD(push_back)(&formatted_string, STRING_METHOD(at)(&result, index));
                 }
