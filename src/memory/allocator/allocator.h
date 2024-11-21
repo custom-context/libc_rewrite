@@ -105,7 +105,7 @@ COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     usize count_of_elements) {\
     UNUSED(this);\
-    return NAMESPACE_MEMORY_NATIVE(malloc)(count_of_elements * sizeof(TYPE));\
+    return NAMESPACE_MEMORY_NATIVE(aligned_alloc)(ALIGNOF(TYPE), count_of_elements * sizeof(TYPE));\
 }\
 COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
@@ -113,7 +113,7 @@ COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     usize count_of_elements) {\
     UNUSED(this);\
     UNUSED(count_of_elements);\
-    NAMESPACE_MEMORY_NATIVE(free)(elements_buffer);\
+    NAMESPACE_MEMORY_NATIVE(aligned_free)(elements_buffer);\
 }\
 COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
@@ -122,7 +122,7 @@ COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     usize new_count_of_elements) {\
     UNUSED(this);\
     UNUSED(count_of_elements);\
-    return NAMESPACE_MEMORY_NATIVE(realloc)(elements_buffer, new_count_of_elements * sizeof(TYPE));\
+    return NAMESPACE_MEMORY_NATIVE(aligned_realloc)(elements_buffer, ALIGNOF(TYPE), new_count_of_elements * sizeof(TYPE));\
 }
 
 #define DEFINE_DEFAULT_ALLOCATOR_METHODS(TYPE) DEFINE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(static, TYPE)
