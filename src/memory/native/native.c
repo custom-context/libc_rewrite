@@ -39,7 +39,9 @@ void NAMESPACE_MEMORY_NATIVE(free)(void* pointer) {
         }
         // else allocate new chunk, copy data & free previous chunk
         void* const new_aligned_storage = NAMESPACE_MEMORY_NATIVE(aligned_alloc)(alignment, new_size);
-        memcpy(new_aligned_storage, reallocated_storage, new_size);
+        if (new_aligned_storage) {
+            memcpy(new_aligned_storage, reallocated_storage, new_size);
+        }
         NAMESPACE_MEMORY_NATIVE(aligned_free)(reallocated_storage);
         return new_aligned_storage;
     }
