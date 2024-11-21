@@ -13,3 +13,5 @@ ALIAS_SIGNED_TYPE_T_AS_TYPE_AND_UNSIGNED_TYPE(intptr);
 
 typedef size_t usize;
 typedef ptrdiff_t ptrdiff;
+
+typedef void* voidptr;

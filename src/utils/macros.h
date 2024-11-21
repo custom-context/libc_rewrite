@@ -290,8 +290,32 @@ struct STRUCT_NAME/*const*/ INTERFACE_VARIABLE(STRUCT_NAME)
 	#define ASSERT(EXPR) UNUSED(EXPR)
 #endif
 
-#define STATIC_ASSERT(EXPR)\
-_Static_assert(EXPR, "("#EXPR")")
 
-#define STATIC_ASSERT_WITH_MESSAGE(EXPR, MSG)\
-_Static_assert(EXPR, MSG)
+#define SIZEOF(EXPR)\
+sizeof(EXPR)
+
+#if __STDC_VERSION__ < 202311L
+    #define STATIC_ASSERT(EXPR)\
+    _Static_assert(EXPR, "("#EXPR")")
+
+    #define STATIC_ASSERT_WITH_MESSAGE(EXPR, MSG)\
+    _Static_assert(EXPR, MSG)
+
+    #define ALIGNOF(EXPR)\
+    _Alignof(EXPR)
+
+    #define ALIGNAS(EXPR)\
+    _Alignas(EXPR)
+#else
+    #define STATIC_ASSERT(EXPR)\
+    static_assert(EXPR, "("#EXPR")")
+
+    #define STATIC_ASSERT_WITH_MESSAGE(EXPR, MSG)\
+    static_assert(EXPR, MSG)
+
+    #define ALIGNOF(EXPR)\
+    alignof(EXPR)
+
+    #define ALIGNAS(EXPR)\
+    alignas(EXPR)
+#endif

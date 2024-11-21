@@ -14,7 +14,8 @@ if(WIN32)
         -Wall
         -Werror
         -Wno-unused-function
-        -Wno-c2x-compat # prevents boolean keywords compatibility error
+        # -Wno-c2x-compat # prevents boolean keywords compatibility error
+        -Wno-c++98-compat # project use aligof
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -Wno-switch-enum
