@@ -74,6 +74,7 @@ set(TESTS_LIST
     optional
     array
     string_view
+    dynamic_array_storage
     dynamic_array
     rb_tree_set
     rb_tree_map
