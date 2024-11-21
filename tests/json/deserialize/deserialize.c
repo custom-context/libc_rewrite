@@ -21,7 +21,7 @@ IMPLEMENT_TYPE_TESTS(json_deserialize) {
 
         CHECK(DeserializationResultMethod(has_value)(&deserialized_json_value_result));
 
-        struct JSON_VALUE_TYPE()* const pdeserialized_json_value =
+        struct JSON_VALUE_TYPE() const* const pdeserialized_json_value =
             DeserializationResultMethod(value)(&deserialized_json_value_result);
 
         // serialize deserialized json value
@@ -49,7 +49,7 @@ IMPLEMENT_TYPE_TESTS(json_deserialize) {
 
         CHECK(DeserializationResultMethod(has_value)(&deserialized_json_value_result));
 
-        struct JSON_VALUE_TYPE()* const pdeserialized_json_value =
+        struct JSON_VALUE_TYPE() const* const pdeserialized_json_value =
             DeserializationResultMethod(value)(&deserialized_json_value_result);
 
         // serialize deserialized json value
@@ -77,7 +77,7 @@ IMPLEMENT_TYPE_TESTS(json_deserialize) {
 
         CHECK(DeserializationResultMethod(has_value)(&deserialized_json_value_result));
 
-        struct JSON_VALUE_TYPE()* const pdeserialized_json_value =
+        struct JSON_VALUE_TYPE() const* const pdeserialized_json_value =
             DeserializationResultMethod(value)(&deserialized_json_value_result);
 
         // serialize deserialized json value
@@ -106,7 +106,7 @@ IMPLEMENT_TYPE_TESTS(json_deserialize) {
 
         CHECK(DeserializationResultMethod(has_value)(&deserialized_json_value_result));
 
-        struct JSON_VALUE_TYPE()* const pdeserialized_json_value =
+        struct JSON_VALUE_TYPE() const* const pdeserialized_json_value =
             DeserializationResultMethod(value)(&deserialized_json_value_result);
 
         // serialize deserialized json value
@@ -136,13 +136,13 @@ IMPLEMENT_TYPE_TESTS(json_deserialize) {
 
         CHECK(DeserializationResultMethod(has_value)(&deserialized_json_value_result));
         if (!DeserializationResultMethod(has_value)(&deserialized_json_value_result)) {
-            struct JSON_DESERIALIZATION_ERROR_TYPE()* const perror = DeserializationResultMethod(error)(&deserialized_json_value_result);
+            struct JSON_DESERIALIZATION_ERROR_TYPE() const* const perror = DeserializationResultMethod(error)(&deserialized_json_value_result);
             struct CSTRING_VIEW_TYPE() message = JSON_DESERIALIZATION_ERROR_METHOD(message)(perror);
             LOG_DEBUG_FORMAT("%s\n", message.buffer);
             CSTRING_VIEW_METHOD(destroy_at)(&message);
         }
 
-        struct JSON_VALUE_TYPE()* const pdeserialized_json_value =
+        struct JSON_VALUE_TYPE() const* const pdeserialized_json_value =
             DeserializationResultMethod(value)(&deserialized_json_value_result);
 
         // serialize deserialized json value

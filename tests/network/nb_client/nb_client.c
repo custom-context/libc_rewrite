@@ -2,7 +2,7 @@
 #include <network/nb_client/nb_client.h>
 #include <errno.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
+DEFINE_RESULT_STATIC_METHODS(int, int)
 
 IMPLEMENT_TYPE_TESTS(nb_client) {
 #if defined(WIN32)

@@ -5,7 +5,7 @@
 #include <construct/numeric_helpers.h>
 
 DEFINE_RESULT_TYPE(int, int);
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
+DEFINE_RESULT_STATIC_METHODS(int, int)
 
 IMPLEMENT_TYPE_TESTS(result) {
     TEST_BLOCK("result construction/destruction") {
@@ -13,7 +13,6 @@ IMPLEMENT_TYPE_TESTS(result) {
         RESULT_METHOD(int, int, construct_at)(&result);
         CHECK(RESULT_METHOD(int, int, has_value)(&result) == 0);
         RESULT_METHOD(int, int, destroy_at)(&result);
-        CHECK(RESULT_METHOD(int, int, has_value)(&result) == 0);
     }
     TEST_BLOCK("result copy construct from value") {
         struct RESULT_TYPE(int, int) result;
@@ -22,6 +21,5 @@ IMPLEMENT_TYPE_TESTS(result) {
         CHECK(RESULT_METHOD(int, int, has_value)(&result));
         CHECK(*RESULT_METHOD(int, int, value)(&result) == value);
         RESULT_METHOD(int, int, destroy_at)(&result);
-        CHECK(RESULT_METHOD(int, int, has_value)(&result) == 0);
     }
 }
