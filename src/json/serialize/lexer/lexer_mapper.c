@@ -34,7 +34,7 @@ void JSON_LEXER_TOKEN_METHOD(PRIVATE(initialize_token_mapping_table))(void) {
         try_map_lexeme_to_token_mapping[separators_literals[i]] = &try_parse_separator_literal;
     }
 
-    unsigned char const whitespaces_literals[] = {' ', '\t', '\n'};
+    unsigned char const whitespaces_literals[] = {' ', '\r', '\t', '\n'};
     for (usize i = 0u; i < sizeof(whitespaces_literals) / sizeof(*whitespaces_literals); ++i) {
         try_map_lexeme_to_token_mapping[whitespaces_literals[i]] = &try_parse_whitespace_literal;
     }
@@ -116,6 +116,7 @@ static struct OPTIONAL_TYPE(JSON_LEXER_TOKEN_TYPE()) try_parse_whitespace_litera
             OPTIONAL_METHOD(JSON_LEXER_TOKEN_TYPE(), assign_move_from_value_at)(&result, &token);
             *count_read_bytes = 1u;
         } break;
+        default: break;
     }
 
     JSON_LEXER_TOKEN_METHOD(destroy_at)(&token);
