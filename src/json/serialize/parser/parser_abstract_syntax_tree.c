@@ -59,6 +59,26 @@ struct JSON_PARSER_AST_ITERATOR_TYPE()
     return result;
 }
 
+static void try_construct_node_by_expression_type(
+    enum JSON_PARSER_EXPRESSION_ENUM_TYPE() const expression_type,
+    struct JSON_PARSER_AST_NODE_TYPE()* const pnode,
+    struct JSON_PARSER_AST_NODE_TYPE()* const pparent_node,
+    struct JSON_LEXER_TOKEN_TYPE()* const ptoken) {
+    switch (expression_type) {
+        case JSON_PARSER_EXPRESSION_ENUM_VALUE(VALUE_TERMINAL): {
+            // construct node using iterator's node as parent node & token pointer
+            JSON_PARSER_AST_NODE_METHOD(PRIVATE(construct_move_from_token_at))(pnode, pparent_node, expression_type, ptoken);
+        } return;
+        case JSON_PARSER_EXPRESSION_ENUM_VALUE(ARRAY_EXPRESSION):
+        case JSON_PARSER_EXPRESSION_ENUM_VALUE(OBJECT_EXPRESSION):
+        case JSON_PARSER_EXPRESSION_ENUM_VALUE(KEY_VALUE_EXPRESSION): {
+            // construct node using iterator's node as parent node
+            JSON_PARSER_AST_NODE_METHOD(PRIVATE(construct_at))(pnode, pparent_node, expression_type);
+        } return;
+    }
+    ASSERT(false && "Unhandled expression type");        
+}
+
 struct JSON_PARSER_AST_ITERATOR_TYPE()
     JSON_PARSER_AST_METHOD(push_move_token_by_iterator)(
         struct JSON_PARSER_AST_TYPE()* const this,
@@ -78,22 +98,7 @@ struct JSON_PARSER_AST_ITERATOR_TYPE()
     struct JSON_PARSER_AST_NODE_TYPE()* parent_node = JSON_PARSER_AST_ITERATOR_METHOD(mut_value)(iterator);
 
     struct JSON_PARSER_AST_NODE_TYPE() node;
-    switch (expression_type) {
-        case JSON_PARSER_EXPRESSION_ENUM_VALUE(VALUE_TERMINAL): {
-            // construct node using iterator's node as parent node & token pointer
-            JSON_PARSER_AST_NODE_METHOD(PRIVATE(construct_move_from_token_at))(&node, parent_node, expression_type, token);
-        } break;
-        case JSON_PARSER_EXPRESSION_ENUM_VALUE(ARRAY_EXPRESSION):
-        case JSON_PARSER_EXPRESSION_ENUM_VALUE(OBJECT_EXPRESSION):
-        case JSON_PARSER_EXPRESSION_ENUM_VALUE(KEY_VALUE_EXPRESSION): {
-            // construct node using iterator's node as parent node
-            JSON_PARSER_AST_NODE_METHOD(PRIVATE(construct_at))(&node, parent_node, expression_type);
-        } break;
-        default: {
-            // error
-            ASSERT(false && "Unhandled expression type"); 
-        } break;
-    }
+    try_construct_node_by_expression_type(expression_type, &node, parent_node, token);
 
     struct JSON_PARSER_AST_NODE_TYPE()* target_node;
     if (!this->root) {
@@ -350,11 +355,10 @@ struct JSON_VALUE_TYPE() JSON_PARSER_AST_NODE_METHOD(PRIVATE(shrink_to_value))(s
             // error
             ASSERT(false);
         } break;
-        default: {
-            // error
-            ASSERT(false && "Unhandled expression type"); 
-        } break;
     }
+
+    // error
+    ASSERT(false && "Unhandled expression type"); 
 
     struct JSON_VALUE_TYPE() result;
     JSON_VALUE_METHOD(construct_at)(&result);
