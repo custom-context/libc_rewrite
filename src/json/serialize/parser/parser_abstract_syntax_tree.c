@@ -89,6 +89,10 @@ struct JSON_PARSER_AST_ITERATOR_TYPE()
             // construct node using iterator's node as parent node
             JSON_PARSER_AST_NODE_METHOD(PRIVATE(construct_at))(&node, parent_node, expression_type);
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled expression type"); 
+        } break;
     }
 
     struct JSON_PARSER_AST_NODE_TYPE()* target_node;
@@ -269,7 +273,7 @@ struct JSON_VALUE_TYPE() JSON_PARSER_AST_NODE_METHOD(PRIVATE(shrink_to_value))(s
                     JSON_VALUE_METHOD(construct_move_from_value_at)(&result, &this->token.string);
                     return result;
                 }
-                default:  {
+                default: {
                     // error
                     ASSERT(false);
                 } break;
@@ -345,6 +349,10 @@ struct JSON_VALUE_TYPE() JSON_PARSER_AST_NODE_METHOD(PRIVATE(shrink_to_value))(s
         case JSON_PARSER_EXPRESSION_ENUM_VALUE(KEY_VALUE_EXPRESSION): {
             // error
             ASSERT(false);
+        } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled expression type"); 
         } break;
     }
 
