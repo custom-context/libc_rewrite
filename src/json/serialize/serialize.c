@@ -3,8 +3,6 @@
 #include "parser/parser.h"
 #include "lexer/lexer.h"
 
-DEFINE_RESULT_TYPE_METHODS_WITH_COMMON_MODIFIER(,JSON_VALUE_TYPE(), JSON_DESERIALIZATION_ERROR_TYPE())
-
 struct STRING_TYPE() NAMESPACE_JSON(serialize)(struct JSON_VALUE_TYPE() const* const json) {
     return NAMESPACE_UTILS_STRING(CONVERT(JSON_VALUE_TYPE(), STRING_TYPE()))(json);
 }
@@ -46,7 +44,7 @@ struct DESERIALIZER_RESULT_TYPE() NAMESPACE_JSON(deserialize)(struct CSTRING_VIE
         }
 
         // [construct] `parser_error` is a raw copy and must be destructed at the end
-        parser_error = JSON_PARSER_METHOD(push_move_token)(&parser, LEXER_RESULT_METHOD(value)(&token_or_error));
+        parser_error = JSON_PARSER_METHOD(push_move_token)(&parser, LEXER_RESULT_METHOD(mut_value)(&token_or_error));
         if (OPTIONAL_METHOD(JSON_PARSER_ERROR_TYPE(), has_value)(&parser_error)) {
             TYPE_METHOD(JSON_DESERIALIZATION_ERROR_TYPE(), construct_from_parser_error_at)(
                 &deserialization_error,

@@ -5,7 +5,7 @@
 
 #include <utils/string/helpers.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
+DEFINE_RESULT_STATIC_METHODS(int, int)
 
 #if defined(WIN32)
     #include <WS2tcpip.h>

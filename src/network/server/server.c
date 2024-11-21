@@ -6,7 +6,7 @@
     #include <netdb.h>
 #endif
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
+DEFINE_RESULT_STATIC_METHODS(int, int)
 
 // connection's private method that opened for server class only 
 static struct CONNECTION_TYPE()* CONNECTION_METHOD(construct_move_from_socket_at)(struct CONNECTION_TYPE()* const this, struct SOCKET_TYPE()* const socket) {

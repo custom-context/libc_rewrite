@@ -6,7 +6,7 @@
 
 #include <utils/debug.h>
 
-DEFINE_RESULT_TYPE_STATIC_METHODS(int, int)
+DEFINE_RESULT_STATIC_METHODS(int, int)
 
 int CONNECTION_METHOD(is_established)(struct CONNECTION_TYPE() const* const this) {
     return SOCKET_METHOD(is_valid)(&this->socket);

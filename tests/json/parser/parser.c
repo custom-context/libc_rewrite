@@ -8,6 +8,8 @@
 #include <primitives/limits.h>
 #include <utils/format.h>
 
+#define TOKEN_OR_ERROR_METHOD(METHOD) RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), METHOD)
+
 IMPLEMENT_TYPE_TESTS(json_parser) {
     TEST_BLOCK("check base json value deserialization (from empty object)") {
         char const target_raw_string[] = "{}";
@@ -25,27 +27,27 @@ IMPLEMENT_TYPE_TESTS(json_parser) {
 
         { // '{' // JSON_LEXER_TOKEN_ENUM_VALUE(OBJECT_BEGIN)
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
-            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), value)(&token_or_error);
+            CHECK(TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
+            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = TOKEN_OR_ERROR_METHOD(mut_value)(&token_or_error);
             CHECK(ptoken->token_type == JSON_LEXER_TOKEN_ENUM_VALUE(OBJECT_BEGIN));
             parser_error_opt = JSON_PARSER_METHOD(push_move_token)(&parser, ptoken);
             CHECK(!OPTIONAL_METHOD(JSON_PARSER_ERROR_TYPE(), has_value)(&parser_error_opt));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
         { // '}' // JSON_LEXER_TOKEN_ENUM_VALUE(OBJECT_END)
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
-            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), value)(&token_or_error);
+            CHECK(TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
+            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = TOKEN_OR_ERROR_METHOD(mut_value)(&token_or_error);
             CHECK(ptoken->token_type == JSON_LEXER_TOKEN_ENUM_VALUE(OBJECT_END));
             parser_error_opt = JSON_PARSER_METHOD(push_move_token)(&parser, ptoken);
             CHECK(!OPTIONAL_METHOD(JSON_PARSER_ERROR_TYPE(), has_value)(&parser_error_opt));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
         { // end of sequence
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(!RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
+            CHECK(!TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
             CHECK(JSON_LEXER_METHOD(are_equals)(&lexer, &lexer_end));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
 
         struct JSON_PARSER_AST_TYPE()* pastree = JSON_PARSER_METHOD(mut_abstract_syntax_tree)(&parser);
@@ -79,27 +81,27 @@ IMPLEMENT_TYPE_TESTS(json_parser) {
 
         { // '[' // JSON_LEXER_TOKEN_ENUM_VALUE(ARRAY_BEGIN)
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
-            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), value)(&token_or_error);
+            CHECK(TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
+            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = TOKEN_OR_ERROR_METHOD(mut_value)(&token_or_error);
             CHECK(ptoken->token_type == JSON_LEXER_TOKEN_ENUM_VALUE(ARRAY_BEGIN));
             parser_error_opt = JSON_PARSER_METHOD(push_move_token)(&parser, ptoken);
             CHECK(!OPTIONAL_METHOD(JSON_PARSER_ERROR_TYPE(), has_value)(&parser_error_opt));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
         { // ']' // JSON_LEXER_TOKEN_ENUM_VALUE(ARRAY_END)
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
-            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), value)(&token_or_error);
+            CHECK(TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
+            struct JSON_LEXER_TOKEN_TYPE()* const ptoken = TOKEN_OR_ERROR_METHOD(mut_value)(&token_or_error);
             CHECK(ptoken->token_type == JSON_LEXER_TOKEN_ENUM_VALUE(ARRAY_END));
             parser_error_opt = JSON_PARSER_METHOD(push_move_token)(&parser, ptoken);
             CHECK(!OPTIONAL_METHOD(JSON_PARSER_ERROR_TYPE(), has_value)(&parser_error_opt));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
         { // end of sequence
             token_or_error = JSON_LEXER_METHOD(get_next_token)(&lexer);
-            CHECK(!RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), has_value)(&token_or_error));
+            CHECK(!TOKEN_OR_ERROR_METHOD(has_value)(&token_or_error));
             CHECK(JSON_LEXER_METHOD(are_equals)(&lexer, &lexer_end));
-            RESULT_METHOD(JSON_LEXER_TOKEN_TYPE(), JSON_LEXER_ERROR_TYPE(), destroy_at)(&token_or_error);
+            TOKEN_OR_ERROR_METHOD(destroy_at)(&token_or_error);
         }
 
         struct JSON_PARSER_AST_TYPE()* pastree = JSON_PARSER_METHOD(mut_abstract_syntax_tree)(&parser);
