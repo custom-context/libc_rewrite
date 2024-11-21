@@ -24,6 +24,33 @@
 #define NOT_NULL(NAME) CONCAT3(not_null, __, NAME)
 #define UNUSED(NAME) (void)(NAME)
 
+// structs' default lifecycle methods
+#define DECLARE_DEFAULT_LIFECYCLE_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, construct_at)(TYPE* const this);\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, construct_copy_at)(TYPE* const this, TYPE const* const src);\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, construct_move_at)(TYPE* const this, TYPE* const src);\
+    MODIFIER void* TYPE_METHOD(TYPE, destroy_at)(TYPE* const this);\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, assign_copy_at)(TYPE* const this, TYPE const* const src);\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, assign_move_at)(TYPE* const this, TYPE* const src);\
+    MODIFIER void TYPE_METHOD(TYPE, swap)(TYPE* const this, TYPE* const src)
+
+// structs' default assignment methods
+#define DEFINE_DEFAULT_ASSIGNMENT_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, assign_copy_at)(TYPE* const this, TYPE const* const src) {\
+        TYPE temporary;\
+        TYPE_METHOD(TYPE, construct_copy_at)(&temporary, src);\
+        TYPE_METHOD(TYPE, swap)(this, &temporary);\
+        TYPE_METHOD(TYPE, destroy_at)(&temporary);\
+        return this;\
+    }\
+    MODIFIER TYPE* TYPE_METHOD(TYPE, assign_move_at)(TYPE* const this, TYPE* const src) {\
+        TYPE temporary;\
+        TYPE_METHOD(TYPE, construct_move_at)(&temporary, src);\
+        TYPE_METHOD(TYPE, swap)(this, &temporary);\
+        TYPE_METHOD(TYPE, destroy_at)(&temporary);\
+        return this;\
+    }
+
 // struct's subtype definition helpers
 #define STRUCT_SUBTYPE(STRUCT_NAME, SUBTYPE_NAME) TYPE_MEMBER(STRUCT_NAME, SUBTYPE_NAME)
 #define DECLARE_STRUCT_SUBTYPE(STRUCT_NAME, SUBTYPE_NAME, SUBTYPE_TYPE)\
