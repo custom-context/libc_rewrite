@@ -66,10 +66,7 @@ static void
     struct int_atomically_increment_runnable_type* const this =
         ISTATIC_CAST(STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable)), int_atomically_increment_runnable_type)(base);
     /* --- method body --- */
-    int32 const value = ATOMIC_METHOD(int32, load_explicit)(&this->value, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE));
-    ATOMIC_METHOD(int32, store_explicit)(&this->value, value + 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELEASE));
+    ATOMIC_METHOD(int32, fetch_add_explicit)(&this->value, 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
 }
 
 // vtable definition
