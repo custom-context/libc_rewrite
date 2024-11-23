@@ -138,6 +138,6 @@ static char const* encoding_type_to_filename(UTF_ENCODING_ENUM() encoding) {
         case UTF_ENCODING_ENUM_VALUE(UTF16_BE): return "utf16_BE.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF16_LE): return "utf16_LE.txt";
         case UTF_ENCODING_ENUM_VALUE(UTF8): return "utf8.txt";
+        default: return NULL;
     }
-    return NULL;
 }

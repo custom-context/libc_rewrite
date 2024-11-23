@@ -18,7 +18,12 @@ target_include_directories(${PROJECT_NAME}
 )
 
 add_definitions(-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
-set_target_properties(${PROJECT_NAME} PROPERTIES C_STANDARD 17)
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+        C_STANDARD 17
+        C_STANDARD_REQUIRED ON
+        C_EXTENSIONS OFF
+)
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} wsock32 ws2_32)
@@ -27,9 +32,10 @@ if(WIN32)
         -Wall
         -Werror
         -Wno-unused-function
-        # -Wno-unsafe-buffer-usage # main function's argv array usage is trigger compile error
-        # -Wno-c2x-compat # prevents boolean keywords compatibility error
-        -Wno-c++98-compat # project use aligof
+        -Wno-unsafe-buffer-usage # main function's argv array usage is trigger compile error
+        -Wno-covered-switch-default # incompatible with `switch-default` warnings
+        -Wno-gnu-alignof-expression # confronts with _Alignof usage (that was added in C11)
+        -Wno-c++98-compat # project uses aligof
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -Wno-switch-enum

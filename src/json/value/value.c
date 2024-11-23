@@ -63,6 +63,10 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_copy_at)(struct JSON_VALUE
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, construct_copy_at)(&this->object, &source->object);
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled source enum value type");
+        } break;
     }
     this->type = source->type;
     return this;
@@ -87,6 +91,10 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_move_at)(struct JSON_VALUE
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, construct_move_at)(&this->object, &source->object);
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled source enum value type");
+        } break;
     }
     this->type = source->type;
     return this;
@@ -105,6 +113,10 @@ void* JSON_VALUE_METHOD(destroy_at)(struct JSON_VALUE_TYPE()* const this) {
         } break;
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, destroy_at)(&this->object);
+        } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
         } break;
     }
     return this;
@@ -129,6 +141,10 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(assign_copy_at)(struct JSON_VALUE_TY
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, assign_copy_at)(&this->object, &source->object);
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
+        } break;
     }
     this->type = source->type;
     return this;
@@ -152,6 +168,10 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(assign_move_at)(struct JSON_VALUE_TY
         } break;
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, assign_move_at)(&this->object, &source->object);
+        } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
         } break;
     }
     this->type = source->type; source->type = JSON_ENUM_VALUE(null);
@@ -181,6 +201,10 @@ void JSON_VALUE_METHOD(swap)(struct JSON_VALUE_TYPE()* const this, struct JSON_V
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, swap)(&this->object, &source->object);
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
+        } break;
     }
     {
         enum JSON_ENUM_TYPE() temporary = this->type;
@@ -208,6 +232,10 @@ struct JSON_VALUE_TYPE()* JSON_VALUE_METHOD(construct_from_type_at)(struct JSON_
         } break;
         case JSON_ENUM_VALUE(object): {
             TYPE_METHOD(JSON_OBJECT_TYPE, construct_at)(&this->object);
+        } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
         } break;
     }
     this->type = type;
@@ -480,6 +508,10 @@ struct STRING_TYPE() NAMESPACE_UTILS_STRING(CONVERT(JSON_VALUE_TYPE(), STRING_TY
                 break;
             }
             STRING_METHOD(push_back)(&result, &(STRUCT_SUBTYPE(STRING_TYPE(), char_type)){'}'});
+        } break;
+        default: {
+            // error
+            ASSERT(false && "Unhandled enum value type");
         } break;
     }
 
