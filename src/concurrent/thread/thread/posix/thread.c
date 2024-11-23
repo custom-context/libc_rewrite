@@ -13,9 +13,10 @@ struct THREAD_TYPE()* THREAD_METHOD(construct_at)(struct THREAD_TYPE()* const th
 }
 void THREAD_METHOD(swap)(struct THREAD_TYPE()* const this, struct THREAD_TYPE()* const source) {
     {
-        this->native_thread.native_handler ^= source->native_thread.native_handler;
-        source->native_thread.native_handler ^= this->native_thread.native_handler;
-        this->native_thread.native_handler ^= source->native_thread.native_handler;
+        STRUCT_SUBTYPE(NATIVE_THREAD_TYPE(), native_handler_type) temporary =
+            this->native_thread.native_handler;
+        this->native_thread.native_handler = source->native_thread.native_handler;
+        source->native_thread.native_handler = temporary;
     }
     STATIC_ASSERT(sizeof(bool) == sizeof(this->is_joinable));
     TYPE_METHOD(bool, swap)(&this->is_joinable, &source->is_joinable);
