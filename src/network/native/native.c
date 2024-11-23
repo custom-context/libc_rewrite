@@ -19,11 +19,13 @@ int NAMESPACE_NETWORK_NATIVE(get_native_domain)(enum SOCKET_DOMAIN_ENUM() domain
         return AF_INET;
     case SOCKET_DOMAIN_ENUM_VALUE(IPv6):
         return AF_INET6;
+#if !(defined(__APPLE__) && defined(__MACH__))
     case SOCKET_DOMAIN_ENUM_VALUE(BLUETOOTH):
-#if defined(WIN32)
+    #if defined(WIN32)
         return AF_BTH;
-#else
+    #else
         return AF_BLUETOOTH;
+    #endif
 #endif
     default: return AF_UNSPEC;
     }
@@ -40,12 +42,14 @@ enum SOCKET_DOMAIN_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_domain)(int nativ
             return SOCKET_DOMAIN_ENUM_VALUE(IPv4);
         case AF_INET6:
             return SOCKET_DOMAIN_ENUM_VALUE(IPv6);
-#if defined(WIN32)
+#if !(defined(__APPLE__) && defined(__MACH__))
+    #if defined(WIN32)
         case AF_BTH:
-#else
+    #else
         case AF_BLUETOOTH:
-#endif
+    #endif
             return SOCKET_DOMAIN_ENUM_VALUE(BLUETOOTH);
+#endif
         default:
             return SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED);
     }
