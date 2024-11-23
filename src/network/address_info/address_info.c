@@ -1,4 +1,4 @@
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
     #define _POSIX_C_SOURCE __STDC_VERSION__
 #endif
 
