@@ -1,6 +1,6 @@
 #include "native_thread.h"
 
-#include <concurrent/thread/native.h>
+#include <concurrent/thread/native/native.h>
 #include <primitives/atomic.h>
 
 static int int_increment(void* argument);
@@ -13,8 +13,8 @@ IMPLEMENT_TYPE_TESTS(native_thread) {
 
         int initial_value = 0;
 
-        NAMESPACE_CONCURRENT_NATIVE_THREAD(create_thread)(&thread, int_increment, (void*)&initial_value);
-        NAMESPACE_CONCURRENT_NATIVE_THREAD(thread_join)(thread, &initial_value);
+        NATIVE_THREAD_METHOD(thread_create)(&thread, int_increment, (void*)&initial_value);
+        NATIVE_THREAD_METHOD(thread_join)(&thread, &initial_value);
 
         CHECK(initial_value == 1);
     }
@@ -24,16 +24,20 @@ IMPLEMENT_TYPE_TESTS(native_thread) {
         };
         struct NATIVE_THREAD_TYPE() arr_threads[ARRAY_SIZE];
 
-        NATIVE_ATOMIC_TYPE(int32) initial_value = 0;
+        ATOMIC_TYPE(int32) atomic_value;
+        ATOMIC_METHOD(int32, construct_at)(&atomic_value);
+
         for (usize i = 0; i < ARRAY_SIZE; ++i) {
-            NAMESPACE_CONCURRENT_NATIVE_THREAD(create_thread)(&arr_threads[i], int_atomic_increment, (void*)&initial_value);
+            NATIVE_THREAD_METHOD(thread_create)(&arr_threads[i], int_atomic_increment, (void*)&atomic_value);
         }
 
         for (usize i = 0; i < ARRAY_SIZE; ++i) {
-            NAMESPACE_CONCURRENT_NATIVE_THREAD(thread_join)(arr_threads[i], NULL);
+            NATIVE_THREAD_METHOD(thread_join)(&arr_threads[i], NULL);
         }
 
-        CHECK(atomic_load_explicit(&initial_value, memory_order_relaxed) == ARRAY_SIZE);
+        CHECK(ATOMIC_METHOD(int32, load_explicit)(&atomic_value, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED)) == ARRAY_SIZE);
+
+        ATOMIC_METHOD(int32, destroy_at)(&atomic_value);
     }
 }
 
@@ -43,10 +47,10 @@ static int int_increment(void* argument) {
 }
 
 static int int_atomic_increment(void* argument) {
-    NATIVE_ATOMIC_TYPE(int32)* const atomic_int_pointer = (NATIVE_ATOMIC_TYPE(int32)*)(argument);
-    int32 value = atomic_load_explicit(atomic_int_pointer, memory_order_relaxed);
-    atomic_thread_fence(memory_order_acquire);
-    atomic_store_explicit(atomic_int_pointer, value + 1, memory_order_relaxed);
-    atomic_thread_fence(memory_order_release);
-    return value + 1;
+    ATOMIC_TYPE(int32)* const patomic_int = (ATOMIC_TYPE(int32)*)(argument);
+    int32 const value = ATOMIC_METHOD(int32, load_explicit)(patomic_int, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
+    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE));
+    ATOMIC_METHOD(int32, store_explicit)(patomic_int, value + 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
+    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELEASE));
+    return 0;
 }

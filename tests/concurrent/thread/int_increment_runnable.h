@@ -69,6 +69,6 @@ static void
 
 DECLARE_CONTAINER_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(static, int_increment_runnable_type, STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable))) = {
     .destroy_at = TYPE_METHOD(int_increment_runnable_type, VTABLE_MEMBER(destroy_at)),
-    .delete_at = NULL,
+    .free_at = NULL,
     .run = TYPE_METHOD(int_increment_runnable_type, VTABLE_MEMBER(run))
 };

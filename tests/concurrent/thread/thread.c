@@ -33,7 +33,7 @@ IMPLEMENT_TYPE_TESTS(thread) {
         int_atomically_increment_runnable_type int_atomically_increment_runnable;
         TYPE_METHOD(int_atomically_increment_runnable_type, construct_at)(&int_atomically_increment_runnable);
         CHECK(ATOMIC_METHOD(int32, load_explicit)(&int_atomically_increment_runnable.value,
-            ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed)) == 0);
+            ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED)) == 0);
 
         for (usize i = 0; i < ARRAY_SIZE; ++i) {
             THREAD_METHOD(construct_from_runnable_at)(&arr_threads[i],
@@ -47,7 +47,7 @@ IMPLEMENT_TYPE_TESTS(thread) {
         }
 
         CHECK(ATOMIC_METHOD(int32, load_explicit)(&int_atomically_increment_runnable.value,
-            ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed)) == ARRAY_SIZE);
+            ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED)) == ARRAY_SIZE);
 
         for (usize i = 0; i < ARRAY_SIZE; ++i) {
             THREAD_METHOD(destroy_at)(&arr_threads[i]);
