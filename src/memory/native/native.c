@@ -2,7 +2,6 @@
 
 #include <utils/macros.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 
 void* NAMESPACE_MEMORY_NATIVE(malloc)(usize size) {
@@ -18,6 +17,7 @@ void NAMESPACE_MEMORY_NATIVE(free)(void* pointer) {
 }
 
 #if defined(_WIN32)
+    #include <malloc.h>
     void* NAMESPACE_MEMORY_NATIVE(aligned_alloc)(usize alignment, usize size) {
         return _aligned_malloc(size, alignment);
     }
@@ -28,9 +28,24 @@ void NAMESPACE_MEMORY_NATIVE(free)(void* pointer) {
         _aligned_free(pointer);
     }
 #else
+#if defined(__APPLE__) && defined(__MACH__)
+    void* NAMESPACE_MEMORY_NATIVE(aligned_alloc)(usize alignment, usize size) {
+        void* result;
+        // memalign alignment rules:
+        // 1. alignment must be power of 2 (1 << X)
+        // 2. alignment must be greater or equal to sizeof(void*)
+        if (posix_memalign(&result, alignment > sizeof(void*) ? alignment : sizeof(void*), size)) {
+            NAMESPACE_MEMORY_NATIVE(aligned_free)(result);
+            return NULL;
+        }
+        return result;
+    }
+#else
+    #include <malloc.h>
     void* NAMESPACE_MEMORY_NATIVE(aligned_alloc)(usize alignment, usize size) {
         return memalign(alignment, size);
     }
+#endif
     void* NAMESPACE_MEMORY_NATIVE(aligned_realloc)(void* pointer, usize alignment, usize new_size) {
         void* const reallocated_storage = realloc(pointer, new_size);
         // if reallocated memory is NULL or it has the same alignment => return it
