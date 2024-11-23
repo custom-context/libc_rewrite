@@ -1,3 +1,7 @@
+#if defined(__unix__)
+    #define _POSIX_C_SOURCE __STDC_VERSION__
+#endif
+
 #include "address_info.h"
 
 #include <network/native/native.h>

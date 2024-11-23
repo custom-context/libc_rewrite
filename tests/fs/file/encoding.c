@@ -21,7 +21,7 @@ typedef struct OPTIONAL_ENCODING_TYPE {
 static struct OPTIONAL_ENCODING_TYPE get_file_encoding(
     char const* const TYPE_NAME,
     char const* const TEST_BLOCK_NAME,
-    usize* const TEST_BLOCK_COUNTER_PTR,
+    unsigned* const TEST_BLOCK_COUNTER_PTR,
     //
     char const filename[const]);
 
@@ -81,10 +81,10 @@ IMPLEMENT_TYPE_TESTS(encoding) {
 static struct OPTIONAL_ENCODING_TYPE get_file_encoding(
     char const* const TYPE_NAME,
     char const* const TEST_BLOCK_NAME,
-    usize* const TEST_BLOCK_COUNTER_PTR,
+    unsigned* const TEST_BLOCK_COUNTER_PTR,
     //
     char const filename[const]) {
-    usize TEST_BLOCK_COUNTER = *TEST_BLOCK_COUNTER_PTR;
+    unsigned TEST_BLOCK_COUNTER = *TEST_BLOCK_COUNTER_PTR;
 
 #if defined(_WIN32)
     HANDLE file_handler =

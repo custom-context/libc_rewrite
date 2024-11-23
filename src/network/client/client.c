@@ -1,9 +1,13 @@
+#if defined(__unix__)
+    #define _POSIX_C_SOURCE __STDC_VERSION__
+#endif
+
 #include "client_inheritance.h"
 #include "client.h"
 
 #include <network/native/native.h>
 
-#if !defined(WIN32)
+#if defined(__unix__)
     #include <errno.h>
     #include <netdb.h>
 #endif

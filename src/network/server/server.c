@@ -1,7 +1,11 @@
+#if defined(__unix__)
+    #define _POSIX_C_SOURCE __STDC_VERSION__
+#endif
+
 #include "server.h"
 #include "server_inheritance.h"
 
-#if !defined(WIN32)
+#if defined(__unix__)
     #include <errno.h>
     #include <netdb.h>
 #endif
@@ -52,10 +56,21 @@ struct SERVER_TYPE()* SERVER_METHOD(bind)(struct SERVER_TYPE()* const this,
 ) {
     ADDRESS_INFO_METHOD(destroy_at)(&this->address_info);
 
+    struct ADDRESS_INFO_CRITERIAS_TYPE() local_address_info_criterias = { 0 };
+
+    if (address_info_criterias) {
+        local_address_info_criterias.native_extra_flags = address_info_criterias->native_extra_flags;
+        local_address_info_criterias.socket_domain = address_info_criterias->socket_domain;
+        local_address_info_criterias.socket_protocol = address_info_criterias->socket_protocol;
+        local_address_info_criterias.socket_type = address_info_criterias->socket_type;
+    }
+
+    local_address_info_criterias.native_extra_flags |= AI_PASSIVE;
+
     ADDRESS_INFO_METHOD(construct_with_fetch_at)(&this->address_info,
         host,
         service,
-        address_info_criterias
+        address_info_criterias ? &local_address_info_criterias : NULL
     );
 
     return SERVER_METHOD(rebind)(this);

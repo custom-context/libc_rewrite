@@ -2,6 +2,7 @@
 
 #include <concurrent/thread/thread.h>
 #include <tests/utils/macros.h>
+#include <primitives/data_model_types_aliases.h>
 
 typedef struct int_increment_runnable_type {
     struct STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable)) INTERFACE_VARIABLE(STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable)));

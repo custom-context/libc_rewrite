@@ -8,7 +8,6 @@
 #if defined(WIN32)
     #include <ws2def.h>
     #include <ws2ipdef.h>
-#else
 #endif
 
 #define NAMESPACE_NETWORK_ADDRESS_INFO(NAME) NAMESPACE_NETWORK(CONCAT3(address_info, __, NAME))
@@ -19,7 +18,7 @@ typedef struct ADDRESS_INFO_CRITERIAS_TYPE() {
     SOCKET_DOMAIN_ENUM() socket_domain;
     SOCKET_TYPE_ENUM() socket_type;
     SOCKET_PROTOCOL_TYPE() socket_protocol;
-    int native_extra_flags; 
+    int native_extra_flags;
 } ADDRESS_INFO_CRITERIAS_TYPE();
 
 // Address info
