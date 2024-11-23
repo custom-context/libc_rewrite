@@ -12,8 +12,18 @@ set_target_properties(${PROJECT_NAME}
         C_EXTENSIONS OFF
 )
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_RULE_MESSAGES OFF)
+
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} wsock32 ws2_32)
+elseif(APPLE)
+    target_link_options(${PROJECT_NAME} PRIVATE -lpthread -lm)
+else()
+    target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread -lm)
+endif()
+
+if(WIN32)
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wpedantic
         -Wall
@@ -28,7 +38,6 @@ if(WIN32)
         -Wno-switch-enum
         -fmacro-backtrace-limit=0)
 else()
-    target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread -lm)
     target_compile_options(${PROJECT_NAME} PRIVATE
         -pedantic
         -Wall
