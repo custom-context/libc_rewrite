@@ -1,5 +1,6 @@
 target_sources(${PROJECT_NAME}
     PRIVATE
+        macros.c
         macros.h
 )
 add_subdirectory(string)

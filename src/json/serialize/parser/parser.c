@@ -305,6 +305,10 @@ struct OPTIONAL_TYPE(JSON_PARSER_ERROR_TYPE())
                 default: return create_error_opt(token);
             }
         } break;
+        default: {
+            // error
+            ASSERT(false && "Unnhadled parse state");
+        }
     }
     
     struct OPTIONAL_TYPE(JSON_PARSER_ERROR_TYPE()) result;

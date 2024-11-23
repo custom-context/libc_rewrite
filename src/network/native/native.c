@@ -25,8 +25,8 @@ int NAMESPACE_NETWORK_NATIVE(get_native_domain)(enum SOCKET_DOMAIN_ENUM() domain
 #else
         return AF_BLUETOOTH;
 #endif
+    default: return AF_UNSPEC;
     }
-    return AF_UNSPEC;
 }
 enum SOCKET_DOMAIN_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_domain)(int native_domain) {
     switch (native_domain) {
@@ -46,9 +46,9 @@ enum SOCKET_DOMAIN_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_domain)(int nativ
         case AF_BLUETOOTH:
 #endif
             return SOCKET_DOMAIN_ENUM_VALUE(BLUETOOTH);
+        default:
+            return SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED);
     }
-
-    return SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED);
 }
 
 int NAMESPACE_NETWORK_NATIVE(get_native_socket_type)(enum SOCKET_TYPE_ENUM() socket_type) {
@@ -58,6 +58,7 @@ int NAMESPACE_NETWORK_NATIVE(get_native_socket_type)(enum SOCKET_TYPE_ENUM() soc
         case SOCKET_TYPE_ENUM_VALUE(RAW): return SOCK_RAW;
         case SOCKET_TYPE_ENUM_VALUE(RELIABLE_MESSAGE_DATAGRAM): return SOCK_RDM;
         case SOCKET_TYPE_ENUM_VALUE(SEQUENCE_PACKET): return SOCK_SEQPACKET;
+        default: return SOCK_STREAM;
     }
     // TODO: change to optional or error socket type
     return SOCK_STREAM;
@@ -69,7 +70,6 @@ enum SOCKET_TYPE_ENUM() NAMESPACE_NETWORK_NATIVE(get_wrapped_socket_type)(int na
         case SOCK_RAW: return SOCKET_TYPE_ENUM_VALUE(RAW);
         case SOCK_RDM: return SOCKET_TYPE_ENUM_VALUE(RELIABLE_MESSAGE_DATAGRAM);
         case SOCK_SEQPACKET: return SOCKET_TYPE_ENUM_VALUE(SEQUENCE_PACKET);
+        default: return SOCKET_TYPE_ENUM_VALUE(STREAM);
     }
-
-    return SOCKET_TYPE_ENUM_VALUE(STREAM);
 }

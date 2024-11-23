@@ -248,6 +248,10 @@ struct STRING_TYPE() NAMESPACE_UTILS(va_cformat)(char const* const format_string
                 }
                 STRING_METHOD(destroy_at)(&result);
             } break;
+            default: {
+                // error
+                ASSERT(false && "Unhandled pattern type");
+            } break;
         }
         format_string_index += CSTRING_VIEW_METHOD(size)(&ppattern->view);
     }
