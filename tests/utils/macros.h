@@ -9,8 +9,8 @@
 #define EXECUTE_TYPE_TESTS(TYPE) EXECUTE_TYPE_TESTS_(TYPE)
 
 #define TEST_BLOCK_(NAME)\
-for (char const* TEST_BLOCK_NAME = ""#NAME; TEST_BLOCK_NAME != NULL; TEST_BLOCK_NAME = NULL)\
-for (size_t TEST_BLOCK_COUNTER = 0; TEST_BLOCK_COUNTER != 1; TEST_BLOCK_COUNTER = 1)
+for (char const* TEST_BLOCK_NAME = ""#NAME; TEST_BLOCK_NAME; TEST_BLOCK_NAME = (void*)(0L))\
+for (unsigned TEST_BLOCK_COUNTER = 0u; TEST_BLOCK_COUNTER != 1u; TEST_BLOCK_COUNTER = 1u)
 #define TEST_BLOCK(NAME) TEST_BLOCK_(NAME)
 
 int errprintf(const char* restrict format, ...);

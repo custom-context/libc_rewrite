@@ -30,6 +30,7 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
         address_info_criterias.socket_domain = SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED);
         address_info_criterias.socket_type = SOCKET_TYPE_ENUM_VALUE(STREAM);
         address_info_criterias.socket_protocol.native_protocol = 0;
+        address_info_criterias.native_extra_flags = 0;
         
         struct STRING_TYPE() client_request;
         STRING_METHOD(construct_from_c_string_at)(&client_request, "test client request");
@@ -48,7 +49,6 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
             address_info_criterias.socket_domain = domain;
 
             /*bind server to port & listen for connections*/{
-                address_info_criterias.native_extra_flags = AI_PASSIVE;
                 NB_SERVER_METHOD(bind)(&server,
                     NULL, /*or "127.0.0.1"*/
                     "8080",
@@ -59,7 +59,6 @@ IMPLEMENT_TYPE_TESTS(nb_server) {
             }
 
             /*connect to server*/{
-                address_info_criterias.native_extra_flags = 0;
                 CLIENT_METHOD(connect)(&client,
                     NULL, /*or "127.0.0.1"*/
                     "8080",

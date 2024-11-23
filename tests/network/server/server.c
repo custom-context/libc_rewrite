@@ -10,6 +10,8 @@ DEFINE_RESULT_STATIC_METHODS(int, int)
 #if defined(WIN32)
     #include <WS2tcpip.h>
 #else
+    #include <sys/types.h>
+    #include <sys/socket.h>
     #include <netdb.h>
 #endif
 
@@ -29,6 +31,7 @@ IMPLEMENT_TYPE_TESTS(server) {
         address_info_criterias.socket_domain = SOCKET_DOMAIN_ENUM_VALUE(UNSPECIFIED);
         address_info_criterias.socket_type = SOCKET_TYPE_ENUM_VALUE(STREAM);
         address_info_criterias.socket_protocol.native_protocol = 0;
+        address_info_criterias.native_extra_flags = 0;
         
         struct STRING_TYPE() client_request;
         STRING_METHOD(construct_from_c_string_at)(&client_request, "test client request");
@@ -47,7 +50,6 @@ IMPLEMENT_TYPE_TESTS(server) {
             address_info_criterias.socket_domain = domain;
 
             /*bind server to port & listen for connections*/{
-                address_info_criterias.native_extra_flags = AI_PASSIVE;
                 SERVER_METHOD(bind)(&server,
                     NULL, /*or "127.0.0.1"*/
                     "8080",
@@ -58,7 +60,6 @@ IMPLEMENT_TYPE_TESTS(server) {
             }
 
             /*connect to server*/{
-                address_info_criterias.native_extra_flags = 0;
                 CLIENT_METHOD(connect)(&client,
                     NULL, /*or "127.0.0.1"*/
                     "8080",
