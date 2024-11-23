@@ -48,9 +48,6 @@ static int int_increment(void* argument) {
 
 static int int_atomic_increment(void* argument) {
     ATOMIC_TYPE(int32)* const patomic_int = (ATOMIC_TYPE(int32)*)(argument);
-    int32 const value = ATOMIC_METHOD(int32, load_explicit)(patomic_int, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE));
-    ATOMIC_METHOD(int32, store_explicit)(patomic_int, value + 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELEASE));
+    ATOMIC_METHOD(int32, fetch_add_explicit)(patomic_int, 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
     return 0;
 }
