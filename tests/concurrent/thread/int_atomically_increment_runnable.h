@@ -66,15 +66,15 @@ static void
     struct int_atomically_increment_runnable_type* const this =
         ISTATIC_CAST(STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable)), int_atomically_increment_runnable_type)(base);
     /* --- method body --- */
-    int32 value = ATOMIC_METHOD(int32, load_explicit)(&this->value, ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(acquire));
-    ATOMIC_METHOD(int32, store_explicit)(&this->value, value + 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed));
-    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(release));
+    int32 const value = ATOMIC_METHOD(int32, load_explicit)(&this->value, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
+    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE));
+    ATOMIC_METHOD(int32, store_explicit)(&this->value, value + 1, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));
+    NAMESPACE_CONCURRENT_ATOMIC(thread_fence)(ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELEASE));
 }
 
 // vtable definition
 DECLARE_CONTAINER_INTERFACE_VTABLE_VARIABLE_WITH_MODIFIER(static, int_atomically_increment_runnable_type, STRUCT_SUBTYPE(THREAD_TYPE(), INTERFACE_TYPE(runnable))) = {
     .destroy_at = TYPE_METHOD(int_atomically_increment_runnable_type, VTABLE_MEMBER(destroy_at)),
-    .delete_at = NULL,
+    .free_at = NULL,
     .run = TYPE_METHOD(int_atomically_increment_runnable_type, VTABLE_MEMBER(run))
 };

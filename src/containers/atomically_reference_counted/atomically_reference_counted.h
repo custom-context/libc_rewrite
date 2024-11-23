@@ -166,7 +166,7 @@ MODIFIER struct ATOMICALLY_REFERENCE_COUNTED_TYPE_WITH_CUSTOM_ALLOCATORS(TYPE, V
     this->control_block_pointer = source->control_block_pointer;\
     if (this->control_block_pointer) {\
         ATOMIC_METHOD(usize, fetch_add_explicit)(&this->control_block_pointer->strong_reference_counter,\
-            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed));\
+            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED));\
     }\
     this->value_pointer = source->value_pointer;\
     TYPE_METHOD(CONTROL_BLOCK_ALLOCATOR, construct_copy_at)(&this->control_block_allocator, &source->control_block_allocator);\
@@ -192,14 +192,14 @@ MODIFIER void*\
             break;\
         }\
         if (ATOMIC_METHOD(usize, fetch_sub_explicit)(&this->control_block_pointer->strong_reference_counter,\
-            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(acquire_release))) {\
+            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE_RELEASE))) {\
             break;\
         }\
         TYPE_METHOD(TYPE, destroy_at)(this->value_pointer);\
         TYPE_METHOD(VALUE_ALLOCATOR, deallocate)(&this->control_block_pointer->value_allocator, this->value_pointer, 1u);\
         TYPE_METHOD(VALUE_ALLOCATOR, destroy_at)(&this->control_block_pointer->value_allocator);\
         if (ATOMIC_METHOD(usize, fetch_sub_explicit)(&this->control_block_pointer->weak_reference_counter,\
-            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(acquire_release))) {\
+            1u, ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE_RELEASE))) {\
             break;\
         }\
         TYPE_METHOD(CONTROL_BLOCK_ALLOCATOR, deallocate)(&this->control_block_allocator, this->control_block_pointer, 1u);\
@@ -296,7 +296,7 @@ MODIFIER STRUCT_SUBTYPE(ATOMICALLY_REFERENCE_COUNTED_CONTROL_BLOCK_TYPE_WITH_CUS
         struct ATOMICALLY_REFERENCE_COUNTED_TYPE_WITH_CUSTOM_ALLOCATORS(TYPE, VALUE_ALLOCATOR, CONTROL_BLOCK_ALLOCATOR) const* const this) {\
     return this->control_block_pointer ?\
         (ATOMIC_METHOD(usize, load_explicit)(&this->control_block_pointer->strong_reference_counter,\
-            ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed)) + 1u)\
+            ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED)) + 1u)\
         : 0u;\
 }
 

@@ -11,10 +11,10 @@
 
 
 typedef enum ATOMIC_MEMORY_ORDER_ENUM_TYPE() {
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(relaxed) = memory_order_relaxed,
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(consume) = memory_order_consume,
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(acquire) = memory_order_acquire,
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(release) = memory_order_release,
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(acquire_release) = memory_order_acq_rel,
-    ATOMIC_MEMORY_ORDER_ENUM_VALUE(sequentially_consistent) = memory_order_seq_cst
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELAXED) = memory_order_relaxed,
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(CONSUME) = memory_order_consume,
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE) = memory_order_acquire,
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(RELEASE) = memory_order_release,
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(ACQUIRE_RELEASE) = memory_order_acq_rel,
+    ATOMIC_MEMORY_ORDER_ENUM_VALUE(SEQUENTIALLY_CONSISTENT) = memory_order_seq_cst
 } ATOMIC_MEMORY_ORDER_ENUM_TYPE();
