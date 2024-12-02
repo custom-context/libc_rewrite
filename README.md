@@ -62,7 +62,7 @@ List of "other stuff":
     - [x] Generic result type
   - Dynamic:
     - [x] Generic array storage type
-    - [x] Generic refernce counters (non-atomic and atomic ones)
+    - [x] Generic refernce counters (atomic & non-atomic with in-place construction optimization (control block + value))
     - [x] Json
       - [x] Value holder
       - [x] Serializer/deserializer
