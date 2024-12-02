@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include <containers/reference_counted/common.h>
 
 /// rc<*, StrongRC, WeakRC>::CtrlBlockInterface
 #define RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)\
@@ -84,7 +84,8 @@ MODIFIER RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)*\
     ASSERT(this);\
     this->INTERFACE_VTABLE_VARIABLE(RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)) =\
         &INTERFACE_VTABLE_STATIC_VARIABLE(RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC));\
-    this->strong_rc = this->weak_rc = 0u;\
+    this->strong_rc = 1u;\
+    this->weak_rc = 0u;\
     return this;\
 }\
 MODIFIER RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)*\
@@ -107,7 +108,7 @@ MODIFIER RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)*\
     ASSERT(src);\
     this->INTERFACE_VTABLE_VARIABLE(RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC)) =\
         &INTERFACE_VTABLE_STATIC_VARIABLE(RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_RC, WEAK_RC));\
-    this->strong_rc = src->strong_rc; src->strong_rc = 0u;\
+    this->strong_rc = src->strong_rc; src->strong_rc = 1u;\
     this->weak_rc = src->weak_rc; src->weak_rc = 0u;\
     return this;\
 }\

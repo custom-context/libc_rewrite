@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include <containers/reference_counted/common.h>
 #include <memory/common.h>
 
 /// DEFAULT_ALLOCATOR_TYPE(DefaultCombinedCtrlBlock<Type, StrongRC, WeakRC>)

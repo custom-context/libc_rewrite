@@ -12,3 +12,10 @@
 /// rc<Type, StrongRC=usize, WeakRC=usize>
 #define RC_TYPE(TYPE)\
     RC_TYPE__STRONG_RC__WEAK_RC(TYPE, usize, usize)
+
+/// weak<Type, StrongRC, WeakRC>
+#define WEAK_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC)\
+    NAMESPACE_REFERENCE_COUNTED(CONCAT5(CONCAT3(weak, __, TYPE), __, STRONG_RC, __, WEAK_RC))
+/// weak<Type, StrongRC=usize, WeakRC=usize>
+#define WEAK_TYPE(TYPE)\
+    WEAK_TYPE__STRONG_RC__WEAK_RC(TYPE, usize, usize)
