@@ -8,4 +8,6 @@ target_sources(${PROJECT_NAME}
         characters_helpers.c
         data_model_helpers.h
         data_model_helpers.c
+
+        primitives.h
 )
