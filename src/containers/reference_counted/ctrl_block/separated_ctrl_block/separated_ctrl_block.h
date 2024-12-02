@@ -1,7 +1,7 @@
 #pragma once
 
 #include "separated_ctrl_block_allocator.h"
-#include "ictrl_block.h"
+#include <containers/reference_counted/ctrl_block/ictrl_block.h>
 #include "separated_ctrl_block_common.h"
 #include <memory/allocator/allocator.h>
 

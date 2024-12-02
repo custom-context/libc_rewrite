@@ -5,7 +5,12 @@
 
 DEFINE_RC_TYPE(int);
 DECLARE_RC_METHODS_WITH_MODIFIER(static, int);
+
+DEFINE_WEAK_TYPE(int);
+DECLARE_WEAK_METHODS_WITH_MODIFIER(static, int);
+
 DEFINE_RC_METHODS_WITH_MODIFIER(static, int)
+DEFINE_WEAK_METHODS_WITH_MODIFIER(static, int)
 
 static int* TYPE_METHOD(int, construct_valued_at)(int* const this, int const value) {
     ASSERT(this);
@@ -110,5 +115,94 @@ IMPLEMENT_TYPE_TESTS(reference_counted) {
 
             RC_METHOD(int, destroy_at)(&rc_int);
         }
+    }
+    TEST_BLOCK("constructor_from_value, create weak from it, destroy rc, destroy weak") {
+        struct DEFAULT_ALLOCATOR_TYPE(int) int_allocator;
+        DEFAULT_ALLOCATOR_METHOD(int, construct_at)(&int_allocator);
+        {
+            int* value_pointer = DEFAULT_ALLOCATOR_METHOD(int, allocate)(&int_allocator, 1u);
+            *value_pointer = 1242096225;
+
+            struct RC_TYPE(int) rc_int;
+            RC_METHOD(int, construct_from_value_pointer_at)(&rc_int, value_pointer);
+            CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+            CHECK(RC_METHOD(int, get)(&rc_int) == value_pointer);
+
+            struct WEAK_TYPE(int) weak_int;
+            WEAK_METHOD(int, construct_from_rc_at)(&weak_int, &rc_int);
+
+            CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+            CHECK(RC_METHOD(int, get)(&rc_int) == value_pointer);
+
+            CHECK(WEAK_METHOD(int, count_owners)(&weak_int) == 1u);
+            CHECK(!WEAK_METHOD(int, expired)(&weak_int));
+
+            RC_METHOD(int, destroy_at)(&rc_int);
+
+            CHECK(WEAK_METHOD(int, expired)(&weak_int));
+
+            WEAK_METHOD(int, destroy_at)(&weak_int);
+        }
+        DEFAULT_ALLOCATOR_METHOD(int, destroy_at)(&int_allocator);
+    }
+    TEST_BLOCK("make_rc(construct_valued_at), create weak from it, destroy rc, destroy weak") {
+        int const value = -570656612;
+        struct RC_TYPE(int) rc_int;
+        MAKE_RC(int, construct_valued_at)(&rc_int, value);
+        CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+        CHECK(RC_METHOD(int, get)(&rc_int));
+        CHECK(*RC_METHOD(int, get)(&rc_int) == value);
+
+        struct WEAK_TYPE(int) weak_int;
+        WEAK_METHOD(int, construct_from_rc_at)(&weak_int, &rc_int);
+
+        CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+        CHECK(RC_METHOD(int, get)(&rc_int));
+        CHECK(*RC_METHOD(int, get)(&rc_int) == value);
+
+        CHECK(WEAK_METHOD(int, count_owners)(&weak_int) == 1u);
+        CHECK(!WEAK_METHOD(int, expired)(&weak_int));
+
+        RC_METHOD(int, destroy_at)(&rc_int);
+
+        CHECK(WEAK_METHOD(int, expired)(&weak_int));
+
+        WEAK_METHOD(int, destroy_at)(&weak_int);
+    }
+    TEST_BLOCK("make_rc(construct_valued_at), create weak from it, create rc from weak, destroy first rc, destroy weak, destroy second rc") {
+        int const value = -570656612;
+        struct RC_TYPE(int) rc_int;
+        MAKE_RC(int, construct_valued_at)(&rc_int, value);
+        CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+        CHECK(RC_METHOD(int, get)(&rc_int));
+        CHECK(*RC_METHOD(int, get)(&rc_int) == value);
+
+        struct WEAK_TYPE(int) weak_int;
+        WEAK_METHOD(int, construct_from_rc_at)(&weak_int, &rc_int);
+
+        CHECK(RC_METHOD(int, count_owners)(&rc_int) == 1u);
+        CHECK(RC_METHOD(int, get)(&rc_int));
+        CHECK(*RC_METHOD(int, get)(&rc_int) == value);
+
+        CHECK(WEAK_METHOD(int, count_owners)(&weak_int) == 1u);
+        CHECK(!WEAK_METHOD(int, expired)(&weak_int));
+
+        struct RC_TYPE(int) rc2_int = WEAK_METHOD(int, lock)(&weak_int);
+
+        CHECK(RC_METHOD(int, count_owners)(&rc2_int) == 2u);
+        CHECK(RC_METHOD(int, get)(&rc2_int));
+        CHECK(*RC_METHOD(int, get)(&rc2_int) == value);
+
+        RC_METHOD(int, destroy_at)(&rc_int);
+
+        CHECK(!WEAK_METHOD(int, expired)(&weak_int));
+
+        WEAK_METHOD(int, destroy_at)(&weak_int);
+
+        CHECK(RC_METHOD(int, count_owners)(&rc2_int) == 1u);
+        CHECK(RC_METHOD(int, get)(&rc2_int));
+        CHECK(*RC_METHOD(int, get)(&rc2_int) == value);
+
+        RC_METHOD(int, destroy_at)(&rc2_int);
     }
 }
