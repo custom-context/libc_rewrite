@@ -67,7 +67,7 @@ MODIFIER struct WEAK_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC)*\
     ASSERT(source);\
     this->pctrl_block = source->pctrl_block;\
     if (this->pctrl_block) {\
-        ++this->pctrl_block->weak_rc;\
+        RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, weak_rc_inc)(this->pctrl_block);\
     }\
     this->pvalue = source->pvalue;\
     return this;\
@@ -90,10 +90,10 @@ MODIFIER void*\
         if (!this->pctrl_block) {\
             break;\
         }\
-        if (--this->pctrl_block->weak_rc) {\
+        if (RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, weak_rc_dec)(this->pctrl_block)) {\
             break;\
         }\
-        if (this->pctrl_block->strong_rc) {\
+        if (RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, strong_rc_value)(this->pctrl_block)) {\
             break;\
         }\
         RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, destroy_at)(this->pctrl_block);\
@@ -148,7 +148,7 @@ MODIFIER struct RC_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC)\
             .pvalue = NULL\
         };\
     }\
-    ++this->pctrl_block->strong_rc;\
+    RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, strong_rc_inc)(this->pctrl_block);\
     return (struct RC_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC)){\
         .pctrl_block = this->pctrl_block,\
         .pvalue = this->pvalue\
@@ -158,13 +158,13 @@ MODIFIER STRUCT_SUBTYPE(RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC(STRONG_
     WEAK__STRONG_RC__WEAK_RC_METHOD(TYPE, STRONG_RC, WEAK_RC, count_owners)(\
         struct WEAK_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC) const* const this) {\
     ASSERT(this);\
-    return this->pctrl_block ? this->pctrl_block->strong_rc : 0u;\
+    return this->pctrl_block ? RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, strong_rc_value)(this->pctrl_block) : 0u;\
 }\
 MODIFIER bool\
     WEAK__STRONG_RC__WEAK_RC_METHOD(TYPE, STRONG_RC, WEAK_RC, expired)(\
         struct WEAK_TYPE__STRONG_RC__WEAK_RC(TYPE, STRONG_RC, WEAK_RC) const* const this) {\
     ASSERT(this);\
-    return !this->pctrl_block || !this->pctrl_block->strong_rc;\
+    return !this->pctrl_block || !RC_CTRL_BLOCK_INTERFACE_TYPE__STRONG_RC__WEAK_RC_METHOD(STRONG_RC, WEAK_RC, strong_rc_value)(this->pctrl_block);\
 }
 
 #define DEFINE_WEAK_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
