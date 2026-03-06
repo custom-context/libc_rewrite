@@ -1,4 +1,5 @@
 #include "numeric_helpers.h"
+#include <primitives/float_types_aliases.h>
 
 DEFINE_INTEGER_TYPE_DEFAULT_LIFECYCLE_METHODS_WITH_MODIFIER(, char)
 DEFINE_INTEGER_TYPE_DEFAULT_LIFECYCLE_METHODS_WITH_MODIFIER(, short)
