@@ -3,15 +3,15 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define ALIAS_SIGNED_TYPE_T_AS_TYPE_AND_UNSIGNED_TYPE(TYPE) \
-    typedef TYPE##_t TYPE;\
-    typedef u##TYPE##_t u##TYPE
-
-ALIAS_SIGNED_TYPE_T_AS_TYPE_AND_UNSIGNED_TYPE(intptr);
-
-#undef ALIAS_SIGNED_TYPE_T_AS_TYPE_AND_UNSIGNED_TYPE
+typedef intptr_t intptr;
+typedef uintptr_t uintptr;
+DECLARE_STRUCT_SUBTYPE(intptr, value_type, intptr);
+DECLARE_STRUCT_SUBTYPE(uintptr, value_type, uintptr);
 
 typedef size_t usize;
 typedef ptrdiff_t ptrdiff;
+DECLARE_STRUCT_SUBTYPE(usize, value_type, usize);
+DECLARE_STRUCT_SUBTYPE(ptrdiff, value_type, ptrdiff);
 
 typedef void* voidptr;
+DECLARE_STRUCT_SUBTYPE(voidptr, value_type, voidptr);

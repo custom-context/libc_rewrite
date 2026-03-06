@@ -1,14 +1,14 @@
 #pragma once
 
-#include <primitives/bool_type_alias.h>
+#include <internal/primitives/bool_type_alias.h>
 
 #include <containers/common.h>
 
 #define OPTIONAL_TYPE(TYPE)\
-NAMESPACE_CONTAINERS(CONCAT3(optional, __, TYPE))
+    NAMESPACE_CONTAINERS(CONCAT3(optional, __, TYPE))
 
 #define OPTIONAL_METHOD(TYPE, METHOD)\
-TYPE_METHOD(OPTIONAL_TYPE(TYPE), METHOD)
+    TYPE_METHOD(OPTIONAL_TYPE(TYPE), METHOD)
 
 typedef struct nullopt nullopt;
 
@@ -22,17 +22,8 @@ typedef struct OPTIONAL_TYPE(TYPE) {\
 } OPTIONAL_TYPE(TYPE)\
 
 #define DECLARE_OPTIONAL_METHODS_WITH_COMMON_MODIFIER(MODIFIER, TYPE)\
+DECLARE_DEFAULT_LIFECYCLE_METHODS_WITH_MODIFIER(MODIFIER, OPTIONAL_TYPE(TYPE));\
 /* --- --- Construction/destruction methods --- --- */\
-MODIFIER struct OPTIONAL_TYPE(TYPE)* OPTIONAL_METHOD(TYPE, construct_at)(\
-    struct OPTIONAL_TYPE(TYPE)* const this);\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, construct_copy_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE) const* const source);\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, construct_move_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE)* const source);\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
     OPTIONAL_METHOD(TYPE, construct_copy_from_value_at)(\
         struct OPTIONAL_TYPE(TYPE)* const this,\
@@ -45,17 +36,7 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
     OPTIONAL_METHOD(TYPE, construct_from_nullopt_at)(\
         struct OPTIONAL_TYPE(TYPE)* const this,\
         struct nullopt const* const nullopt);\
-MODIFIER void* OPTIONAL_METHOD(TYPE, destroy_at)(\
-    struct OPTIONAL_TYPE(TYPE)* const this);\
 /* --- --- Assignment methods --- --- */\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, assign_copy_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE) const* const source);\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, assign_move_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE)* const source);\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
     OPTIONAL_METHOD(TYPE, assign_copy_from_value_at)(\
         struct OPTIONAL_TYPE(TYPE)* const this,\
@@ -68,11 +49,6 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
     OPTIONAL_METHOD(TYPE, assign_from_nullopt_at)(\
         struct OPTIONAL_TYPE(TYPE)* const this,\
         struct nullopt const* const nullopt);\
-/* --- --- Swap --- --- */\
-MODIFIER void\
-    OPTIONAL_METHOD(TYPE, swap)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE)* const source);\
 /* --- ---  --- --- */\
 MODIFIER bool\
     OPTIONAL_METHOD(TYPE, has_value)(\
@@ -98,10 +74,10 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
         struct OPTIONAL_TYPE(TYPE) const* const source) {\
     ASSERT(this);\
     ASSERT(source);\
-    this->has_value = source->has_value;\
     if (source->has_value) {\
         TYPE_METHOD(TYPE, construct_copy_at)(&this->value, &source->value);\
     }\
+    this->has_value = source->has_value;\
     return this;\
 }\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
@@ -110,10 +86,10 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
         struct OPTIONAL_TYPE(TYPE)* const source) {\
     ASSERT(this);\
     ASSERT(source);\
-    this->has_value = source->has_value;\
     if (source->has_value) {\
         TYPE_METHOD(TYPE, construct_move_at)(&this->value, &source->value);\
     }\
+    this->has_value = source->has_value;\
     return this;\
 }\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
@@ -122,8 +98,8 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
         STRUCT_SUBTYPE(OPTIONAL_TYPE(TYPE), value_type) const* const value) {\
     ASSERT(this);\
     ASSERT(value);\
-    this->has_value = true;\
     TYPE_METHOD(TYPE, construct_copy_at)(&this->value, value);\
+    this->has_value = true;\
     return this;\
 }\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
@@ -132,8 +108,8 @@ MODIFIER struct OPTIONAL_TYPE(TYPE)*\
         STRUCT_SUBTYPE(OPTIONAL_TYPE(TYPE), value_type)* const value) {\
     ASSERT(this);\
     ASSERT(value);\
-    this->has_value = true;\
     TYPE_METHOD(TYPE, construct_move_at)(&this->value, value);\
+    this->has_value = true;\
     return this;\
 }\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
@@ -154,30 +130,7 @@ MODIFIER void* OPTIONAL_METHOD(TYPE, destroy_at)(\
     return this;\
 }\
 /* --- --- Assignment methods --- --- */\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, assign_copy_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE) const* const source) {\
-    ASSERT(this);\
-    ASSERT(source);\
-    struct OPTIONAL_TYPE(TYPE) temporary;\
-    OPTIONAL_METHOD(TYPE, construct_copy_at)(&temporary, source);\
-    OPTIONAL_METHOD(TYPE, swap)(&temporary, this);\
-    OPTIONAL_METHOD(TYPE, destroy_at)(&temporary);\
-    return this;\
-}\
-MODIFIER struct OPTIONAL_TYPE(TYPE)*\
-    OPTIONAL_METHOD(TYPE, assign_move_at)(\
-        struct OPTIONAL_TYPE(TYPE)* const this,\
-        struct OPTIONAL_TYPE(TYPE)* const source) {\
-    ASSERT(this);\
-    ASSERT(source);\
-    struct OPTIONAL_TYPE(TYPE) temporary;\
-    OPTIONAL_METHOD(TYPE, construct_move_at)(&temporary, source);\
-    OPTIONAL_METHOD(TYPE, swap)(&temporary, this);\
-    OPTIONAL_METHOD(TYPE, destroy_at)(&temporary);\
-    return this;\
-}\
+DEFINE_DEFAULT_ASSIGNMENT_METHODS_WITH_MODIFIER(MODIFIER, OPTIONAL_TYPE(TYPE))\
 MODIFIER struct OPTIONAL_TYPE(TYPE)*\
     OPTIONAL_METHOD(TYPE, assign_copy_from_value_at)(\
         struct OPTIONAL_TYPE(TYPE)* const this,\
