@@ -12,43 +12,23 @@ typedef struct DEFAULT_ALLOCATOR_TYPE(TYPE) {\
     char bit: 1;\
 } DEFAULT_ALLOCATOR_TYPE(TYPE)
 
-#define DECLARE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(COMMON_MODIFIER, TYPE)\
-/* --- Construction/Destruction functions --- */\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)*\
-    DEFAULT_ALLOCATOR_METHOD(TYPE, construct_at)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this);\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)*\
-    DEFAULT_ALLOCATOR_METHOD(TYPE, construct_copy_at)(\
-        struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-        struct DEFAULT_ALLOCATOR_TYPE(TYPE) const* const source);\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)*\
-    DEFAULT_ALLOCATOR_METHOD(TYPE, construct_move_at)(\
-        struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-        struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const source);\
-COMMON_MODIFIER void* DEFAULT_ALLOCATOR_METHOD(TYPE, destroy_at)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this);\
-/* --- Assign functions --- */\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_copy_at)(\
-    struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-    struct DEFAULT_ALLOCATOR_TYPE(TYPE) const* const source);\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_move_at)(\
-    struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
-    struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const source);\
-/* --- Swap --- */\
-COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, swap)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this, struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const another);\
+#define DECLARE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
+DECLARE_DEFAULT_LIFECYCLE_METHODS_WITH_MODIFIER(MODIFIER, DEFAULT_ALLOCATOR_TYPE(TYPE));\
 /* --- Memory managment functions implementation --- */\
-COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
+MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     usize count_of_elements);\
-COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
+MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
     usize count_of_elements);\
-COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
+MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
     usize count_of_elements,\
     usize new_count_of_elements)
 
-#define DECLARE_DEFAULT_ALLOCATOR_METHODS(COMMON_MODIFIER, TYPE) DECLARE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(, TYPE)
+#define DECLARE_DEFAULT_ALLOCATOR_METHODS(MODIFIER, TYPE) DECLARE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(, TYPE)
 
 #define IS_ALLOCATOR(ALLOCATOR_TYPE)\
     (&TYPE_METHOD(ALLOCATOR_TYPE, construct_at) &&\
@@ -61,53 +41,53 @@ COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     &TYPE_METHOD(ALLOCATOR_TYPE, deallocate) &&\
     &TYPE_METHOD(ALLOCATOR_TYPE, reallocate))
 
-#define DEFINE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(COMMON_MODIFIER, TYPE)\
+#define DEFINE_DEFAULT_ALLOCATOR_METHODS_WITH_MODIFIER(MODIFIER, TYPE)\
 /* --- Construction/Destruction functions implementation --- */\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_at)(\
+MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_at)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this) {\
     return this;\
 }\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_copy_at)(\
+MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_copy_at)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE) const* const source) {\
     UNUSED(source);\
     return this;\
 }\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_move_at)(\
+MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, construct_move_at)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const source) {\
     UNUSED(source);\
     return this;\
 }\
-COMMON_MODIFIER void* DEFAULT_ALLOCATOR_METHOD(TYPE, destroy_at)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this) {\
+MODIFIER void* DEFAULT_ALLOCATOR_METHOD(TYPE, destroy_at)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this) {\
     return this;\
 }\
 /* --- Assign functions --- */\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_copy_at)(\
+MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_copy_at)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE) const* const source) {\
     UNUSED(source);\
     return this;\
 }\
-COMMON_MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_move_at)(\
+MODIFIER struct DEFAULT_ALLOCATOR_TYPE(TYPE)* DEFAULT_ALLOCATOR_METHOD(TYPE, assign_move_at)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const source) {\
     UNUSED(source);\
     return this;\
 }\
 /* --- Swap --- */\
-COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, swap)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this, struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const another) {\
+MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, swap)(struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this, struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const another) {\
     UNUSED(this);\
     UNUSED(another);\
 }\
 /* --- Memory managment functions implementation --- */\
-COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
+MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, allocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     usize count_of_elements) {\
     UNUSED(this);\
     return NAMESPACE_MEMORY_NATIVE(aligned_alloc)(ALIGNOF(TYPE), count_of_elements * sizeof(TYPE));\
 }\
-COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
+MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
     usize count_of_elements) {\
@@ -115,7 +95,7 @@ COMMON_MODIFIER void DEFAULT_ALLOCATOR_METHOD(TYPE, deallocate)(\
     UNUSED(count_of_elements);\
     NAMESPACE_MEMORY_NATIVE(aligned_free)(elements_buffer);\
 }\
-COMMON_MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
+MODIFIER TYPE* DEFAULT_ALLOCATOR_METHOD(TYPE, reallocate)(\
     struct DEFAULT_ALLOCATOR_TYPE(TYPE)* const this,\
     TYPE* const elements_buffer,\
     usize count_of_elements,\
