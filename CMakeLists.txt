@@ -23,31 +23,38 @@ else()
     target_link_options(${PROJECT_NAME} PRIVATE -lasan -lpthread -lm)
 endif()
 
+set(COMMON_COMPILE_OPTIONS
+    -Wall
+    -Werror
+    -Wno-unused-function
+    -Wno-declaration-after-statement
+    -Wno-disabled-macro-expansion
+    -Wno-switch-enum
+)
+
+# not compatible with c standard less than C11
+# but `pre-c11-compat` warning not exists for clang version <=18
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-Wno-pre-c11-compat NO_PRE_C11_COMPATABILITY_FLAG_EXISTS)
+if (NO_PRE_C11_COMPATABILITY_FLAG_EXISTS)
+    list(APPEND COMMON_COMPILE_OPTIONS
+        -Wno-pre-c11-compat
+    )
+endif()
+
 if(WIN32)
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wpedantic
-        -Wall
-        -Werror
-        -Wno-unused-function
+        ${COMMON_COMPILE_OPTIONS}
         -Wno-unsafe-buffer-usage # arrays usage is trigger compile error
         -Wno-covered-switch-default # incompatible with `switch-default` warnings
         -Wno-gnu-alignof-expression # confronts with _Alignof usage (that was added in C11)
         -Wno-c++98-compat # project uses aligof
-        -Wno-declaration-after-statement
-        -Wno-disabled-macro-expansion
-        -Wno-switch-enum
-        -Wno-pre-c11-compat # not compatible with c standard less than C11
         -fmacro-backtrace-limit=0)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -pedantic
-        -Wall
-        -Werror
-        -Wno-unused-function
-        -Wno-declaration-after-statement
-        -Wno-disabled-macro-expansion
-        -Wno-switch-enum
-        -Wno-pre-c11-compat # not compatible with c standard less than C11
+        ${COMMON_COMPILE_OPTIONS}
         -fsanitize=address
         -Wno-sequence-point
         )
