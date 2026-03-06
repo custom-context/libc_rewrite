@@ -36,6 +36,7 @@ if(WIN32)
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -Wno-switch-enum
+        -Wno-pre-c11-compat # not compatible with c standard less than C11
         -fmacro-backtrace-limit=0)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE
@@ -46,6 +47,7 @@ else()
         -Wno-declaration-after-statement
         -Wno-disabled-macro-expansion
         -Wno-switch-enum
+        -Wno-pre-c11-compat # not compatible with c standard less than C11
         -fsanitize=address
         -Wno-sequence-point
         )
