@@ -5,3 +5,4 @@
 #include "data_model_types_aliases.h"
 #include "characters_types_aliases.h"
 #include "bool_type_alias.h"
+#include "float_types_aliases.h"
